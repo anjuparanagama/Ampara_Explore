@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Menu, X, Globe, ChevronDown, Check } from "lucide-react";
 import { useLanguage, Language } from "@/context/LanguageContext";
 
@@ -22,7 +23,24 @@ export default function Navbar({
 }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLangDropdown, setShowLangDropdown] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
+
+  useEffect(() => {
+    const syncAuthState = () => {
+      setIsAuthenticated(localStorage.getItem("ampara_auth") === "true");
+    };
+
+    syncAuthState();
+    window.addEventListener("ampara-auth-change", syncAuthState);
+    window.addEventListener("storage", syncAuthState);
+
+    return () => {
+      window.removeEventListener("ampara-auth-change", syncAuthState);
+      window.removeEventListener("storage", syncAuthState);
+    };
+  }, []);
 
   const navItems = [
     { id: "home", label: t("navHome") },
@@ -60,7 +78,11 @@ export default function Navbar({
     languages.find((l) => l.code === language) || languages[0];
 
   return (
-    <header className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 transition-all duration-300">
+    <header
+      className={`${
+        pathname === "/" ? "absolute" : "relative"
+      } top-0 left-0 z-50 w-full px-4 pt-3 pb-2 transition-all duration-300 sm:px-6 lg:px-8`}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between transition-all hover:shadow-md">
           {/* Logo Brand */}
@@ -154,20 +176,21 @@ export default function Navbar({
               {t("navLogin")}
             </a>
 
-            {/* Profile Avatar */}
-            <a
-              href="/login"
-              className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-white ring-2 ring-sky-100 shadow-sm cursor-pointer hover:ring-sky-300 transition-all block"
-              title="User Account"
-            >
-              <Image
-                src="/images/avatar.jpg"
-                alt="User Avatar"
-                fill
-                className="object-cover"
-                priority
-              />
-            </a>
+            {isAuthenticated && (
+              <a
+                href="/login"
+                className="relative block h-9 w-9 cursor-pointer overflow-hidden rounded-full border-2 border-white shadow-sm ring-2 ring-sky-100 transition-all hover:ring-sky-300 sm:h-10 sm:w-10"
+                title="User Account"
+              >
+                <Image
+                  src="/images/avatar.jpg"
+                  alt="User Avatar"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </a>
+            )}
 
             {/* Mobile Menu Button */}
             <button

@@ -55,7 +55,7 @@ export default function Hero({
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col justify-between pt-20 sm:pt-24 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-between pt-0 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
       {/* Dynamic Smooth Time-Lapse Hero Background synced with Current Local Time */}
       <HeroTimeLapseBg />

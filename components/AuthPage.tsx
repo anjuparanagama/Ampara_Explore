@@ -36,6 +36,8 @@ export default function AuthPage({ mode }: AuthPageProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!passwordsMatch) return;
+    window.localStorage.setItem("ampara_auth", "true");
+    window.dispatchEvent(new Event("ampara-auth-change"));
     setSubmitted(true);
   };
 
