@@ -26,10 +26,10 @@ export default function LoginPage() {
 
   // Form values
   const [email, setEmail] = useState(
-    viewState === "default" ? "kasun@amparaexplore.lk" : "kasun-invalid@"
+    viewState === "default" ? "kasun@amparaexplore.lk" : "kasun-invalid@",
   );
   const [password, setPassword] = useState(
-    viewState === "default" ? "SuperSecurePass123!" : "123"
+    viewState === "default" ? "SuperSecurePass123!" : "123",
   );
   const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -53,18 +53,17 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
-
       {/* 1. Header Bar */}
       <header className="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-full bg-[#0084d1] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
               <Compass className="w-5 h-5 text-white stroke-[2.2]" />
             </div>
             <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900">
-              Ampara <span className="text-[#0084d1] font-extrabold">Explore</span>
+              Ampara{" "}
+              <span className="text-[#0084d1] font-extrabold">Explore</span>
             </span>
           </Link>
 
@@ -93,37 +92,41 @@ export default function LoginPage() {
               </svg>
             </div>
           </div>
-
         </div>
       </header>
 
       {/* 2. Main Body Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col justify-center">
-
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col justify-center">
         {/* State Switcher Pill at Top */}
         <div className="flex justify-center sm:justify-end mb-4 sm:mb-6">
           <div className="inline-flex items-center bg-white/90 backdrop-blur-md p-1 rounded-full border border-slate-200/90 shadow-xs">
             <button
               type="button"
               onClick={() => handleStateToggle("default")}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${viewState === "default"
-                ? "bg-slate-100 text-[#006699] shadow-2xs"
-                : "text-slate-500 hover:text-slate-800"
-                }`}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                viewState === "default"
+                  ? "bg-slate-100 text-[#006699] shadow-2xs"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
             >
-              <span className={`w-2 h-2 rounded-full ${viewState === "default" ? "bg-[#0084d1]" : "bg-transparent border border-slate-400"}`} />
+              <span
+                className={`w-2 h-2 rounded-full ${viewState === "default" ? "bg-[#0084d1]" : "bg-transparent border border-slate-400"}`}
+              />
               <span>Default State</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleStateToggle("error")}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${viewState === "error"
-                ? "bg-red-50 text-red-600 shadow-2xs"
-                : "text-slate-500 hover:text-slate-800"
-                }`}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                viewState === "error"
+                  ? "bg-red-50 text-red-600 shadow-2xs"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
             >
-              <span className={`w-2 h-2 rounded-full ${viewState === "error" ? "bg-red-500" : "bg-transparent border border-slate-400"}`} />
+              <span
+                className={`w-2 h-2 rounded-full ${viewState === "error" ? "bg-red-500" : "bg-transparent border border-slate-400"}`}
+              />
               <span>Error State</span>
             </button>
           </div>
@@ -131,10 +134,8 @@ export default function LoginPage() {
 
         {/* 2-Column Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
-
           {/* LEFT SIDE: Visual Showcase Card */}
           <div className="lg:col-span-7 relative rounded-[28px] overflow-hidden min-h-[520px] lg:min-h-[640px] flex flex-col justify-between p-6 sm:p-8 shadow-xl border border-slate-200/60 group">
-
             {/* Background Image */}
             <Image
               src="/images/login-bg.jpg"
@@ -150,11 +151,12 @@ export default function LoginPage() {
 
             {/* Top Bar Pills inside the Image Card */}
             <div className="relative z-10 flex flex-wrap items-center justify-between gap-2.5">
-
               {/* Left Pill: Discovery Horizon */}
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold tracking-wider">
                 <Search className="w-3.5 h-3.5 text-white/90" />
-                <span className="uppercase">25 KM Radial Discovery Horizon</span>
+                <span className="uppercase">
+                  25 KM Radial Discovery Horizon
+                </span>
               </div>
 
               {/* Right Pill: Location Tag */}
@@ -171,19 +173,21 @@ export default function LoginPage() {
               </div>
 
               <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-[1.1] mb-3 drop-shadow-md">
-                Explore More.<br />
+                Explore More.
+                <br />
                 Plan Better.
               </h2>
 
               <p className="text-slate-100 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-sm max-w-md">
-                Discover ancient stupas, elephant corridors, and pristine reservoir sunrises nestled within Ampara&apos;s protected perimeter.
+                Discover ancient stupas, elephant corridors, and pristine
+                reservoir sunrises nestled within Ampara&apos;s protected
+                perimeter.
               </p>
             </div>
 
             {/* Bottom Overlay Card: Curated Ecological Circuit */}
             <div className="relative z-10 bg-slate-900/75 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 border border-white/15 text-white shadow-2xl">
               <div className="grid grid-cols-12 gap-3 items-center">
-
                 {/* Circuit Info */}
                 <div className="col-span-7 flex items-center gap-3">
                   <div className="relative w-10 h-10 rounded-xl bg-[#0084d1] flex items-center justify-center shrink-0 shadow-md">
@@ -221,18 +225,14 @@ export default function LoginPage() {
                     Free Access
                   </div>
                 </div>
-
               </div>
             </div>
-
           </div>
 
           {/* RIGHT SIDE: Authentication Form Card */}
           <div className="lg:col-span-5 flex flex-col justify-center">
-
             {/* White Form Card */}
             <div className="bg-white rounded-[28px] p-6 sm:p-8 border border-slate-200 shadow-xl shadow-slate-900/5">
-
               {/* Card Header with Brand + 25KM Secure Badge */}
               <div className="flex items-start justify-between gap-2 mb-6">
                 <div className="flex items-center gap-2.5">
@@ -260,13 +260,13 @@ export default function LoginPage() {
                   Welcome Back
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                  Enter your credentials to access your saved itineraries and visit plans.
+                  Enter your credentials to access your saved itineraries and
+                  visit plans.
                 </p>
               </div>
 
               {/* Form Elements */}
               <form onSubmit={handleSubmit} className="space-y-4">
-
                 {/* Email Field */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
@@ -288,10 +288,11 @@ export default function LoginPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="kasun@amparaexplore.lk"
-                      className={`w-full bg-[#f8fafc] text-slate-900 text-xs sm:text-sm font-medium rounded-xl pl-10 pr-3.5 py-3 border transition-all focus:outline-none ${viewState === "error"
-                        ? "border-red-400 ring-2 ring-red-100 bg-red-50/20"
-                        : "border-slate-200 focus:border-[#0084d1] focus:ring-3 focus:ring-sky-100 focus:bg-white"
-                        }`}
+                      className={`w-full bg-[#f8fafc] text-slate-900 text-xs sm:text-sm font-medium rounded-xl pl-10 pr-3.5 py-3 border transition-all focus:outline-none ${
+                        viewState === "error"
+                          ? "border-red-400 ring-2 ring-red-100 bg-red-50/20"
+                          : "border-slate-200 focus:border-[#0084d1] focus:ring-3 focus:ring-sky-100 focus:bg-white"
+                      }`}
                     />
                   </div>
 
@@ -327,17 +328,22 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••••••••••"
-                      className={`w-full bg-[#f8fafc] text-slate-900 text-xs sm:text-sm font-medium rounded-xl pl-10 pr-10 py-3 border transition-all focus:outline-none ${viewState === "error"
-                        ? "border-red-400 ring-2 ring-red-100 bg-red-50/20"
-                        : "border-slate-200 focus:border-[#0084d1] focus:ring-3 focus:ring-sky-100 focus:bg-white"
-                        }`}
+                      className={`w-full bg-[#f8fafc] text-slate-900 text-xs sm:text-sm font-medium rounded-xl pl-10 pr-10 py-3 border transition-all focus:outline-none ${
+                        viewState === "error"
+                          ? "border-red-400 ring-2 ring-red-100 bg-red-50/20"
+                          : "border-slate-200 focus:border-[#0084d1] focus:ring-3 focus:ring-sky-100 focus:bg-white"
+                      }`}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
                     </button>
                   </div>
 
@@ -358,7 +364,10 @@ export default function LoginPage() {
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="w-4 h-4 rounded border-slate-300 text-[#0084d1] focus:ring-[#0084d1] cursor-pointer accent-[#0084d1]"
                   />
-                  <label htmlFor="remember" className="text-xs font-semibold text-slate-700 select-none cursor-pointer">
+                  <label
+                    htmlFor="remember"
+                    className="text-xs font-semibold text-slate-700 select-none cursor-pointer"
+                  >
                     Remember my itinerary session
                   </label>
                 </div>
@@ -371,7 +380,6 @@ export default function LoginPage() {
                   <span>Sign In to Ampara Explore</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
-
               </form>
 
               {/* Social Login Separator */}
@@ -386,7 +394,6 @@ export default function LoginPage() {
 
               {/* Social Buttons (Google & Sri Lanka Pass) */}
               <div className="grid grid-cols-2 gap-3">
-
                 {/* Google Button */}
                 <button
                   type="button"
@@ -423,7 +430,6 @@ export default function LoginPage() {
                   </span>
                   <span>Sri Lanka Pass</span>
                 </button>
-
               </div>
 
               {/* Bottom Sign up Link */}
@@ -436,41 +442,49 @@ export default function LoginPage() {
                   Create an Explorer ID
                 </Link>
               </div>
-
             </div>
 
             {/* Bottom Security / Protection Badge */}
             <div className="flex items-center justify-center gap-2 text-center text-slate-600 text-[11px] font-semibold mt-4">
               <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Protected by Sri Lanka Tourism Digital Gateway • 256-bit encryption</span>
+              <span>
+                Protected by Sri Lanka Tourism Digital Gateway • 256-bit
+                encryption
+              </span>
             </div>
-
           </div>
-
         </div>
-
       </main>
 
       {/* 3. Footer */}
       <footer className="w-full border-t border-slate-200/80 bg-white px-4 sm:px-8 py-4 text-slate-500 text-xs mt-6">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div>
-            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage & Wildlife Portal.
+            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage &
+            Wildlife Portal.
           </div>
           <div className="flex items-center gap-5 font-semibold text-slate-600">
-            <Link href="/privacy-policy" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms-of-service" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/terms-of-service"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Terms of Service
             </Link>
-            <Link href="/cultural-guidelines" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/cultural-guidelines"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Cultural Guidelines
             </Link>
           </div>
         </div>
       </footer>
-
     </div>
   );
 }

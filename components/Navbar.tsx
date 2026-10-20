@@ -56,13 +56,13 @@ export default function Navbar({
     { code: "ta", label: "தமிழ் (TA)", flag: "🇱🇰" },
   ];
 
-  const currentLangObj = languages.find((l) => l.code === language) || languages[0];
+  const currentLangObj =
+    languages.find((l) => l.code === language) || languages[0];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 transition-all duration-300">
+    <header className="fixed top-0 left-0 right-0 mt-4 z-50 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 transition-all duration-300">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between transition-all hover:shadow-md">
-          
           {/* Logo Brand */}
           <button
             onClick={() => handleNavClick("home")}
@@ -74,14 +74,11 @@ export default function Navbar({
                   {t("brandTitle")}
                 </span>
               </div>
-              <span className="text-[9px] sm:text-[10px] font-bold tracking-wider text-[#0284c7] uppercase border border-sky-300/60 bg-sky-50/80 px-2 py-0.5 rounded-full w-fit mt-0.5">
-                {t("radialHorizon")}
-              </span>
             </div>
           </button>
 
           {/* Desktop Navigation Pills */}
-          <nav className="hidden md:flex items-center gap-1 bg-slate-100/70 p-1 rounded-full border border-slate-200/60">
+          <nav className="hidden md:flex items-center gap-1  p-1 rounded-full ">
             {navItems.map((item) => {
               const isActive = activeTab === item.id && item.id !== "plan";
               return (
@@ -107,7 +104,6 @@ export default function Navbar({
 
           {/* User Section & Language Selector */}
           <div className="flex items-center gap-2.5 sm:gap-3">
-            
             {/* Language Selector Dropdown */}
             <div className="relative">
               <button
@@ -135,7 +131,9 @@ export default function Navbar({
                         setShowLangDropdown(false);
                       }}
                       className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors ${
-                        language === l.code ? "bg-sky-50 text-[#0284c7]" : "text-slate-700 hover:bg-slate-100"
+                        language === l.code
+                          ? "bg-sky-50 text-[#0284c7]"
+                          : "text-slate-700 hover:bg-slate-100"
                       }`}
                     >
                       <span className="flex items-center gap-1.5">
@@ -177,7 +175,11 @@ export default function Navbar({
               className="md:hidden p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
               aria-label="Toggle Menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
         </div>
@@ -217,4 +219,3 @@ export default function Navbar({
     </header>
   );
 }
-

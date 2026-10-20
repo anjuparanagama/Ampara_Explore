@@ -444,7 +444,11 @@ export default function HeroTimeLapseBg() {
         )}
 
         {/* Time-of-Day Pill Button (Triggers Drawer) */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white shadow-lg text-xs font-semibold transition-all hover:bg-slate-900/95 cursor-pointer">
+        <button
+          type="button"
+          onClick={() => setShowControls(!showControls)}
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white shadow-lg text-xs font-semibold transition-all hover:bg-slate-900/95 cursor-pointer"
+        >
           <span className="flex items-center gap-1.5 text-sky-400">
             {timeInfo.period === "morning" && (
               <Sunrise className="w-3.5 h-3.5 text-amber-400" />
@@ -462,7 +466,6 @@ export default function HeroTimeLapseBg() {
               {timeInfo.timeStr}
             </span>
           </span>
-
           <span className="text-slate-400 font-normal hidden sm:inline">•</span>
           <span className="text-slate-300 hidden sm:inline">
             {timeInfo.label}
@@ -474,15 +477,7 @@ export default function HeroTimeLapseBg() {
               Live
             </span>
           )}
-
-          <button
-            onClick={() => setShowControls(!showControls)}
-            className="ml-1 p-1 hover:bg-white/10 rounded-full transition-colors text-slate-300 hover:text-white"
-            title="Time Lapse Controls"
-          >
-            <Clock className="w-3.5 h-3.5" />
-          </button>
-        </div>
+        </button>
       </div>
     </div>
   );

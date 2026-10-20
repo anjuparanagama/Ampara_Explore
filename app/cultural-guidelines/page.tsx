@@ -21,7 +21,9 @@ import {
 } from "lucide-react";
 
 export default function CulturalGuidelinesPage() {
-  const [activeTab, setActiveTab] = useState<"all" | "temples" | "wildlife" | "eco">("all");
+  const [activeTab, setActiveTab] = useState<
+    "all" | "temples" | "wildlife" | "eco"
+  >("all");
 
   const dosAndDonts = [
     {
@@ -71,19 +73,23 @@ export default function CulturalGuidelinesPage() {
     },
   ];
 
-  const filteredCategories = activeTab === "all" ? dosAndDonts : dosAndDonts.filter((d) => d.category === activeTab);
+  const filteredCategories =
+    activeTab === "all"
+      ? dosAndDonts
+      : dosAndDonts.filter((d) => d.category === activeTab);
 
   return (
     <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
       {/* 1. Header Bar */}
       <header className="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-full bg-[#0084d1] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
               <Compass className="w-5 h-5 text-white stroke-[2.2]" />
             </div>
             <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900">
-              Ampara <span className="text-[#0084d1] font-extrabold">Explore</span>
+              Ampara{" "}
+              <span className="text-[#0084d1] font-extrabold">Explore</span>
             </span>
           </Link>
 
@@ -110,7 +116,9 @@ export default function CulturalGuidelinesPage() {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-3">
-          <Link href="/" className="hover:text-[#0084d1]">Home</Link>
+          <Link href="/" className="hover:text-[#0084d1]">
+            Home
+          </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
           <span className="text-slate-800 font-bold">Cultural Guidelines</span>
         </div>
@@ -118,7 +126,7 @@ export default function CulturalGuidelinesPage() {
         {/* Hero Banner Card */}
         <div className="bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 rounded-[28px] p-6 sm:p-10 text-white shadow-xl shadow-slate-900/10 mb-8 border border-sky-500/20 relative overflow-hidden">
           <div className="absolute right-0 top-0 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
-          
+
           <div className="relative z-10 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sky-300 text-xs font-bold uppercase tracking-wider mb-3">
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
@@ -130,7 +138,9 @@ export default function CulturalGuidelinesPage() {
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
-              Ampara is a land of sacred millennia-old Buddhist stupas, thriving elephant corridors, and delicate wetland ecosystems. As explorers, we travel with deep respect, humility, and care.
+              Ampara is a land of sacred millennia-old Buddhist stupas, thriving
+              elephant corridors, and delicate wetland ecosystems. As explorers,
+              we travel with deep respect, humility, and care.
             </p>
           </div>
         </div>
@@ -141,32 +151,48 @@ export default function CulturalGuidelinesPage() {
             <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-2">
               <Shirt className="w-5 h-5" />
             </div>
-            <div className="text-xs font-bold text-slate-900">Modest Clothing</div>
-            <div className="text-[11px] text-slate-500">Shoulders & knees covered</div>
+            <div className="text-xs font-bold text-slate-900">
+              Modest Clothing
+            </div>
+            <div className="text-[11px] text-slate-500">
+              Shoulders & knees covered
+            </div>
           </div>
 
           <div className="bg-white rounded-2xl p-4 border border-slate-200 text-center shadow-xs">
             <div className="w-10 h-10 rounded-xl bg-sky-50 text-[#0084d1] flex items-center justify-center mx-auto mb-2">
               <Footprints className="w-5 h-5" />
             </div>
-            <div className="text-xs font-bold text-slate-900">Remove Footwear</div>
-            <div className="text-[11px] text-slate-500">Before sacred sand terraces</div>
+            <div className="text-xs font-bold text-slate-900">
+              Remove Footwear
+            </div>
+            <div className="text-[11px] text-slate-500">
+              Before sacred sand terraces
+            </div>
           </div>
 
           <div className="bg-white rounded-2xl p-4 border border-slate-200 text-center shadow-xs">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-2">
               <Trees className="w-5 h-5" />
             </div>
-            <div className="text-xs font-bold text-slate-900">Leave No Trace</div>
-            <div className="text-[11px] text-slate-500">Zero plastic littering</div>
+            <div className="text-xs font-bold text-slate-900">
+              Leave No Trace
+            </div>
+            <div className="text-[11px] text-slate-500">
+              Zero plastic littering
+            </div>
           </div>
 
           <div className="bg-white rounded-2xl p-4 border border-slate-200 text-center shadow-xs">
             <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-2">
               <VolumeX className="w-5 h-5" />
             </div>
-            <div className="text-xs font-bold text-slate-900">Maintain Silence</div>
-            <div className="text-[11px] text-slate-500">Reverence in hermitages</div>
+            <div className="text-xs font-bold text-slate-900">
+              Maintain Silence
+            </div>
+            <div className="text-[11px] text-slate-500">
+              Reverence in hermitages
+            </div>
           </div>
         </div>
 
@@ -239,14 +265,15 @@ export default function CulturalGuidelinesPage() {
             const info = titles[cat.category];
 
             return (
-              <div key={cat.category} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm">
+              <div
+                key={cat.category}
+                className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm"
+              >
                 <div className="mb-5 pb-4 border-b border-slate-100">
                   <h2 className="text-xl font-black text-slate-900 tracking-tight">
                     {info?.label || cat.category}
                   </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    {info?.desc}
-                  </p>
+                  <p className="text-xs text-slate-500 mt-0.5">{info?.desc}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -258,7 +285,10 @@ export default function CulturalGuidelinesPage() {
                     </div>
                     <ul className="space-y-2.5">
                       {cat.dos.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2.5 text-xs text-slate-700 leading-relaxed">
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2.5 text-xs text-slate-700 leading-relaxed"
+                        >
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
                           <span>{item}</span>
                         </li>
@@ -274,7 +304,10 @@ export default function CulturalGuidelinesPage() {
                     </div>
                     <ul className="space-y-2.5">
                       {cat.donts.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2.5 text-xs text-slate-700 leading-relaxed">
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2.5 text-xs text-slate-700 leading-relaxed"
+                        >
                           <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
                           <span>{item}</span>
                         </li>
@@ -294,8 +327,13 @@ export default function CulturalGuidelinesPage() {
               <Shield className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-900">Need Immediate Advice or Tourist Police Assistance?</div>
-              <div className="text-[11px] text-slate-600">Tourist Police Post, Ampara: +94 63 222 2222 • Wildlife Department: 1992</div>
+              <div className="text-xs font-bold text-slate-900">
+                Need Immediate Advice or Tourist Police Assistance?
+              </div>
+              <div className="text-[11px] text-slate-600">
+                Tourist Police Post, Ampara: +94 63 222 2222 • Wildlife
+                Department: 1992
+              </div>
             </div>
           </div>
 
@@ -310,15 +348,22 @@ export default function CulturalGuidelinesPage() {
 
       {/* 3. Footer */}
       <footer className="w-full border-t border-slate-200/80 bg-white px-4 sm:px-8 py-4 text-slate-500 text-xs mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div>
-            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage & Wildlife Portal.
+            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage &
+            Wildlife Portal.
           </div>
           <div className="flex items-center gap-5 font-semibold text-slate-600">
-            <Link href="/privacy-policy" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms-of-service" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/terms-of-service"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Terms of Service
             </Link>
             <Link href="/cultural-guidelines" className="text-[#0084d1]">

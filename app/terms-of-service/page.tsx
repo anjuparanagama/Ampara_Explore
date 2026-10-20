@@ -28,10 +28,17 @@ export default function TermsOfServicePage() {
       content: (
         <>
           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-            By accessing or using the <strong className="text-slate-800">Ampara Explore (25 KM Radial Horizon)</strong> tourism portal and mobile web app, you agree to comply with and be bound by these Terms of Service, all applicable laws of Sri Lanka, and local municipal bylaws of the Ampara District Secretariat.
+            By accessing or using the{" "}
+            <strong className="text-slate-800">
+              Ampara Explore (25 KM Radial Horizon)
+            </strong>{" "}
+            tourism portal and mobile web app, you agree to comply with and be
+            bound by these Terms of Service, all applicable laws of Sri Lanka,
+            and local municipal bylaws of the Ampara District Secretariat.
           </p>
           <p className="text-slate-600 text-sm leading-relaxed">
-            If you disagree with any part of these terms, you should immediately cease use of the portal and its itinerary planning tools.
+            If you disagree with any part of these terms, you should immediately
+            cease use of the portal and its itinerary planning tools.
           </p>
         </>
       ),
@@ -46,10 +53,23 @@ export default function TermsOfServicePage() {
             When you register for an official Ampara Explorer ID:
           </p>
           <ul className="space-y-2 text-sm text-slate-600 list-disc list-inside">
-            <li>You agree to provide true, accurate, and up-to-date personal information.</li>
-            <li>You are responsible for maintaining the confidentiality of your account credentials.</li>
-            <li>Your issued Explorer Pass Code is non-transferable and represents your verified digital profile for local tourism discounts and ranger alerts.</li>
-            <li>Accounts engaging in fraudulent bookings or defamatory content will be revoked without notice.</li>
+            <li>
+              You agree to provide true, accurate, and up-to-date personal
+              information.
+            </li>
+            <li>
+              You are responsible for maintaining the confidentiality of your
+              account credentials.
+            </li>
+            <li>
+              Your issued Explorer Pass Code is non-transferable and represents
+              your verified digital profile for local tourism discounts and
+              ranger alerts.
+            </li>
+            <li>
+              Accounts engaging in fraudulent bookings or defamatory content
+              will be revoked without notice.
+            </li>
           </ul>
         </>
       ),
@@ -61,16 +81,24 @@ export default function TermsOfServicePage() {
       content: (
         <>
           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-            The Ampara Explore platform provides a curated radial mapping system centered on the Ampara Clock Tower:
+            The Ampara Explore platform provides a curated radial mapping system
+            centered on the Ampara Clock Tower:
           </p>
           <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 leading-relaxed mb-3 flex items-start gap-2.5">
             <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
             <span>
-              <strong>Crucial Notice:</strong> Radial distances represent straight-line geographic distances. Actual road navigation distances, terrain variations, gravel bund roads, and seasonal reservoir water levels may impact actual travel duration. Always check local trail markers.
+              <strong>Crucial Notice:</strong> Radial distances represent
+              straight-line geographic distances. Actual road navigation
+              distances, terrain variations, gravel bund roads, and seasonal
+              reservoir water levels may impact actual travel duration. Always
+              check local trail markers.
             </span>
           </div>
           <p className="text-slate-600 text-sm leading-relaxed">
-            Wildlife movement, irrigation reservoir discharge, and weather conditions in the Eastern Province are unpredictable. Travelers are advised to consult designated wildlife rangers at the Inginiyagala Wildlife Jetty before boat journeys.
+            Wildlife movement, irrigation reservoir discharge, and weather
+            conditions in the Eastern Province are unpredictable. Travelers are
+            advised to consult designated wildlife rangers at the Inginiyagala
+            Wildlife Jetty before boat journeys.
           </p>
         </>
       ),
@@ -82,11 +110,30 @@ export default function TermsOfServicePage() {
       content: (
         <>
           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-            All historical sites indexed on this platform (including Deegawapi Stupa, Buddhangala Monastery, Rajagala Forest Hermitage, and Magul Maha Viharaya) are legally protected under the <strong className="text-slate-800">Antiquities Ordinance No. 9 of 1940</strong> of Sri Lanka:
+            All historical sites indexed on this platform (including Deegawapi
+            Stupa, Buddhangala Monastery, Rajagala Forest Hermitage, and Magul
+            Maha Viharaya) are legally protected under the{" "}
+            <strong className="text-slate-800">
+              Antiquities Ordinance No. 9 of 1940
+            </strong>{" "}
+            of Sri Lanka:
           </p>
           <ul className="space-y-2 text-sm text-slate-600 list-disc list-inside">
-            <li>Vandalism, graffiti, or unauthorized removal of archaeological artifacts, bricks, or rocks is a criminal offense punishable by federal law.</li>
-            <li>Visitors must strictly adhere to our <Link href="/cultural-guidelines" className="text-[#0084d1] font-bold underline">Cultural Guidelines</Link> regarding temple dress codes and photography protocols.</li>
+            <li>
+              Vandalism, graffiti, or unauthorized removal of archaeological
+              artifacts, bricks, or rocks is a criminal offense punishable by
+              federal law.
+            </li>
+            <li>
+              Visitors must strictly adhere to our{" "}
+              <Link
+                href="/cultural-guidelines"
+                className="text-[#0084d1] font-bold underline"
+              >
+                Cultural Guidelines
+              </Link>{" "}
+              regarding temple dress codes and photography protocols.
+            </li>
           </ul>
         </>
       ),
@@ -98,12 +145,23 @@ export default function TermsOfServicePage() {
       content: (
         <>
           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-            Ampara Explore functions as an informative regional discovery tool. Under no circumstances shall the platform administrators or regional discovery project contributors be liable for:
+            Ampara Explore functions as an informative regional discovery tool.
+            Under no circumstances shall the platform administrators or regional
+            discovery project contributors be liable for:
           </p>
           <ul className="space-y-1.5 text-sm text-slate-600 list-disc list-inside">
-            <li>Injuries or incidents occurring during independent trekking, safari excursions, or reservoir swimming.</li>
-            <li>Direct, indirect, or incidental delays arising from seasonal wildlife road blockages or weather events.</li>
-            <li>Discrepancies in third-party boat safari service rates or accommodation bookings.</li>
+            <li>
+              Injuries or incidents occurring during independent trekking,
+              safari excursions, or reservoir swimming.
+            </li>
+            <li>
+              Direct, indirect, or incidental delays arising from seasonal
+              wildlife road blockages or weather events.
+            </li>
+            <li>
+              Discrepancies in third-party boat safari service rates or
+              accommodation bookings.
+            </li>
           </ul>
         </>
       ),
@@ -114,13 +172,14 @@ export default function TermsOfServicePage() {
     <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
       {/* 1. Header Bar */}
       <header className="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-full bg-[#0084d1] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
               <Compass className="w-5 h-5 text-white stroke-[2.2]" />
             </div>
             <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900">
-              Ampara <span className="text-[#0084d1] font-extrabold">Explore</span>
+              Ampara{" "}
+              <span className="text-[#0084d1] font-extrabold">Explore</span>
             </span>
           </Link>
 
@@ -147,7 +206,9 @@ export default function TermsOfServicePage() {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-3">
-          <Link href="/" className="hover:text-[#0084d1]">Home</Link>
+          <Link href="/" className="hover:text-[#0084d1]">
+            Home
+          </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
           <span className="text-slate-800 font-bold">Terms of Service</span>
         </div>
@@ -164,19 +225,24 @@ export default function TermsOfServicePage() {
                 Terms of Service
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
-                Rules and responsibilities governing use of the Ampara Explore radial discovery platform.
+                Rules and responsibilities governing use of the Ampara Explore
+                radial discovery platform.
               </p>
             </div>
 
             <div className="text-left sm:text-right text-xs text-slate-500 shrink-0">
-              <span className="font-bold text-slate-700 block">Jurisdiction: Sri Lanka</span>
+              <span className="font-bold text-slate-700 block">
+                Jurisdiction: Sri Lanka
+              </span>
               <span>Last Updated: {lastUpdated}</span>
             </div>
           </div>
 
           {/* Table of Contents Pill Bar */}
           <div className="flex flex-wrap items-center gap-2 pt-6">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Jump to:</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">
+              Jump to:
+            </span>
             {sections.map((s) => (
               <a
                 key={s.id}
@@ -214,8 +280,12 @@ export default function TermsOfServicePage() {
         {/* Quick Link Footer Navigator */}
         <div className="mt-10 p-6 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-center sm:text-left">
-            <div className="text-sm font-bold text-slate-900">Explore Additional Policies</div>
-            <div className="text-xs text-slate-500">Read our privacy protocols and cultural conservation guidelines.</div>
+            <div className="text-sm font-bold text-slate-900">
+              Explore Additional Policies
+            </div>
+            <div className="text-xs text-slate-500">
+              Read our privacy protocols and cultural conservation guidelines.
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -237,18 +307,25 @@ export default function TermsOfServicePage() {
 
       {/* 3. Footer */}
       <footer className="w-full border-t border-slate-200/80 bg-white px-4 sm:px-8 py-4 text-slate-500 text-xs mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div>
-            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage & Wildlife Portal.
+            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage &
+            Wildlife Portal.
           </div>
           <div className="flex items-center gap-5 font-semibold text-slate-600">
-            <Link href="/privacy-policy" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Privacy Policy
             </Link>
             <Link href="/terms-of-service" className="text-[#0084d1]">
               Terms of Service
             </Link>
-            <Link href="/cultural-guidelines" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/cultural-guidelines"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Cultural Guidelines
             </Link>
           </div>

@@ -130,8 +130,12 @@ const initialPlans: SavedPlan[] = [
 ];
 
 export default function MyVisitPlansPage() {
-  const [activeFilterTab, setActiveFilterTab] = useState<"all" | "upcoming" | "draft" | "completed">("all");
-  const [viewState, setViewState] = useState<"populated" | "empty">("populated");
+  const [activeFilterTab, setActiveFilterTab] = useState<
+    "all" | "upcoming" | "draft" | "completed"
+  >("all");
+  const [viewState, setViewState] = useState<"populated" | "empty">(
+    "populated",
+  );
   const [plans, setPlans] = useState<SavedPlan[]>(initialPlans);
   const [bookmarkedPlans, setBookmarkedPlans] = useState<string[]>(["plan-1"]);
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
@@ -153,7 +157,6 @@ export default function MyVisitPlansPage() {
 
   return (
     <div className="min-h-screen bg-[#f3f6fa] text-slate-900 font-sans selection:bg-[#0284c7] selection:text-white flex flex-col justify-between">
-      
       {/* 1. Global Navigation Bar */}
       <Navbar
         activeTab={activeTab}
@@ -164,11 +167,13 @@ export default function MyVisitPlansPage() {
       />
 
       {/* 2. Top Breadcrumb & GPS Radius Tag */}
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-2">
+      <div className="max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-2">
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
-          
           <div className="flex items-center gap-1.5 text-slate-500 font-medium">
-            <Link href="/" className="hover:text-[#0084d1] flex items-center gap-1">
+            <Link
+              href="/"
+              className="hover:text-[#0084d1] flex items-center gap-1"
+            >
               <span>⌂ Home</span>
             </Link>
             <span>/</span>
@@ -179,16 +184,13 @@ export default function MyVisitPlansPage() {
             <span className="w-2 h-2 rounded-full bg-[#0084d1] animate-pulse" />
             <span>GPS RADIUS: 25 KM STRICT BOUND</span>
           </div>
-
         </div>
       </div>
 
       {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-3 space-y-6 flex-1">
-        
+      <main className="max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-3 space-y-6 flex-1">
         {/* 3. User Explorer Profile Header Card */}
         <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-          
           <div className="flex items-center gap-4">
             {/* Avatar Circle with Online Dot */}
             <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 border-white ring-2 ring-sky-200 shadow-sm shrink-0">
@@ -218,7 +220,8 @@ export default function MyVisitPlansPage() {
               </h1>
 
               <p className="text-xs sm:text-sm text-slate-500 font-medium max-w-xl">
-                Curate, sequence, and review your one-day regional itineraries strictly within Ampara&apos;s 25 km sanctuary horizon.
+                Curate, sequence, and review your one-day regional itineraries
+                strictly within Ampara&apos;s 25 km sanctuary horizon.
               </p>
             </div>
           </div>
@@ -231,19 +234,21 @@ export default function MyVisitPlansPage() {
             <Plus className="w-4 h-4 stroke-[3]" />
             <span>Create New Plan</span>
           </Link>
-
         </div>
 
         {/* 4. Quick Key Metric Stats Bar (4 cards) */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-          
           <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-2xs flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-sky-50 text-[#0084d1] flex items-center justify-center font-black shrink-0">
               <Layers className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xl font-black text-slate-900 leading-none">3</div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Active Itineraries</div>
+              <div className="text-xl font-black text-slate-900 leading-none">
+                3
+              </div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
+                Active Itineraries
+              </div>
             </div>
           </div>
 
@@ -252,8 +257,12 @@ export default function MyVisitPlansPage() {
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xl font-black text-slate-900 leading-none">1</div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Completed Tour</div>
+              <div className="text-xl font-black text-slate-900 leading-none">
+                1
+              </div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
+                Completed Tour
+              </div>
             </div>
           </div>
 
@@ -262,8 +271,12 @@ export default function MyVisitPlansPage() {
               <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xl font-black text-slate-900 leading-none">12</div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Waypoints Planned</div>
+              <div className="text-xl font-black text-slate-900 leading-none">
+                12
+              </div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
+                Waypoints Planned
+              </div>
             </div>
           </div>
 
@@ -272,23 +285,34 @@ export default function MyVisitPlansPage() {
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xl font-black text-purple-700 leading-none">100%</div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">25km Compliant</div>
+              <div className="text-xl font-black text-purple-700 leading-none">
+                100%
+              </div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
+                25km Compliant
+              </div>
             </div>
           </div>
-
         </div>
 
         {/* 5. Filter Tabs & Preview Mode Switcher */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
-          
           {/* Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
             {[
               { id: "all", label: `All Plans (${plans.length})` },
-              { id: "upcoming", label: `Upcoming (${plans.filter((p) => p.status === "upcoming").length})` },
-              { id: "draft", label: `Drafts (${plans.filter((p) => p.status === "draft").length})` },
-              { id: "completed", label: `Completed (${plans.filter((p) => p.status === "completed").length})` },
+              {
+                id: "upcoming",
+                label: `Upcoming (${plans.filter((p) => p.status === "upcoming").length})`,
+              },
+              {
+                id: "draft",
+                label: `Drafts (${plans.filter((p) => p.status === "draft").length})`,
+              },
+              {
+                id: "completed",
+                label: `Completed (${plans.filter((p) => p.status === "completed").length})`,
+              },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -307,7 +331,9 @@ export default function MyVisitPlansPage() {
 
           {/* Preview Mode Switcher */}
           <div className="inline-flex items-center gap-2 text-xs font-bold bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-2xs self-start sm:self-auto">
-            <span className="text-slate-400 text-[10px] uppercase font-extrabold tracking-wider">PREVIEW MODE:</span>
+            <span className="text-slate-400 text-[10px] uppercase font-extrabold tracking-wider">
+              PREVIEW MODE:
+            </span>
             <button
               type="button"
               onClick={() => setViewState("populated")}
@@ -324,12 +350,10 @@ export default function MyVisitPlansPage() {
               Empty State
             </button>
           </div>
-
         </div>
 
         {/* 6. 2-Column Main Content */}
         {viewState === "empty" || filteredPlans.length === 0 ? (
-          
           /* Empty State */
           <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-4 max-w-xl mx-auto my-6">
             <div className="w-16 h-16 rounded-full bg-sky-50 text-[#0084d1] flex items-center justify-center mx-auto">
@@ -339,7 +363,8 @@ export default function MyVisitPlansPage() {
               No Itineraries in this Category
             </h3>
             <p className="text-xs text-slate-500 max-w-md mx-auto">
-              You haven&apos;t created any itineraries under this filter yet. Start by planning a 1-day exploration within 25km.
+              You haven&apos;t created any itineraries under this filter yet.
+              Start by planning a 1-day exploration within 25km.
             </p>
             <Link
               href="/plan"
@@ -349,15 +374,11 @@ export default function MyVisitPlansPage() {
               <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
-
         ) : (
-
           /* Populated 2-Column Dashboard */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
             {/* LEFT COLUMN: Saved Plans Feed (8 cols) */}
             <div className="lg:col-span-8 space-y-5">
-              
               {filteredPlans.map((plan) => {
                 const isBookmarked = bookmarkedPlans.includes(plan.id);
 
@@ -374,8 +395,8 @@ export default function MyVisitPlansPage() {
                             plan.status === "upcoming"
                               ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                               : plan.status === "draft"
-                              ? "bg-purple-50 text-purple-700 border border-purple-200"
-                              : "bg-sky-50 text-[#0084d1] border border-sky-200"
+                                ? "bg-purple-50 text-purple-700 border border-purple-200"
+                                : "bg-sky-50 text-[#0084d1] border border-sky-200"
                           }`}
                         >
                           <span
@@ -383,8 +404,8 @@ export default function MyVisitPlansPage() {
                               plan.status === "upcoming"
                                 ? "bg-emerald-500"
                                 : plan.status === "draft"
-                                ? "bg-purple-500"
-                                : "bg-[#0084d1]"
+                                  ? "bg-purple-500"
+                                  : "bg-[#0084d1]"
                             }`}
                           />
                           <span>{plan.statusLabel}</span>
@@ -412,7 +433,9 @@ export default function MyVisitPlansPage() {
 
                     {/* Photos Preview Grid (if any) */}
                     {plan.photos.length > 0 && (
-                      <div className={`grid gap-2.5 ${plan.photos.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}>
+                      <div
+                        className={`grid gap-2.5 ${plan.photos.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}
+                      >
                         {plan.photos.map((photo, pIdx) => (
                           <div
                             key={pIdx}
@@ -435,11 +458,13 @@ export default function MyVisitPlansPage() {
 
                     {/* Card Bottom Meta & Actions */}
                     <div className="pt-3 border-t border-slate-150 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      
                       {/* Meta stats */}
                       <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 font-medium">
                         <span className="font-bold text-[#0084d1] bg-sky-50 px-2 py-0.5 rounded-md">
-                          {plan.stopsCount} {plan.status === "completed" ? "Stops Explored" : "Stops"}
+                          {plan.stopsCount}{" "}
+                          {plan.status === "completed"
+                            ? "Stops Explored"
+                            : "Stops"}
                         </span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
@@ -477,7 +502,9 @@ export default function MyVisitPlansPage() {
                           }`}
                           title="Bookmark"
                         >
-                          <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-[#0084d1]" : ""}`} />
+                          <Bookmark
+                            className={`w-4 h-4 ${isBookmarked ? "fill-[#0084d1]" : ""}`}
+                          />
                         </button>
 
                         {plan.status === "completed" ? (
@@ -531,18 +558,14 @@ export default function MyVisitPlansPage() {
                           </>
                         )}
                       </div>
-
                     </div>
-
                   </div>
                 );
               })}
-
             </div>
 
             {/* RIGHT COLUMN: Sidebar Intelligence (4 cols) */}
             <div className="lg:col-span-4 space-y-5 sticky top-20">
-              
               {/* 1. Horizon Compliance Card */}
               <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-3">
                 <div className="flex items-center gap-2">
@@ -560,7 +583,9 @@ export default function MyVisitPlansPage() {
                 </div>
 
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Every planned waypoint is strictly anchored within 25 km of Ampara&apos;s central clocktower for feasible, stress-free single-day excursions.
+                  Every planned waypoint is strictly anchored within 25 km of
+                  Ampara&apos;s central clocktower for feasible, stress-free
+                  single-day excursions.
                 </p>
 
                 {/* Ring Indicator Box */}
@@ -590,18 +615,21 @@ export default function MyVisitPlansPage() {
                     <Sparkles className="w-4 h-4 text-[#0084d1]" />
                     <span>Recommended to Add</span>
                   </div>
-                  <Link href="/#explore" className="text-xs font-bold text-[#0084d1] hover:underline">
+                  <Link
+                    href="/#explore"
+                    className="text-xs font-bold text-[#0084d1] hover:underline"
+                  >
                     View All
                   </Link>
                 </div>
 
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Unvisited treasures nearby that integrate seamlessly into your existing routes:
+                  Unvisited treasures nearby that integrate seamlessly into your
+                  existing routes:
                 </p>
 
                 {/* Items */}
                 <div className="space-y-2.5">
-                  
                   <div className="p-2.5 rounded-2xl border border-slate-200/80 hover:bg-slate-50 transition-all flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5">
                       <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-slate-100 shrink-0">
@@ -613,8 +641,12 @@ export default function MyVisitPlansPage() {
                         />
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-slate-900">Hingurana Valley</div>
-                        <div className="text-[10px] text-slate-500">Sugarcane plains &amp; waterways</div>
+                        <div className="text-xs font-bold text-slate-900">
+                          Hingurana Valley
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          Sugarcane plains &amp; waterways
+                        </div>
                         <button
                           type="button"
                           onClick={() => alert("Added to Oct 26 Plan!")}
@@ -640,8 +672,12 @@ export default function MyVisitPlansPage() {
                         />
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-slate-900">Pannalgama Quiet Pier</div>
-                        <div className="text-[10px] text-slate-500">Canoe launch &amp; kingfisher birding</div>
+                        <div className="text-xs font-bold text-slate-900">
+                          Pannalgama Quiet Pier
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          Canoe launch &amp; kingfisher birding
+                        </div>
                         <button
                           type="button"
                           onClick={() => alert("Added to Nov 04 Plan!")}
@@ -655,7 +691,6 @@ export default function MyVisitPlansPage() {
                       18.7 km
                     </span>
                   </div>
-
                 </div>
               </div>
 
@@ -666,21 +701,19 @@ export default function MyVisitPlansPage() {
                   <span>Wildlife &amp; Heritage Advisory</span>
                 </div>
                 <p className="text-emerald-900/90 text-[11px] leading-relaxed">
-                  Elephant corridors around Senanayake Samudraya become active around 4:00 PM. Please maintain respectful 50m buffers and adhere to park boundaries.
+                  Elephant corridors around Senanayake Samudraya become active
+                  around 4:00 PM. Please maintain respectful 50m buffers and
+                  adhere to park boundaries.
                 </p>
               </div>
-
             </div>
-
           </div>
-
         )}
-
       </main>
 
       {/* 7. Global Footer */}
       <footer className="w-full bg-white border-t border-slate-200/90 mt-8 pt-8 pb-6 text-slate-600 text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <div className="md:col-span-5 space-y-3">
               <div className="flex items-center gap-2">
@@ -695,7 +728,9 @@ export default function MyVisitPlansPage() {
                 </span>
               </div>
               <p className="text-slate-500 text-xs leading-relaxed max-w-sm">
-                Curating ancient stupas, untouched reservoir sanctuaries, and coastal peripheries nestled strictly within a 25 km radius of Ampara. Travel thoughtfully with genuine regional insight.
+                Curating ancient stupas, untouched reservoir sanctuaries, and
+                coastal peripheries nestled strictly within a 25 km radius of
+                Ampara. Travel thoughtfully with genuine regional insight.
               </p>
             </div>
 
@@ -705,22 +740,34 @@ export default function MyVisitPlansPage() {
               </div>
               <ul className="space-y-2 text-xs font-semibold text-slate-600">
                 <li>
-                  <Link href="/#explore" className="hover:text-[#0084d1] transition-colors">
+                  <Link
+                    href="/#explore"
+                    className="hover:text-[#0084d1] transition-colors"
+                  >
                     Explore Attractions
                   </Link>
                 </li>
                 <li>
-                  <Link href="/map" className="hover:text-[#0084d1] transition-colors">
+                  <Link
+                    href="/map"
+                    className="hover:text-[#0084d1] transition-colors"
+                  >
                     Radial Route Map
                   </Link>
                 </li>
                 <li>
-                  <Link href="/plan" className="hover:text-[#0084d1] transition-colors">
+                  <Link
+                    href="/plan"
+                    className="hover:text-[#0084d1] transition-colors"
+                  >
                     One-Day Visit Planner
                   </Link>
                 </li>
                 <li>
-                  <Link href="/login" className="hover:text-[#0084d1] transition-colors">
+                  <Link
+                    href="/login"
+                    className="hover:text-[#0084d1] transition-colors"
+                  >
                     Account Portal
                   </Link>
                 </li>
@@ -732,14 +779,16 @@ export default function MyVisitPlansPage() {
                 HERITAGE &amp; WILDLIFE
               </div>
               <p className="text-slate-500 text-xs leading-relaxed">
-                Adhere to regional conservation rules when visiting Senanayake Samudraya, Dighavapi, and Buddhist forest monasteries.
+                Adhere to regional conservation rules when visiting Senanayake
+                Samudraya, Dighavapi, and Buddhist forest monasteries.
               </p>
             </div>
           </div>
 
           <div className="pt-6 border-t border-slate-150 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
             <div>
-              © 2024 Ampara Explore. Sri Lanka Tourism Development Authority aligned.
+              © 2024 Ampara Explore. Sri Lanka Tourism Development Authority
+              aligned.
             </div>
             <div className="font-bold text-slate-700">
               Eastern Province, Sri Lanka
@@ -761,7 +810,6 @@ export default function MyVisitPlansPage() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
       />
-
     </div>
   );
 }

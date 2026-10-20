@@ -29,7 +29,9 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("kasun@amparaexplore.lk");
   const [otp, setOtp] = useState(["8", "4", "9", "2", "0", "1"]);
   const [newPassword, setNewPassword] = useState("NewExplorerPass2025!");
-  const [confirmPassword, setConfirmPassword] = useState("NewExplorerPass2025!");
+  const [confirmPassword, setConfirmPassword] = useState(
+    "NewExplorerPass2025!",
+  );
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [resendCountdown, setResendCountdown] = useState(45);
@@ -59,7 +61,10 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleOtpKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       const prevInput = document.getElementById(`otp-${index - 1}`);
       if (prevInput) prevInput.focus();
@@ -75,13 +80,31 @@ export default function ForgotPasswordPage() {
     if (/[0-9]/.test(pass)) score++;
     if (/[^A-Za-z0-9]/.test(pass)) score++;
 
-    if (score <= 1) return { score: 1, text: "Weak", color: "bg-rose-500", textCol: "text-rose-600" };
-    if (score <= 3) return { score: 2, text: "Good", color: "bg-amber-500", textCol: "text-amber-600" };
-    return { score: 3, text: "Strong", color: "bg-emerald-500", textCol: "text-emerald-600" };
+    if (score <= 1)
+      return {
+        score: 1,
+        text: "Weak",
+        color: "bg-rose-500",
+        textCol: "text-rose-600",
+      };
+    if (score <= 3)
+      return {
+        score: 2,
+        text: "Good",
+        color: "bg-amber-500",
+        textCol: "text-amber-600",
+      };
+    return {
+      score: 3,
+      text: "Strong",
+      color: "bg-emerald-500",
+      textCol: "text-emerald-600",
+    };
   };
 
   const strength = getPasswordStrength(newPassword);
-  const passwordsMatch = newPassword && confirmPassword && newPassword === confirmPassword;
+  const passwordsMatch =
+    newPassword && confirmPassword && newPassword === confirmPassword;
 
   const handleRequestSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,14 +136,15 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
       {/* 1. Header Bar */}
       <header className="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-full bg-[#0084d1] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
               <Compass className="w-5 h-5 text-white stroke-[2.2]" />
             </div>
             <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900">
-              Ampara <span className="text-[#0084d1] font-extrabold">Explore</span>
+              Ampara{" "}
+              <span className="text-[#0084d1] font-extrabold">Explore</span>
             </span>
           </Link>
 
@@ -150,67 +174,82 @@ export default function ForgotPasswordPage() {
       </header>
 
       {/* 2. Main Body Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col justify-center">
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col justify-center">
         {/* State Switcher Pill at Top */}
         <div className="flex justify-center sm:justify-end mb-4 sm:mb-6">
           <div className="inline-flex flex-wrap items-center bg-white/90 backdrop-blur-md p-1 rounded-full border border-slate-200/90 shadow-xs gap-1">
             <button
               type="button"
               onClick={() => handleStepSwitch("request")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${step === "request"
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                step === "request"
                   ? "bg-slate-100 text-[#006699] shadow-2xs"
                   : "text-slate-500 hover:text-slate-800"
-                }`}
+              }`}
             >
-              <span className={`w-2 h-2 rounded-full ${step === "request" ? "bg-[#0084d1]" : "bg-transparent border border-slate-400"}`} />
+              <span
+                className={`w-2 h-2 rounded-full ${step === "request" ? "bg-[#0084d1]" : "bg-transparent border border-slate-400"}`}
+              />
               <span>1. Request Code</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleStepSwitch("verify")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${step === "verify"
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                step === "verify"
                   ? "bg-slate-100 text-[#006699] shadow-2xs"
                   : "text-slate-500 hover:text-slate-800"
-                }`}
+              }`}
             >
-              <span className={`w-2 h-2 rounded-full ${step === "verify" ? "bg-[#0084d1]" : "bg-transparent border border-slate-400"}`} />
+              <span
+                className={`w-2 h-2 rounded-full ${step === "verify" ? "bg-[#0084d1]" : "bg-transparent border border-slate-400"}`}
+              />
               <span>2. Verify OTP</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleStepSwitch("reset")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${step === "reset"
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                step === "reset"
                   ? "bg-slate-100 text-[#006699] shadow-2xs"
                   : "text-slate-500 hover:text-slate-800"
-                }`}
+              }`}
             >
-              <span className={`w-2 h-2 rounded-full ${step === "reset" ? "bg-[#0084d1]" : "bg-transparent border border-slate-400"}`} />
+              <span
+                className={`w-2 h-2 rounded-full ${step === "reset" ? "bg-[#0084d1]" : "bg-transparent border border-slate-400"}`}
+              />
               <span>3. New Password</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleStepSwitch("success")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${step === "success"
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                step === "success"
                   ? "bg-emerald-50 text-emerald-700 shadow-2xs"
                   : "text-slate-500 hover:text-slate-800"
-                }`}
+              }`}
             >
-              <span className={`w-2 h-2 rounded-full ${step === "success" ? "bg-emerald-500" : "bg-transparent border border-slate-400"}`} />
+              <span
+                className={`w-2 h-2 rounded-full ${step === "success" ? "bg-emerald-500" : "bg-transparent border border-slate-400"}`}
+              />
               <span>4. Success</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleStepSwitch("error")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${step === "error"
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                step === "error"
                   ? "bg-rose-50 text-rose-700 shadow-2xs"
                   : "text-slate-500 hover:text-slate-800"
-                }`}
+              }`}
             >
-              <span className={`w-2 h-2 rounded-full ${step === "error" ? "bg-rose-500" : "bg-transparent border border-slate-400"}`} />
+              <span
+                className={`w-2 h-2 rounded-full ${step === "error" ? "bg-rose-500" : "bg-transparent border border-slate-400"}`}
+              />
               <span>Error State</span>
             </button>
           </div>
@@ -254,12 +293,15 @@ export default function ForgotPasswordPage() {
               </div>
 
               <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-[1.1] mb-3 drop-shadow-md">
-                Recover Access.<br />
+                Recover Access.
+                <br />
                 Return to Ampara.
               </h2>
 
               <p className="text-slate-100 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-sm max-w-md">
-                Restore immediate access to your saved radial itineraries, booked wildlife boat safaris, and personalized heritage trail pins.
+                Restore immediate access to your saved radial itineraries,
+                booked wildlife boat safaris, and personalized heritage trail
+                pins.
               </p>
 
               {/* Safety Checklist */}
@@ -346,7 +388,8 @@ export default function ForgotPasswordPage() {
                       Forgot Your Password?
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                      Enter your registered Explorer email address or phone number, and we will send you a 6-digit verification code.
+                      Enter your registered Explorer email address or phone
+                      number, and we will send you a 6-digit verification code.
                     </p>
                   </div>
 
@@ -371,17 +414,21 @@ export default function ForgotPasswordPage() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="explorer@amparaexplore.lk"
-                          className={`w-full bg-[#f8fafc] text-slate-900 text-xs sm:text-sm font-medium rounded-xl pl-10 pr-3.5 py-3 border transition-all focus:outline-none ${step === "error"
+                          className={`w-full bg-[#f8fafc] text-slate-900 text-xs sm:text-sm font-medium rounded-xl pl-10 pr-3.5 py-3 border transition-all focus:outline-none ${
+                            step === "error"
                               ? "border-red-400 ring-2 ring-red-100 bg-red-50/20"
                               : "border-slate-200 focus:border-[#0084d1] focus:ring-3 focus:ring-sky-100 focus:bg-white"
-                            }`}
+                          }`}
                         />
                       </div>
 
                       {step === "error" && (
                         <div className="flex items-center gap-1.5 text-[11px] font-semibold text-red-600 mt-1.5">
                           <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                          <span>No explorer account found with this email address. Please try another or register.</span>
+                          <span>
+                            No explorer account found with this email address.
+                            Please try another or register.
+                          </span>
                         </div>
                       )}
                     </div>
@@ -415,7 +462,9 @@ export default function ForgotPasswordPage() {
                       Check Your Inbox
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                      We have sent a 6-digit recovery code to <span className="font-bold text-slate-800">{email}</span>. Enter it below to proceed.
+                      We have sent a 6-digit recovery code to{" "}
+                      <span className="font-bold text-slate-800">{email}</span>.
+                      Enter it below to proceed.
                     </p>
                   </div>
 
@@ -443,7 +492,9 @@ export default function ForgotPasswordPage() {
                             type="text"
                             maxLength={1}
                             value={digit}
-                            onChange={(e) => handleOtpChange(idx, e.target.value)}
+                            onChange={(e) =>
+                              handleOtpChange(idx, e.target.value)
+                            }
                             onKeyDown={(e) => handleOtpKeyDown(idx, e)}
                             className="w-full text-center text-lg sm:text-xl font-bold bg-[#f8fafc] text-slate-900 rounded-xl py-3 border border-slate-200 focus:border-[#0084d1] focus:ring-3 focus:ring-sky-100 focus:bg-white focus:outline-none transition-all"
                           />
@@ -503,7 +554,8 @@ export default function ForgotPasswordPage() {
                       Create New Password
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                      Your new password must be secure and different from previously used passwords.
+                      Your new password must be secure and different from
+                      previously used passwords.
                     </p>
                   </div>
 
@@ -514,7 +566,9 @@ export default function ForgotPasswordPage() {
                         <label className="text-xs font-bold text-slate-800">
                           New Password
                         </label>
-                        <span className={`text-[10px] font-extrabold uppercase ${strength.textCol || "text-slate-400"}`}>
+                        <span
+                          className={`text-[10px] font-extrabold uppercase ${strength.textCol || "text-slate-400"}`}
+                        >
                           {strength.text}
                         </span>
                       </div>
@@ -536,15 +590,25 @@ export default function ForgotPasswordPage() {
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
                         >
-                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          {showPassword ? (
+                            <EyeOff className="w-4 h-4" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
                         </button>
                       </div>
 
                       {/* Password Strength Meter Bar */}
                       <div className="mt-1.5 flex items-center gap-1">
-                        <div className={`h-1 flex-1 rounded-full ${strength.score >= 1 ? strength.color : "bg-slate-200"}`} />
-                        <div className={`h-1 flex-1 rounded-full ${strength.score >= 2 ? strength.color : "bg-slate-200"}`} />
-                        <div className={`h-1 flex-1 rounded-full ${strength.score >= 3 ? strength.color : "bg-slate-200"}`} />
+                        <div
+                          className={`h-1 flex-1 rounded-full ${strength.score >= 1 ? strength.color : "bg-slate-200"}`}
+                        />
+                        <div
+                          className={`h-1 flex-1 rounded-full ${strength.score >= 2 ? strength.color : "bg-slate-200"}`}
+                        />
+                        <div
+                          className={`h-1 flex-1 rounded-full ${strength.score >= 3 ? strength.color : "bg-slate-200"}`}
+                        />
                       </div>
                     </div>
 
@@ -571,17 +635,24 @@ export default function ForgotPasswordPage() {
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           placeholder="••••••••••••"
-                          className={`w-full bg-[#f8fafc] text-slate-900 text-xs sm:text-sm font-medium rounded-xl pl-10 pr-9 py-3 border transition-all focus:outline-none ${!passwordsMatch && confirmPassword
+                          className={`w-full bg-[#f8fafc] text-slate-900 text-xs sm:text-sm font-medium rounded-xl pl-10 pr-9 py-3 border transition-all focus:outline-none ${
+                            !passwordsMatch && confirmPassword
                               ? "border-red-400 ring-2 ring-red-100 bg-red-50/20"
                               : "border-slate-200 focus:border-[#0084d1] focus:ring-3 focus:ring-sky-100 focus:bg-white"
-                            }`}
+                          }`}
                         />
                         <button
                           type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
                           className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
                         >
-                          {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          {showConfirmPassword ? (
+                            <EyeOff className="w-4 h-4" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
                         </button>
                       </div>
 
@@ -620,7 +691,8 @@ export default function ForgotPasswordPage() {
                   </h1>
 
                   <p className="text-xs sm:text-sm text-slate-500 font-medium max-w-sm mx-auto mb-6">
-                    Your Explorer ID password has been updated securely. You can now use your new password to sign into your travel portal.
+                    Your Explorer ID password has been updated securely. You can
+                    now use your new password to sign into your travel portal.
                   </p>
 
                   <div className="space-y-3">
@@ -646,7 +718,10 @@ export default function ForgotPasswordPage() {
             {/* Bottom Security / Protection Badge */}
             <div className="flex items-center justify-center gap-2 text-center text-slate-600 text-[11px] font-semibold mt-4">
               <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Protected by Sri Lanka Tourism Digital Gateway • 256-bit encryption</span>
+              <span>
+                Protected by Sri Lanka Tourism Digital Gateway • 256-bit
+                encryption
+              </span>
             </div>
           </div>
         </div>
@@ -654,18 +729,28 @@ export default function ForgotPasswordPage() {
 
       {/* 3. Footer */}
       <footer className="w-full border-t border-slate-200/80 bg-white px-4 sm:px-8 py-4 text-slate-500 text-xs mt-6">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div>
-            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage & Wildlife Portal.
+            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage &
+            Wildlife Portal.
           </div>
           <div className="flex items-center gap-5 font-semibold text-slate-600">
-            <Link href="/privacy-policy" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms-of-service" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/terms-of-service"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Terms of Service
             </Link>
-            <Link href="/cultural-guidelines" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/cultural-guidelines"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Cultural Guidelines
             </Link>
           </div>

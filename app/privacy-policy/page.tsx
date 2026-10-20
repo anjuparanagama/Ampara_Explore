@@ -29,20 +29,35 @@ export default function PrivacyPolicyPage() {
       content: (
         <>
           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-            Ampara Explore collects necessary information to offer you an authentic, safe, and personalized 25 km radial discovery experience in the Eastern Province of Sri Lanka. We collect:
+            Ampara Explore collects necessary information to offer you an
+            authentic, safe, and personalized 25 km radial discovery experience
+            in the Eastern Province of Sri Lanka. We collect:
           </p>
           <ul className="space-y-2 text-sm text-slate-600 list-disc list-inside">
             <li>
-              <strong className="text-slate-800">Account Credentials:</strong> Full name, verified email address, contact/WhatsApp number, and encrypted password.
+              <strong className="text-slate-800">Account Credentials:</strong>{" "}
+              Full name, verified email address, contact/WhatsApp number, and
+              encrypted password.
             </li>
             <li>
-              <strong className="text-slate-800">Travel Preferences:</strong> Interests such as wildlife safaris, ancient stupas, reservoir boat trips, and eco-camping.
+              <strong className="text-slate-800">Travel Preferences:</strong>{" "}
+              Interests such as wildlife safaris, ancient stupas, reservoir boat
+              trips, and eco-camping.
             </li>
             <li>
-              <strong className="text-slate-800">Real-Time Radial Horizon Geolocation:</strong> Temporary GPS coordinates (used only when permitted to calculate radial distance from the Ampara town center or current location to indexed sites).
+              <strong className="text-slate-800">
+                Real-Time Radial Horizon Geolocation:
+              </strong>{" "}
+              Temporary GPS coordinates (used only when permitted to calculate
+              radial distance from the Ampara town center or current location to
+              indexed sites).
             </li>
             <li>
-              <strong className="text-slate-800">Visit Plans & Custom Itineraries:</strong> Saved attractions, custom waypoints, notes, and visit route sequences.
+              <strong className="text-slate-800">
+                Visit Plans & Custom Itineraries:
+              </strong>{" "}
+              Saved attractions, custom waypoints, notes, and visit route
+              sequences.
             </li>
           </ul>
         </>
@@ -55,7 +70,8 @@ export default function PrivacyPolicyPage() {
       content: (
         <>
           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-            Your data is strictly utilized for the functional enhancement of your travel planning:
+            Your data is strictly utilized for the functional enhancement of
+            your travel planning:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
@@ -64,7 +80,8 @@ export default function PrivacyPolicyPage() {
                 <span>25 KM Radial Filtering</span>
               </div>
               <p className="text-xs text-slate-500">
-                To accurately measure radial distance to sanctuaries like Gal Oya and Senanayake Samudraya.
+                To accurately measure radial distance to sanctuaries like Gal
+                Oya and Senanayake Samudraya.
               </p>
             </div>
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
@@ -73,7 +90,8 @@ export default function PrivacyPolicyPage() {
                 <span>Wildlife & Safari Alerts</span>
               </div>
               <p className="text-xs text-slate-500">
-                To alert registered explorers regarding seasonal elephant crossings and sunrise boat safari departures.
+                To alert registered explorers regarding seasonal elephant
+                crossings and sunrise boat safari departures.
               </p>
             </div>
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
@@ -82,7 +100,8 @@ export default function PrivacyPolicyPage() {
                 <span>Synchronized Itineraries</span>
               </div>
               <p className="text-xs text-slate-500">
-                Ensures your 1-day visit plan is preserved across devices and available offline.
+                Ensures your 1-day visit plan is preserved across devices and
+                available offline.
               </p>
             </div>
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
@@ -91,7 +110,8 @@ export default function PrivacyPolicyPage() {
                 <span>Safety Protocol Compliance</span>
               </div>
               <p className="text-xs text-slate-500">
-                Connecting with local tourist police and ranger stations during emergencies.
+                Connecting with local tourist police and ranger stations during
+                emergencies.
               </p>
             </div>
           </div>
@@ -105,12 +125,25 @@ export default function PrivacyPolicyPage() {
       content: (
         <>
           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-            In compliance with the <strong className="text-slate-800">Sri Lanka Personal Data Protection Act No. 9 of 2022</strong>, we implement rigorous technical safeguards:
+            In compliance with the{" "}
+            <strong className="text-slate-800">
+              Sri Lanka Personal Data Protection Act No. 9 of 2022
+            </strong>
+            , we implement rigorous technical safeguards:
           </p>
           <ul className="space-y-2 text-sm text-slate-600 list-disc list-inside">
-            <li>All transit data is encrypted via 256-bit Secure Socket Layer (SSL/TLS).</li>
-            <li>Passwords are hashed with industry-standard one-way cryptography and never stored in plain text.</li>
-            <li>We do not sell, rent, or monetize your personal travel data to commercial advertisers.</li>
+            <li>
+              All transit data is encrypted via 256-bit Secure Socket Layer
+              (SSL/TLS).
+            </li>
+            <li>
+              Passwords are hashed with industry-standard one-way cryptography
+              and never stored in plain text.
+            </li>
+            <li>
+              We do not sell, rent, or monetize your personal travel data to
+              commercial advertisers.
+            </li>
           </ul>
         </>
       ),
@@ -122,13 +155,33 @@ export default function PrivacyPolicyPage() {
       content: (
         <>
           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-            As a registered Ampara Explorer, you retain full sovereignty over your information:
+            As a registered Ampara Explorer, you retain full sovereignty over
+            your information:
           </p>
           <div className="space-y-2 text-sm text-slate-600">
-            <p>• <strong className="text-slate-800">Access & Export:</strong> Request a digital export of your saved itineraries and profile history.</p>
-            <p>• <strong className="text-slate-800">Rectification:</strong> Update or modify your email, phone, or travel interest tags at any time.</p>
-            <p>• <strong className="text-slate-800">Account Erasure:</strong> Request permanent deletion of your Explorer ID and all associated itinerary records.</p>
-            <p>• <strong className="text-slate-800">Notification Preferences:</strong> Opt out of seasonal ranger SMS alerts without losing core platform features.</p>
+            <p>
+              • <strong className="text-slate-800">Access & Export:</strong>{" "}
+              Request a digital export of your saved itineraries and profile
+              history.
+            </p>
+            <p>
+              • <strong className="text-slate-800">Rectification:</strong>{" "}
+              Update or modify your email, phone, or travel interest tags at any
+              time.
+            </p>
+            <p>
+              • <strong className="text-slate-800">Account Erasure:</strong>{" "}
+              Request permanent deletion of your Explorer ID and all associated
+              itinerary records.
+            </p>
+            <p>
+              •{" "}
+              <strong className="text-slate-800">
+                Notification Preferences:
+              </strong>{" "}
+              Opt out of seasonal ranger SMS alerts without losing core platform
+              features.
+            </p>
           </div>
         </>
       ),
@@ -143,7 +196,8 @@ export default function PrivacyPolicyPage() {
             Data Protection & Privacy Officer
           </p>
           <p className="text-xs text-slate-600 mb-3">
-            Ampara Regional Tourism & Digital Discovery Project, District Secretariat, Ampara, Sri Lanka.
+            Ampara Regional Tourism & Digital Discovery Project, District
+            Secretariat, Ampara, Sri Lanka.
           </p>
           <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-[#006699]">
             <span>Email: privacy@amparaexplore.lk</span>
@@ -158,13 +212,14 @@ export default function PrivacyPolicyPage() {
     <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
       {/* 1. Header Bar */}
       <header className="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-full bg-[#0084d1] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
               <Compass className="w-5 h-5 text-white stroke-[2.2]" />
             </div>
             <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900">
-              Ampara <span className="text-[#0084d1] font-extrabold">Explore</span>
+              Ampara{" "}
+              <span className="text-[#0084d1] font-extrabold">Explore</span>
             </span>
           </Link>
 
@@ -191,7 +246,9 @@ export default function PrivacyPolicyPage() {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Breadcrumb & Pill */}
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-3">
-          <Link href="/" className="hover:text-[#0084d1]">Home</Link>
+          <Link href="/" className="hover:text-[#0084d1]">
+            Home
+          </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
           <span className="text-slate-800 font-bold">Privacy Policy</span>
         </div>
@@ -208,19 +265,24 @@ export default function PrivacyPolicyPage() {
                 Privacy Policy
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
-                How we protect and handle your personal data across the 25 KM Radial Horizon portal.
+                How we protect and handle your personal data across the 25 KM
+                Radial Horizon portal.
               </p>
             </div>
 
             <div className="text-left sm:text-right text-xs text-slate-500 shrink-0">
-              <span className="font-bold text-slate-700 block">Status: Verified</span>
+              <span className="font-bold text-slate-700 block">
+                Status: Verified
+              </span>
               <span>Last Updated: {lastUpdated}</span>
             </div>
           </div>
 
           {/* Table of Contents Pill Bar */}
           <div className="flex flex-wrap items-center gap-2 pt-6">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Sections:</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">
+              Sections:
+            </span>
             {sections.map((s) => (
               <a
                 key={s.id}
@@ -258,8 +320,13 @@ export default function PrivacyPolicyPage() {
         {/* Quick Link Footer Navigator */}
         <div className="mt-10 p-6 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-center sm:text-left">
-            <div className="text-sm font-bold text-slate-900">Explore Additional Legal & Cultural Policies</div>
-            <div className="text-xs text-slate-500">Read our terms of service and sacred cultural preservation guidelines.</div>
+            <div className="text-sm font-bold text-slate-900">
+              Explore Additional Legal & Cultural Policies
+            </div>
+            <div className="text-xs text-slate-500">
+              Read our terms of service and sacred cultural preservation
+              guidelines.
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -281,18 +348,25 @@ export default function PrivacyPolicyPage() {
 
       {/* 3. Footer */}
       <footer className="w-full border-t border-slate-200/80 bg-white px-4 sm:px-8 py-4 text-slate-500 text-xs mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div>
-            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage & Wildlife Portal.
+            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage &
+            Wildlife Portal.
           </div>
           <div className="flex items-center gap-5 font-semibold text-slate-600">
             <Link href="/privacy-policy" className="text-[#0084d1]">
               Privacy Policy
             </Link>
-            <Link href="/terms-of-service" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/terms-of-service"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Terms of Service
             </Link>
-            <Link href="/cultural-guidelines" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/cultural-guidelines"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Cultural Guidelines
             </Link>
           </div>

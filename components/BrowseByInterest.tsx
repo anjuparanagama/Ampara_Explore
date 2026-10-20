@@ -3,6 +3,15 @@
 import React from "react";
 import { interestCategories, amparaAttractions } from "@/data/amparaData";
 import { useLanguage } from "@/context/LanguageContext";
+import {
+  Church,
+  Droplets,
+  Landmark,
+  PawPrint,
+  Theater,
+  TreePine,
+  WavesHorizontal,
+} from "lucide-react";
 
 interface BrowseByInterestProps {
   selectedCategory: string | null;
@@ -17,7 +26,7 @@ export default function BrowseByInterest({
 
   const getCategoryCount = (title: string) => {
     return amparaAttractions.filter(
-      (a) => a.category.toLowerCase() === title.toLowerCase()
+      (a) => a.category.toLowerCase() === title.toLowerCase(),
     ).length;
   };
 
@@ -34,72 +43,38 @@ export default function BrowseByInterest({
     return keyMap[title] ? t(keyMap[title]) : title;
   };
 
-  // Custom icon renderer matching the exact icons from the design
   const renderCategoryIcon = (id: string, color: string) => {
+    const iconProps = {
+      className: "w-6 h-6",
+      color,
+      strokeWidth: 2,
+    };
+
     switch (id) {
       case "nature":
-        return (
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {/* Stylized tree icon */}
-            <path d="M12 2L6 10h3l-4 7h6v5h2v-5h6l-4-7h3L12 2z" />
-          </svg>
-        );
+        return <TreePine {...iconProps} />;
       case "historical":
-        return (
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {/* Ancient temple columns */}
-            <path d="M3 21h18M3 7h18M4 7v14M8 7v14M12 7v14M16 7v14M20 7v14M12 3L2 7h20L12 3z" />
-          </svg>
-        );
+        return <Landmark {...iconProps} />;
       case "religious":
-        return (
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {/* Pagoda / Stupa shrine */}
-            <path d="M12 2v3M8 5h8M6 8h12M4 11h16M7 11v7M17 11v7M3 21h18M9 21v-3h6v3" />
-          </svg>
-        );
+        return <Church {...iconProps} />;
       case "beaches":
-        return (
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {/* Ocean waves */}
-            <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-          </svg>
-        );
+        return <WavesHorizontal {...iconProps} />;
       case "waterfalls":
-        return (
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {/* Water droplet with ripple */}
-            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-          </svg>
-        );
+        return <Droplets {...iconProps} />;
       case "wildlife":
-        return (
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {/* Paw print */}
-            <circle cx="12" cy="15" r="4" />
-            <circle cx="6" cy="9" r="2" />
-            <circle cx="10" cy="5" r="2" />
-            <circle cx="14" cy="5" r="2" />
-            <circle cx="18" cy="9" r="2" />
-          </svg>
-        );
+        return <PawPrint {...iconProps} />;
       case "cultural":
-        return (
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            {/* Drama / cultural masks */}
-            <circle cx="9" cy="11" r="7" />
-            <path d="M6 10h.01M12 10h.01M7.5 14c.5.8 1.5 1.2 2.5 1s2-.5 2.5-1" />
-            <path d="M15 8c2.5.5 4.5 2.5 5 5 .5 2.5-.5 5-2 6M17 11h.01M17 15c-.5.5-1 .8-1.8.8" />
-          </svg>
-        );
+        return <Theater {...iconProps} />;
       default:
         return null;
     }
   };
 
   return (
-    <section id="explore" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      
+    <section
+      id="explore"
+      className="w-full max-w-[1440px] mx-auto py-16 px-4 sm:px-6 lg:px-8"
+    >
       {/* Header with Title and Description */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
         <div>
@@ -116,7 +91,7 @@ export default function BrowseByInterest({
       </div>
 
       {/* 7 Horizontal Category Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3.5 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2.5 sm:gap-3">
         {interestCategories.map((cat) => {
           const isSelected = selectedCategory === cat.title;
           const translatedTitle = getCategoryTranslation(cat.title);
@@ -193,5 +168,3 @@ export default function BrowseByInterest({
     </section>
   );
 }
-
-

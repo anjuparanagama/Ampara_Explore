@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Compass, MapPin, Target, ArrowRight, Star } from "lucide-react";
+import {
+  Search,
+  Compass,
+  MapPin,
+  Target,
+  ArrowRight,
+  Star,
+} from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 import HeroTimeLapseBg from "./HeroTimeLapseBg";
@@ -46,24 +53,17 @@ export default function Hero({
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col justify-between pt-20 sm:pt-24 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      
+    <section
+      id="hero"
+      className="relative min-h-screen flex flex-col justify-between pt-20 sm:pt-24 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8 overflow-hidden"
+    >
       {/* Dynamic Smooth Time-Lapse Hero Background synced with Current Local Time */}
       <HeroTimeLapseBg />
 
       {/* Main Content Container */}
-      <div className="max-w-4xl mx-auto text-center flex flex-col items-center pt-2 sm:pt-4 relative z-10">
-        
-        {/* Location / Radial Zone Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/85 backdrop-blur-md border border-slate-200/80 shadow-xs mb-3 sm:mb-4 animate-fadeIn">
-          <span className="w-2 h-2 rounded-full bg-[#0284c7] animate-pulse" />
-          <span className="text-[11px] sm:text-xs font-bold text-slate-800 tracking-wide">
-            {t("heroZonePill")}
-          </span>
-        </div>
-
+      <div className="max-w-4xl w-full mx-auto text-center flex flex-1 flex-col items-center justify-center relative z-10">
         {/* Hero Title */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.1] mb-3 sm:mb-4 drop-shadow-xs">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-200 leading-[1.1] mb-3 sm:mb-4 drop-shadow-xs">
           {t("heroTitleDiscover")}{" "}
           <span className="text-[#0084d1] text-transparent bg-clip-text bg-gradient-to-r from-[#0284c7] to-[#0ea5e9]">
             {t("heroTitleCity")}
@@ -71,9 +71,9 @@ export default function Hero({
         </h1>
 
         {/* Hero Subtitle */}
-        <p className="text-xs sm:text-sm md:text-base text-slate-800 font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)] mb-4 sm:mb-5">
+        <p className="text-xs sm:text-sm md:text-base text-slate-200 font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)] mb-4 sm:mb-5">
           {t("heroSubtitle")}
-          <span className="block sm:inline font-semibold text-slate-900">
+          <span className="block sm:inline font-semibold text-slate-200">
             {t("heroSubtitleSuffix")}
           </span>
         </p>
@@ -95,19 +95,12 @@ export default function Hero({
 
             {/* Radius Badge / Toggle Selector */}
             <div className="relative">
-              <button
-                type="button"
-                onClick={() => setShowRadiusDropdown(!showRadiusDropdown)}
-                className="shrink-0 hidden sm:flex items-center gap-1.5 bg-sky-50 hover:bg-sky-100 text-[#0284c7] border border-sky-200/80 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer"
-              >
-                <Target className="w-3.5 h-3.5" />
-                <span>{t("withinRadius")} {selectedRadius} km</span>
-              </button>
-
               {/* Radius Dropdown */}
               {showRadiusDropdown && (
                 <div className="absolute right-0 top-full mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-30 min-w-[150px] text-left animate-fadeIn">
-                  <div className="text-[11px] font-bold text-slate-400 uppercase px-3 py-1">Select Radius</div>
+                  <div className="text-[11px] font-bold text-slate-400 uppercase px-3 py-1">
+                    Select Radius
+                  </div>
                   {[5, 15, 25].map((km) => (
                     <button
                       key={km}
@@ -117,11 +110,17 @@ export default function Hero({
                         setShowRadiusDropdown(false);
                       }}
                       className={`w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-between cursor-pointer ${
-                        selectedRadius === km ? "bg-sky-50 text-[#0284c7]" : "text-slate-700 hover:bg-slate-50"
+                        selectedRadius === km
+                          ? "bg-sky-50 text-[#0284c7]"
+                          : "text-slate-700 hover:bg-slate-50"
                       }`}
                     >
-                      <span>{t("withinRadius")} {km} km</span>
-                      {selectedRadius === km && <span className="text-xs">✓</span>}
+                      <span>
+                        {t("withinRadius")} {km} km
+                      </span>
+                      {selectedRadius === km && (
+                        <span className="text-xs">✓</span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -140,7 +139,7 @@ export default function Hero({
         </div>
 
         {/* Popular Tags */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 text-[11px] sm:text-xs mb-4 sm:mb-5">
+        {/*         <div className="flex flex-wrap items-center justify-center gap-1.5 text-[11px] sm:text-xs mb-4 sm:mb-5">
           <span className="font-bold text-slate-700">{t("popularLabel")}</span>
           {popularTags.map((tag) => (
             <button
@@ -151,7 +150,7 @@ export default function Hero({
               {tag}
             </button>
           ))}
-        </div>
+        </div> */}
 
         {/* Action CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
@@ -176,7 +175,6 @@ export default function Hero({
       {/* 4 Bottom Key Metrics Stat Cards */}
       <div className="max-w-5xl mx-auto w-full mt-4 sm:mt-6 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3.5">
-          
           {/* Card 1: 40+ Attractions */}
           <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
             <div className="text-xl sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform">
@@ -217,11 +215,8 @@ export default function Hero({
               {t("stat4Label")}
             </div>
           </div>
-
         </div>
       </div>
     </section>
   );
 }
-
-

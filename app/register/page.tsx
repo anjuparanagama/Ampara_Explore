@@ -93,18 +93,38 @@ export default function RegisterPage() {
     if (/[0-9]/.test(pass)) score++;
     if (/[^A-Za-z0-9]/.test(pass)) score++;
 
-    if (score <= 1) return { score: 1, text: "Weak", color: "bg-rose-500", textCol: "text-rose-600" };
-    if (score <= 3) return { score: 2, text: "Good", color: "bg-amber-500", textCol: "text-amber-600" };
-    return { score: 3, text: "Strong", color: "bg-emerald-500", textCol: "text-emerald-600" };
+    if (score <= 1)
+      return {
+        score: 1,
+        text: "Weak",
+        color: "bg-rose-500",
+        textCol: "text-rose-600",
+      };
+    if (score <= 3)
+      return {
+        score: 2,
+        text: "Good",
+        color: "bg-amber-500",
+        textCol: "text-amber-600",
+      };
+    return {
+      score: 3,
+      text: "Strong",
+      color: "bg-emerald-500",
+      textCol: "text-emerald-600",
+    };
   };
 
   const strength = getPasswordStrength(password);
-  const passwordsMatch = password && confirmPassword && password === confirmPassword;
+  const passwordsMatch =
+    password && confirmPassword && password === confirmPassword;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreeTerms && viewState !== "error") {
-      alert("Please accept the Cultural & Eco Preservation guidelines to register.");
+      alert(
+        "Please accept the Cultural & Eco Preservation guidelines to register.",
+      );
       return;
     }
     const randomPassId = `AMP-${new Date().getFullYear()}-EXP-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -116,14 +136,15 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
       {/* 1. Header Bar */}
       <header className="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 py-3.5 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-full bg-[#0084d1] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
               <Compass className="w-5 h-5 text-white stroke-[2.2]" />
             </div>
             <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900">
-              Ampara <span className="text-[#0084d1] font-extrabold">Explore</span>
+              Ampara{" "}
+              <span className="text-[#0084d1] font-extrabold">Explore</span>
             </span>
           </Link>
 
@@ -154,7 +175,7 @@ export default function RegisterPage() {
       </header>
 
       {/* 2. Main Body Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col justify-center">
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col justify-center">
         {/* State Switcher Pill at Top */}
         <div className="flex justify-center sm:justify-end mb-4 sm:mb-6">
           <div className="inline-flex items-center bg-white/90 backdrop-blur-md p-1 rounded-full border border-slate-200/90 shadow-xs">
@@ -169,7 +190,9 @@ export default function RegisterPage() {
             >
               <span
                 className={`w-2 h-2 rounded-full ${
-                  viewState === "default" ? "bg-[#0084d1]" : "bg-transparent border border-slate-400"
+                  viewState === "default"
+                    ? "bg-[#0084d1]"
+                    : "bg-transparent border border-slate-400"
                 }`}
               />
               <span>Default Form</span>
@@ -186,7 +209,9 @@ export default function RegisterPage() {
             >
               <span
                 className={`w-2 h-2 rounded-full ${
-                  viewState === "error" ? "bg-red-500" : "bg-transparent border border-slate-400"
+                  viewState === "error"
+                    ? "bg-red-500"
+                    : "bg-transparent border border-slate-400"
                 }`}
               />
               <span>Validation Error</span>
@@ -203,7 +228,9 @@ export default function RegisterPage() {
             >
               <span
                 className={`w-2 h-2 rounded-full ${
-                  viewState === "success" ? "bg-emerald-500" : "bg-transparent border border-slate-400"
+                  viewState === "success"
+                    ? "bg-emerald-500"
+                    : "bg-transparent border border-slate-400"
                 }`}
               />
               <span>Issued Pass Preview</span>
@@ -249,12 +276,15 @@ export default function RegisterPage() {
               </div>
 
               <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-[1.1] mb-3 drop-shadow-md">
-                Begin Your Journey.<br />
+                Begin Your Journey.
+                <br />
                 Become an Explorer.
               </h2>
 
               <p className="text-slate-100 text-xs sm:text-sm font-medium leading-relaxed drop-shadow-sm max-w-md">
-                Unlock personalized 25 km radial itinerary routing, offline GPS heritage trails, and verified wildlife tracker alerts across Ampara.
+                Unlock personalized 25 km radial itinerary routing, offline GPS
+                heritage trails, and verified wildlife tracker alerts across
+                Ampara.
               </p>
 
               {/* Explorer Benefits Checklist */}
@@ -338,7 +368,8 @@ export default function RegisterPage() {
                     Welcome to Ampara Explore!
                   </h1>
                   <p className="text-xs sm:text-sm text-slate-500 font-medium max-w-md mx-auto mt-1">
-                    Your official 25 KM Explorer ID has been generated and linked to your profile.
+                    Your official 25 KM Explorer ID has been generated and
+                    linked to your profile.
                   </p>
                 </div>
 
@@ -402,7 +433,8 @@ export default function RegisterPage() {
                         Primary Interest
                       </div>
                       <div className="font-semibold text-amber-300 mt-0.5 capitalize">
-                        {INTERESTS.find((i) => i.id === selectedInterest)?.label || "Wildlife & Safari"}
+                        {INTERESTS.find((i) => i.id === selectedInterest)
+                          ?.label || "Wildlife & Safari"}
                       </div>
                     </div>
                   </div>
@@ -410,7 +442,9 @@ export default function RegisterPage() {
                   <div className="mt-3 flex items-center justify-between text-[11px] text-slate-300">
                     <div className="flex items-center gap-1.5">
                       <QrCode className="w-4 h-4 text-sky-300" />
-                      <span className="font-mono text-[10px]">QR VERIFIED • SL TOURISM</span>
+                      <span className="font-mono text-[10px]">
+                        QR VERIFIED • SL TOURISM
+                      </span>
                     </div>
                     <div className="text-[10px] text-slate-400">
                       Valid for 2024 / 2025 Season
@@ -477,7 +511,8 @@ export default function RegisterPage() {
                     Create Explorer Account
                   </h1>
                   <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                    Register your traveler profile to plan, customize and track your visits in the 25 km radial zone.
+                    Register your traveler profile to plan, customize and track
+                    your visits in the 25 km radial zone.
                   </p>
                 </div>
 
@@ -515,7 +550,9 @@ export default function RegisterPage() {
                     {viewState === "error" && !fullName && (
                       <div className="flex items-center gap-1.5 text-[11px] font-semibold text-red-600 mt-1">
                         <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                        <span>Please enter your full legal or traveler name.</span>
+                        <span>
+                          Please enter your full legal or traveler name.
+                        </span>
                       </div>
                     )}
                   </div>
@@ -605,7 +642,9 @@ export default function RegisterPage() {
                                 : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
                             }`}
                           >
-                            <span className="text-base shrink-0">{interest.icon}</span>
+                            <span className="text-base shrink-0">
+                              {interest.icon}
+                            </span>
                             <span className="truncate">{interest.label}</span>
                           </button>
                         );
@@ -621,7 +660,9 @@ export default function RegisterPage() {
                         <label className="text-xs font-bold text-slate-800">
                           Password
                         </label>
-                        <span className={`text-[10px] font-extrabold uppercase ${strength.textCol || "text-slate-400"}`}>
+                        <span
+                          className={`text-[10px] font-extrabold uppercase ${strength.textCol || "text-slate-400"}`}
+                        >
                           {strength.text}
                         </span>
                       </div>
@@ -647,15 +688,25 @@ export default function RegisterPage() {
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
                         >
-                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          {showPassword ? (
+                            <EyeOff className="w-4 h-4" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
                         </button>
                       </div>
 
                       {/* Password Strength Meter Bar */}
                       <div className="mt-1.5 flex items-center gap-1">
-                        <div className={`h-1 flex-1 rounded-full ${strength.score >= 1 ? strength.color : "bg-slate-200"}`} />
-                        <div className={`h-1 flex-1 rounded-full ${strength.score >= 2 ? strength.color : "bg-slate-200"}`} />
-                        <div className={`h-1 flex-1 rounded-full ${strength.score >= 3 ? strength.color : "bg-slate-200"}`} />
+                        <div
+                          className={`h-1 flex-1 rounded-full ${strength.score >= 1 ? strength.color : "bg-slate-200"}`}
+                        />
+                        <div
+                          className={`h-1 flex-1 rounded-full ${strength.score >= 2 ? strength.color : "bg-slate-200"}`}
+                        />
+                        <div
+                          className={`h-1 flex-1 rounded-full ${strength.score >= 3 ? strength.color : "bg-slate-200"}`}
+                        />
                       </div>
                     </div>
 
@@ -690,10 +741,16 @@ export default function RegisterPage() {
                         />
                         <button
                           type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
                           className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
                         >
-                          {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          {showConfirmPassword ? (
+                            <EyeOff className="w-4 h-4" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
                         </button>
                       </div>
 
@@ -716,15 +773,27 @@ export default function RegisterPage() {
                         onChange={(e) => setAgreeTerms(e.target.checked)}
                         className="w-4 h-4 mt-0.5 rounded border-slate-300 text-[#0084d1] focus:ring-[#0084d1] cursor-pointer accent-[#0084d1]"
                       />
-                      <label htmlFor="terms" className="text-xs text-slate-600 cursor-pointer select-none leading-tight">
+                      <label
+                        htmlFor="terms"
+                        className="text-xs text-slate-600 cursor-pointer select-none leading-tight"
+                      >
                         I agree to the{" "}
-                        <Link href="/cultural-guidelines" target="_blank" className="font-bold text-[#0084d1] hover:underline">
+                        <Link
+                          href="/cultural-guidelines"
+                          target="_blank"
+                          className="font-bold text-[#0084d1] hover:underline"
+                        >
                           Cultural Preservation & Eco Code
                         </Link>{" "}
                         and{" "}
-                        <Link href="/terms-of-service" target="_blank" className="font-bold text-[#0084d1] hover:underline">
+                        <Link
+                          href="/terms-of-service"
+                          target="_blank"
+                          className="font-bold text-[#0084d1] hover:underline"
+                        >
                           Terms of Service
-                        </Link>.
+                        </Link>
+                        .
                       </label>
                     </div>
 
@@ -736,8 +805,12 @@ export default function RegisterPage() {
                         onChange={(e) => setRangerAlerts(e.target.checked)}
                         className="w-4 h-4 mt-0.5 rounded border-slate-300 text-[#0084d1] focus:ring-[#0084d1] cursor-pointer accent-[#0084d1]"
                       />
-                      <label htmlFor="alerts" className="text-xs text-slate-600 cursor-pointer select-none leading-tight">
-                        Receive seasonal elephant crossing & boat safari sunrise timing alerts.
+                      <label
+                        htmlFor="alerts"
+                        className="text-xs text-slate-600 cursor-pointer select-none leading-tight"
+                      >
+                        Receive seasonal elephant crossing & boat safari sunrise
+                        timing alerts.
                       </label>
                     </div>
                   </div>
@@ -758,7 +831,9 @@ export default function RegisterPage() {
                     <div className="w-full border-t border-slate-200" />
                   </div>
                   <div className="relative flex justify-center text-[10px] uppercase font-black text-slate-400 tracking-wider">
-                    <span className="bg-white px-3">Or register quickly with</span>
+                    <span className="bg-white px-3">
+                      Or register quickly with
+                    </span>
                   </div>
                 </div>
 
@@ -826,7 +901,10 @@ export default function RegisterPage() {
             {/* Bottom Security / Protection Badge */}
             <div className="flex items-center justify-center gap-2 text-center text-slate-600 text-[11px] font-semibold mt-4">
               <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Protected by Sri Lanka Tourism Digital Gateway • 256-bit encryption</span>
+              <span>
+                Protected by Sri Lanka Tourism Digital Gateway • 256-bit
+                encryption
+              </span>
             </div>
           </div>
         </div>
@@ -834,18 +912,28 @@ export default function RegisterPage() {
 
       {/* 3. Footer */}
       <footer className="w-full border-t border-slate-200/80 bg-white px-4 sm:px-8 py-4 text-slate-500 text-xs mt-6">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div>
-            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage & Wildlife Portal.
+            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage &
+            Wildlife Portal.
           </div>
           <div className="flex items-center gap-5 font-semibold text-slate-600">
-            <Link href="/privacy-policy" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms-of-service" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/terms-of-service"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Terms of Service
             </Link>
-            <Link href="/cultural-guidelines" className="hover:text-[#0084d1] transition-colors">
+            <Link
+              href="/cultural-guidelines"
+              className="hover:text-[#0084d1] transition-colors"
+            >
               Cultural Guidelines
             </Link>
           </div>

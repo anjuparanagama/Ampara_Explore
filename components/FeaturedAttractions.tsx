@@ -4,7 +4,15 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { amparaAttractions, Attraction } from "@/data/amparaData";
-import { Star, MapPin, Clock, Plus, Check, ExternalLink, Compass } from "lucide-react";
+import {
+  Star,
+  MapPin,
+  Clock,
+  Plus,
+  Check,
+  ExternalLink,
+  Compass,
+} from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface FeaturedAttractionsProps {
@@ -27,14 +35,16 @@ export default function FeaturedAttractions({
   onClearCategory,
 }: FeaturedAttractionsProps) {
   const { t } = useLanguage();
-  
+
   // Filter attractions based on search, category, and radius
   const filteredAttractions = amparaAttractions.filter((item) => {
     const matchesSearch =
       !searchQuery ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.highlights.some((h) => h.toLowerCase().includes(searchQuery.toLowerCase()));
+      item.highlights.some((h) =>
+        h.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
 
     const matchesCategory =
       !selectedCategory ||
@@ -49,8 +59,10 @@ export default function FeaturedAttractions({
   });
 
   return (
-    <section id="destinations" className="scroll-mt-24 py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      
+    <section
+      id="destinations"
+      className="scroll-mt-24 py-10 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto"
+    >
       {/* Section Subheader */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 pb-4 border-b border-slate-200/80 gap-3">
         <div>
@@ -68,13 +80,15 @@ export default function FeaturedAttractions({
         {/* Legend */}
         <div className="flex items-center gap-3 text-xs text-slate-600 font-medium">
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> 0-5 km Inner
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> 0-5 km
+            Inner
           </span>
           <span className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-sky-500" /> 5-15 km Mid
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" /> 15-25 km Horizon
+            <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" /> 15-25 km
+            Horizon
           </span>
         </div>
       </div>
@@ -110,9 +124,12 @@ export default function FeaturedAttractions({
       {filteredAttractions.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8 shadow-xs">
           <Compass className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-          <h4 className="text-lg font-bold text-slate-800">No destinations match your criteria</h4>
+          <h4 className="text-lg font-bold text-slate-800">
+            No destinations match your criteria
+          </h4>
           <p className="text-sm text-slate-500 mt-1 max-w-md mx-auto">
-            Try expanding your search radius or clearing category filters to discover more hidden gems.
+            Try expanding your search radius or clearing category filters to
+            discover more hidden gems.
           </p>
           {selectedCategory && onClearCategory && (
             <button
@@ -245,5 +262,3 @@ export default function FeaturedAttractions({
     </section>
   );
 }
-
-

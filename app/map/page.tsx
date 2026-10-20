@@ -170,9 +170,13 @@ export default function MapPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedZone, setSelectedZone] = useState<number>(25);
-  const [mapLayer, setMapLayer] = useState<"terrain" | "satellite" | "topo">("terrain");
+  const [mapLayer, setMapLayer] = useState<"terrain" | "satellite" | "topo">(
+    "terrain",
+  );
   const [zoomLevel, setZoomLevel] = useState<number>(1);
-  const [selectedPlace, setSelectedPlace] = useState<MapPlace | null>(mapDestinations[0]);
+  const [selectedPlace, setSelectedPlace] = useState<MapPlace | null>(
+    mapDestinations[0],
+  );
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
@@ -183,7 +187,8 @@ export default function MapPage() {
   ]);
 
   const handleTogglePlan = (place: MapPlace) => {
-    const matched = amparaAttractions.find((a) => a.id === place.id) || amparaAttractions[0];
+    const matched =
+      amparaAttractions.find((a) => a.id === place.id) || amparaAttractions[0];
     if (visitPlan.some((p) => p.id === matched.id)) {
       setVisitPlan(visitPlan.filter((p) => p.id !== matched.id));
     } else {
@@ -202,7 +207,8 @@ export default function MapPage() {
       selectedCategory === "All" ||
       (selectedCategory === "Nature" && p.category === "Nature") ||
       (selectedCategory === "Wildlife" && p.category === "Wildlife") ||
-      (selectedCategory === "Sacred" && (p.category === "Sacred" || p.category === "Historical"));
+      (selectedCategory === "Sacred" &&
+        (p.category === "Sacred" || p.category === "Historical"));
 
     const matchesZone = p.distanceKm <= selectedZone;
 
@@ -211,7 +217,6 @@ export default function MapPage() {
 
   return (
     <div className="min-h-screen bg-[#f3f6fa] text-slate-900 font-sans selection:bg-[#0284c7] selection:text-white flex flex-col justify-between">
-      
       {/* 1. Navigation Header */}
       <Navbar
         activeTab={activeTab}
@@ -223,12 +228,9 @@ export default function MapPage() {
 
       {/* 2. Main Map Dashboard (Split Layout) */}
       <main className="max-w-[1600px] w-full mx-auto px-2 sm:px-4 lg:px-6 pt-20 sm:pt-24 pb-4 flex-1 flex flex-col lg:flex-row gap-4 items-stretch">
-        
         {/* LEFT PANEL: Explore Places Directory (approx 380px) */}
         <div className="w-full lg:w-[380px] shrink-0 bg-white rounded-3xl border border-slate-200/90 shadow-sm flex flex-col justify-between overflow-hidden">
-          
           <div className="p-4 sm:p-5 space-y-4">
-            
             {/* Panel Title & Count */}
             <div className="flex items-center justify-between">
               <div>
@@ -330,7 +332,6 @@ export default function MapPage() {
                 ))}
               </div>
             </div>
-
           </div>
 
           {/* Scrollable Destinations List */}
@@ -422,20 +423,19 @@ export default function MapPage() {
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-
         </div>
 
         {/* RIGHT MAIN: Interactive 25KM Radar Map Canvas */}
         <div className="flex-1 bg-white rounded-3xl border border-slate-200/90 shadow-sm relative overflow-hidden flex flex-col min-h-[580px] lg:min-h-[720px]">
-          
           {/* Top Floating Control Bar */}
           <div className="absolute top-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
-            
             {/* Center Benchmark Tag */}
             <div className="pointer-events-auto bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-200 shadow-sm text-xs font-bold text-slate-800 flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[#0084d1] animate-pulse" />
               <span>AMPARA CLOCK TOWER 0.0 KM</span>
-              <span className="text-[10px] text-slate-400 font-semibold">• 0.0 km Benchmark Center</span>
+              <span className="text-[10px] text-slate-400 font-semibold">
+                • 0.0 km Benchmark Center
+              </span>
             </div>
 
             {/* Map Layer Switcher */}
@@ -444,7 +444,9 @@ export default function MapPage() {
                 type="button"
                 onClick={() => setMapLayer("terrain")}
                 className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
-                  mapLayer === "terrain" ? "bg-[#0084d1] text-white shadow-2xs" : "text-slate-600 hover:text-slate-900"
+                  mapLayer === "terrain"
+                    ? "bg-[#0084d1] text-white shadow-2xs"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 🗺 Terrain
@@ -453,7 +455,9 @@ export default function MapPage() {
                 type="button"
                 onClick={() => setMapLayer("satellite")}
                 className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
-                  mapLayer === "satellite" ? "bg-[#0084d1] text-white shadow-2xs" : "text-slate-600 hover:text-slate-900"
+                  mapLayer === "satellite"
+                    ? "bg-[#0084d1] text-white shadow-2xs"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 🛰 Satellite
@@ -462,13 +466,14 @@ export default function MapPage() {
                 type="button"
                 onClick={() => setMapLayer("topo")}
                 className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
-                  mapLayer === "topo" ? "bg-[#0084d1] text-white shadow-2xs" : "text-slate-600 hover:text-slate-900"
+                  mapLayer === "topo"
+                    ? "bg-[#0084d1] text-white shadow-2xs"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 ⛰ Topography
               </button>
             </div>
-
           </div>
 
           {/* Top Right Route Legend Overlay */}
@@ -489,7 +494,6 @@ export default function MapPage() {
 
           {/* SVG Map Canvas with Concentric Radar Rings */}
           <div className="flex-1 relative w-full h-full bg-[#eef7fa] overflow-hidden flex items-center justify-center">
-            
             <svg
               className="w-full h-full absolute inset-0 cursor-grab active:cursor-grabbing"
               viewBox="0 0 1000 800"
@@ -583,10 +587,31 @@ export default function MapPage() {
 
               {/* Center Hub: Ampara City Center (0.0 KM) */}
               <g transform="translate(500, 400)">
-                <circle cx="0" cy="0" r="16" fill="#0084d1" opacity="0.2" className="animate-ping" />
-                <circle cx="0" cy="0" r="9" fill="#0084d1" stroke="#ffffff" strokeWidth="2.5" />
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="16"
+                  fill="#0084d1"
+                  opacity="0.2"
+                  className="animate-ping"
+                />
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="9"
+                  fill="#0084d1"
+                  stroke="#ffffff"
+                  strokeWidth="2.5"
+                />
                 <circle cx="0" cy="0" r="3" fill="#ffffff" />
-                <text x="0" y="24" textAnchor="middle" fill="#0f172a" fontSize="11" fontWeight="900">
+                <text
+                  x="0"
+                  y="24"
+                  textAnchor="middle"
+                  fill="#0f172a"
+                  fontSize="11"
+                  fontWeight="900"
+                >
                   AMPARA CITY CENTER (0.0 KM)
                 </text>
               </g>
@@ -606,9 +631,16 @@ export default function MapPage() {
                     className="cursor-pointer group"
                   >
                     {isSelected && (
-                      <circle cx="0" cy="0" r="22" fill="#0084d1" opacity="0.3" className="animate-pulse" />
+                      <circle
+                        cx="0"
+                        cy="0"
+                        r="22"
+                        fill="#0084d1"
+                        opacity="0.3"
+                        className="animate-pulse"
+                      />
                     )}
-                    
+
                     {/* Pin Marker Background */}
                     <circle
                       cx="0"
@@ -618,8 +650,8 @@ export default function MapPage() {
                         place.category === "Nature"
                           ? "#0284c7"
                           : place.category === "Wildlife"
-                          ? "#059669"
-                          : "#7c3aed"
+                            ? "#059669"
+                            : "#7c3aed"
                       }
                       stroke="#ffffff"
                       strokeWidth="2.5"
@@ -649,7 +681,6 @@ export default function MapPage() {
             {/* ACTIVE INTERACTIVE DESTINATION POPUP CARD */}
             {selectedPlace && (
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-full max-w-sm bg-white rounded-3xl p-4 shadow-2xl border border-slate-200/90 animate-scaleUp">
-                
                 {/* Close Button */}
                 <button
                   type="button"
@@ -689,7 +720,9 @@ export default function MapPage() {
                     <div className="flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full text-xs font-black shrink-0">
                       <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                       <span>{selectedPlace.rating}</span>
-                      <span className="text-slate-400 font-normal text-[10px]">({selectedPlace.reviewsCount}+)</span>
+                      <span className="text-slate-400 font-normal text-[10px]">
+                        ({selectedPlace.reviewsCount}+)
+                      </span>
                     </div>
                   </div>
 
@@ -741,26 +774,28 @@ export default function MapPage() {
                     </button>
                   </div>
                 </div>
-
               </div>
             )}
-
           </div>
 
           {/* Bottom Map Legend Bar */}
           <div className="bg-white/95 backdrop-blur-md px-4 py-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex flex-wrap items-center gap-4 text-slate-600 font-semibold">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#0084d1]" /> Main Landmark
+                <span className="w-2.5 h-2.5 rounded-full bg-[#0084d1]" /> Main
+                Landmark
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" /> Conservation Water
+                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />{" "}
+                Conservation Water
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-600" /> Monastic Hermitages
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />{" "}
+                Monastic Hermitages
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Wildlife Corridors
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />{" "}
+                Wildlife Corridors
               </span>
             </div>
 
@@ -795,14 +830,12 @@ export default function MapPage() {
               </button>
             </div>
           </div>
-
         </div>
-
       </main>
 
       {/* 3. Global Footer */}
       <footer className="w-full bg-white border-t border-slate-200/90 mt-8 pt-8 pb-6 text-slate-600 text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <div className="md:col-span-5 space-y-3">
               <div className="flex items-center gap-2">
@@ -817,7 +850,9 @@ export default function MapPage() {
                 </span>
               </div>
               <p className="text-slate-500 text-xs leading-relaxed max-w-sm">
-                Guiding ancient stupas, untouched reservoir sanctuaries, and coastal peripheries nestled strictly within a 25 km radius of Ampara. Travel thoughtfully with genuine regional insight.
+                Guiding ancient stupas, untouched reservoir sanctuaries, and
+                coastal peripheries nestled strictly within a 25 km radius of
+                Ampara. Travel thoughtfully with genuine regional insight.
               </p>
             </div>
 
@@ -827,22 +862,34 @@ export default function MapPage() {
               </div>
               <ul className="space-y-2 text-xs font-semibold text-slate-600">
                 <li>
-                  <Link href="/#explore" className="hover:text-[#0084d1] transition-colors">
+                  <Link
+                    href="/#explore"
+                    className="hover:text-[#0084d1] transition-colors"
+                  >
                     Explore Attractions
                   </Link>
                 </li>
                 <li>
-                  <Link href="/map" className="hover:text-[#0084d1] transition-colors">
+                  <Link
+                    href="/map"
+                    className="hover:text-[#0084d1] transition-colors"
+                  >
                     Radar Zone Map
                   </Link>
                 </li>
                 <li>
-                  <Link href="/plan" className="hover:text-[#0084d1] transition-colors">
+                  <Link
+                    href="/plan"
+                    className="hover:text-[#0084d1] transition-colors"
+                  >
                     One-Day Visit Planner
                   </Link>
                 </li>
                 <li>
-                  <Link href="/#explore" className="hover:text-[#0084d1] transition-colors">
+                  <Link
+                    href="/#explore"
+                    className="hover:text-[#0084d1] transition-colors"
+                  >
                     Ancient Forest
                   </Link>
                 </li>
@@ -854,14 +901,17 @@ export default function MapPage() {
                 HERITAGE &amp; WILDLIFE
               </div>
               <p className="text-slate-500 text-xs leading-relaxed">
-                A 2,500-year-old ecological conservation index showcasing Senanayake Samudraya, Dighavapi, and Buddhangala sacred monasteries.
+                A 2,500-year-old ecological conservation index showcasing
+                Senanayake Samudraya, Dighavapi, and Buddhangala sacred
+                monasteries.
               </p>
             </div>
           </div>
 
           <div className="pt-6 border-t border-slate-150 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
             <div>
-              © 2024 Ampara Explore • Sri Lanka Tourism Development Authority aligned.
+              © 2024 Ampara Explore • Sri Lanka Tourism Development Authority
+              aligned.
             </div>
             <div className="font-bold text-slate-700">
               Eastern Province, Sri Lanka
@@ -875,7 +925,9 @@ export default function MapPage() {
         isOpen={isPlanDrawerOpen}
         onClose={() => setIsPlanDrawerOpen(false)}
         visitPlan={visitPlan}
-        onRemove={(remId) => setVisitPlan(visitPlan.filter((p) => p.id !== remId))}
+        onRemove={(remId) =>
+          setVisitPlan(visitPlan.filter((p) => p.id !== remId))
+        }
         onClear={() => setVisitPlan([])}
       />
 
@@ -883,7 +935,6 @@ export default function MapPage() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
       />
-
     </div>
   );
 }

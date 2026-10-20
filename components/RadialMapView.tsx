@@ -8,8 +8,12 @@ interface RadialMapViewProps {
   onSelectAttraction: (attraction: Attraction) => void;
 }
 
-export default function RadialMapView({ onSelectAttraction }: RadialMapViewProps) {
-  const [activePin, setActivePin] = useState<Attraction | null>(amparaAttractions[0]);
+export default function RadialMapView({
+  onSelectAttraction,
+}: RadialMapViewProps) {
+  const [activePin, setActivePin] = useState<Attraction | null>(
+    amparaAttractions[0],
+  );
   const [filterRadius, setFilterRadius] = useState<number>(25);
 
   const calculateRadarPos = (distanceKm: number, angleDeg: number) => {
@@ -49,7 +53,10 @@ export default function RadialMapView({ onSelectAttraction }: RadialMapViewProps
   };
 
   return (
-    <section id="map" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section
+      id="map"
+      className="py-16 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto"
+    >
       <div className="text-center max-w-3xl mx-auto mb-12">
         <span className="text-xs font-extrabold tracking-widest text-[#0084d1] uppercase block mb-1.5">
           SPATIAL INTELLIGENCE
@@ -58,7 +65,8 @@ export default function RadialMapView({ onSelectAttraction }: RadialMapViewProps
           25 km Radial Horizon Map
         </h2>
         <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-          Visualizing all attractions originating from Ampara Town Clock Tower (0 km) across 5km concentric discovery zones.
+          Visualizing all attractions originating from Ampara Town Clock Tower
+          (0 km) across 5km concentric discovery zones.
         </p>
       </div>
 
@@ -66,43 +74,164 @@ export default function RadialMapView({ onSelectAttraction }: RadialMapViewProps
         <div className="lg:col-span-7 flex flex-col items-center relative">
           <div className="relative w-full max-w-[480px] aspect-square flex items-center justify-center bg-slate-950 rounded-3xl p-4 shadow-2xl overflow-hidden border border-slate-800">
             <div className="absolute inset-0 bg-gradient-to-tr from-sky-950/40 via-transparent to-slate-900" />
-            
+
             <svg viewBox="0 0 500 500" className="w-full h-full relative z-10">
               {/* 5 km */}
-              <circle cx="250" cy="250" r="42" fill="none" stroke="#0284c7" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" />
-              <text x="255" y="215" fill="#38bdf8" fontSize="10" fontWeight="bold" opacity="0.8">5 km</text>
+              <circle
+                cx="250"
+                cy="250"
+                r="42"
+                fill="none"
+                stroke="#0284c7"
+                strokeWidth="1"
+                strokeDasharray="4 4"
+                opacity="0.4"
+              />
+              <text
+                x="255"
+                y="215"
+                fill="#38bdf8"
+                fontSize="10"
+                fontWeight="bold"
+                opacity="0.8"
+              >
+                5 km
+              </text>
 
               {/* 10 km */}
-              <circle cx="250" cy="250" r="84" fill="none" stroke="#0284c7" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" />
-              <text x="255" y="173" fill="#38bdf8" fontSize="10" fontWeight="bold" opacity="0.8">10 km</text>
+              <circle
+                cx="250"
+                cy="250"
+                r="84"
+                fill="none"
+                stroke="#0284c7"
+                strokeWidth="1"
+                strokeDasharray="4 4"
+                opacity="0.4"
+              />
+              <text
+                x="255"
+                y="173"
+                fill="#38bdf8"
+                fontSize="10"
+                fontWeight="bold"
+                opacity="0.8"
+              >
+                10 km
+              </text>
 
               {/* 15 km */}
-              <circle cx="250" cy="250" r="126" fill="none" stroke="#0284c7" strokeWidth="1.5" opacity="0.5" />
-              <text x="255" y="131" fill="#38bdf8" fontSize="10" fontWeight="bold" opacity="0.8">15 km</text>
+              <circle
+                cx="250"
+                cy="250"
+                r="126"
+                fill="none"
+                stroke="#0284c7"
+                strokeWidth="1.5"
+                opacity="0.5"
+              />
+              <text
+                x="255"
+                y="131"
+                fill="#38bdf8"
+                fontSize="10"
+                fontWeight="bold"
+                opacity="0.8"
+              >
+                15 km
+              </text>
 
               {/* 20 km */}
-              <circle cx="250" cy="250" r="168" fill="none" stroke="#0284c7" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" />
-              <text x="255" y="89" fill="#38bdf8" fontSize="10" fontWeight="bold" opacity="0.8">20 km</text>
+              <circle
+                cx="250"
+                cy="250"
+                r="168"
+                fill="none"
+                stroke="#0284c7"
+                strokeWidth="1"
+                strokeDasharray="4 4"
+                opacity="0.4"
+              />
+              <text
+                x="255"
+                y="89"
+                fill="#38bdf8"
+                fontSize="10"
+                fontWeight="bold"
+                opacity="0.8"
+              >
+                20 km
+              </text>
 
               {/* 25 km Outer Bound */}
-              <circle cx="250" cy="250" r="210" fill="none" stroke="#38bdf8" strokeWidth="2" opacity="0.8" />
-              <text x="255" y="47" fill="#7dd3fc" fontSize="11" fontWeight="bold">25 km Max Horizon</text>
+              <circle
+                cx="250"
+                cy="250"
+                r="210"
+                fill="none"
+                stroke="#38bdf8"
+                strokeWidth="2"
+                opacity="0.8"
+              />
+              <text
+                x="255"
+                y="47"
+                fill="#7dd3fc"
+                fontSize="11"
+                fontWeight="bold"
+              >
+                25 km Max Horizon
+              </text>
 
               {/* Crosshairs */}
-              <line x1="250" y1="35" x2="250" y2="465" stroke="#0369a1" strokeWidth="1" opacity="0.3" />
-              <line x1="35" y1="250" x2="465" y2="250" stroke="#0369a1" strokeWidth="1" opacity="0.3" />
+              <line
+                x1="250"
+                y1="35"
+                x2="250"
+                y2="465"
+                stroke="#0369a1"
+                strokeWidth="1"
+                opacity="0.3"
+              />
+              <line
+                x1="35"
+                y1="250"
+                x2="465"
+                y2="250"
+                stroke="#0369a1"
+                strokeWidth="1"
+                opacity="0.3"
+              />
 
               {/* Center Origin: Ampara Town */}
               <circle cx="250" cy="250" r="8" fill="#38bdf8" />
-              <circle cx="250" cy="250" r="16" fill="none" stroke="#38bdf8" strokeWidth="1.5" opacity="0.6" />
-              <text x="250" y="275" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="bold">
+              <circle
+                cx="250"
+                cy="250"
+                r="16"
+                fill="none"
+                stroke="#38bdf8"
+                strokeWidth="1.5"
+                opacity="0.6"
+              />
+              <text
+                x="250"
+                y="275"
+                textAnchor="middle"
+                fill="#ffffff"
+                fontSize="11"
+                fontWeight="bold"
+              >
                 Ampara Hub (0 km)
               </text>
 
               {/* Attraction Pin Markers */}
               {amparaAttractions.map((attraction) => {
                 const angle = angleMapping[attraction.id] || 45;
-                const { x, y } = calculateRadarPos(attraction.distanceKm, angle);
+                const { x, y } = calculateRadarPos(
+                  attraction.distanceKm,
+                  angle,
+                );
                 const isSelected = activePin?.id === attraction.id;
                 const isVisible = attraction.distanceKm <= filterRadius;
 
@@ -115,7 +244,13 @@ export default function RadialMapView({ onSelectAttraction }: RadialMapViewProps
                     className="cursor-pointer transition-all duration-300"
                   >
                     {isSelected && (
-                      <circle cx={x} cy={y} r="14" fill="#38bdf8" opacity="0.3" />
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r="14"
+                        fill="#38bdf8"
+                        opacity="0.3"
+                      />
                     )}
                     <circle
                       cx={x}
@@ -143,7 +278,9 @@ export default function RadialMapView({ onSelectAttraction }: RadialMapViewProps
           </div>
 
           <div className="mt-4 w-full max-w-sm flex items-center justify-between gap-3 bg-slate-50 border border-slate-200 rounded-full px-4 py-2">
-            <span className="text-xs font-bold text-slate-700">Filter Radius:</span>
+            <span className="text-xs font-bold text-slate-700">
+              Filter Radius:
+            </span>
             <input
               type="range"
               min="5"
@@ -182,9 +319,14 @@ export default function RadialMapView({ onSelectAttraction }: RadialMapViewProps
               </div>
 
               <div className="space-y-1.5 bg-white p-3 rounded-2xl border border-slate-200/80">
-                <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Key Highlights</div>
+                <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  Key Highlights
+                </div>
                 {activePin.highlights.map((h, i) => (
-                  <div key={i} className="text-xs font-semibold text-slate-700 flex items-center gap-2">
+                  <div
+                    key={i}
+                    className="text-xs font-semibold text-slate-700 flex items-center gap-2"
+                  >
                     <span className="w-1.5 h-1.5 rounded-full bg-[#0284c7]" />
                     <span>{h}</span>
                   </div>
@@ -193,7 +335,10 @@ export default function RadialMapView({ onSelectAttraction }: RadialMapViewProps
 
               <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200">
                 <div className="text-xs font-semibold text-slate-600">
-                  Recommended duration: <strong className="text-slate-900">{activePin.duration}</strong>
+                  Recommended duration:{" "}
+                  <strong className="text-slate-900">
+                    {activePin.duration}
+                  </strong>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -222,4 +367,3 @@ export default function RadialMapView({ onSelectAttraction }: RadialMapViewProps
     </section>
   );
 }
-
