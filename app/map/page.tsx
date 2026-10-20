@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   Compass,
   ArrowLeft,
@@ -33,6 +34,10 @@ import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import { amparaAttractions, Attraction } from "@/data/amparaData";
 
+const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
+  ssr: false,
+});
+
 interface MapPlace {
   id: string;
   name: string;
@@ -49,6 +54,8 @@ interface MapPlace {
   openHours: string;
   roadInfo: string;
   zone: "0-5km" | "5-15km" | "15-25km";
+  latitude: number;
+  longitude: number;
 }
 
 const mapDestinations: MapPlace[] = [
@@ -69,6 +76,8 @@ const mapDestinations: MapPlace[] = [
     openHours: "Open Access Entry",
     roadInfo: "18 min via A25 Highway",
     zone: "15-25km",
+    latitude: 7.274,
+    longitude: 81.527,
   },
   {
     id: "gal-oya-national-park",
@@ -87,6 +96,8 @@ const mapDestinations: MapPlace[] = [
     openHours: "06:00 AM - 06:00 PM",
     roadInfo: "22 min via B350 Road",
     zone: "15-25km",
+    latitude: 7.098,
+    longitude: 81.502,
   },
   {
     id: "deegawapi-stupa",
@@ -105,6 +116,8 @@ const mapDestinations: MapPlace[] = [
     openHours: "05:30 AM - 07:00 PM",
     roadInfo: "19 min via A4 Corridor",
     zone: "15-25km",
+    latitude: 7.239,
+    longitude: 81.729,
   },
   {
     id: "buddhangala-monastery",
@@ -124,6 +137,8 @@ const mapDestinations: MapPlace[] = [
     openHours: "06:00 AM - 06:30 PM",
     roadInfo: "12 min North Road",
     zone: "5-15km",
+    latitude: 7.234,
+    longitude: 81.699,
   },
   {
     id: "panama-kudumbigala",
@@ -143,6 +158,8 @@ const mapDestinations: MapPlace[] = [
     openHours: "Sunrise to Sunset",
     roadInfo: "32 min coastal highway",
     zone: "15-25km",
+    latitude: 6.844,
+    longitude: 81.382,
   },
   {
     id: "ampara-peace-pagoda",
@@ -162,6 +179,8 @@ const mapDestinations: MapPlace[] = [
     openHours: "06:00 AM - 08:00 PM",
     roadInfo: "5 min town center",
     zone: "0-5km",
+    latitude: 7.292,
+    longitude: 81.672,
   },
 ];
 
@@ -227,9 +246,9 @@ export default function MapPage() {
       />
 
       {/* 2. Main Map Dashboard (Split Layout) */}
-      <main className="max-w-[1600px] w-full mx-auto px-2 sm:px-4 lg:px-6 pt-20 sm:pt-24 pb-4 flex-1 flex flex-col lg:flex-row gap-4 items-stretch">
+      <main className="max-w-[1600px] w-full mx-auto px-3 sm:px-5 lg:px-8 pt-4 sm:pt-5 pb-6 sm:pb-8 flex-1 flex flex-col lg:flex-row gap-4 lg:gap-5 items-stretch">
         {/* LEFT PANEL: Explore Places Directory (approx 380px) */}
-        <div className="w-full lg:w-[380px] shrink-0 bg-white rounded-3xl border border-slate-200/90 shadow-sm flex flex-col justify-between overflow-hidden">
+        <div className="w-full lg:w-[360px] xl:w-[380px] shrink-0 bg-white rounded-3xl border border-slate-200/90 shadow-[0_10px_30px_rgba(15,23,42,0.06)] flex flex-col justify-between overflow-hidden">
           <div className="p-4 sm:p-5 space-y-4">
             {/* Panel Title & Count */}
             <div className="flex items-center justify-between">
@@ -426,7 +445,7 @@ export default function MapPage() {
         </div>
 
         {/* RIGHT MAIN: Interactive 25KM Radar Map Canvas */}
-        <div className="flex-1 bg-white rounded-3xl border border-slate-200/90 shadow-sm relative overflow-hidden flex flex-col min-h-[580px] lg:min-h-[720px]">
+        <div className="flex-1 bg-white rounded-3xl border border-slate-200/90 shadow-[0_10px_30px_rgba(15,23,42,0.06)] relative overflow-hidden flex flex-col min-h-[620px] lg:min-h-[720px]">
           {/* Top Floating Control Bar */}
           <div className="absolute top-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
             {/* Center Benchmark Tag */}
@@ -494,8 +513,21 @@ export default function MapPage() {
 
           {/* SVG Map Canvas with Concentric Radar Rings */}
           <div className="flex-1 relative w-full h-full bg-[#eef7fa] overflow-hidden flex items-center justify-center">
+            <LeafletMap
+              places={filteredPlaces}
+              selectedPlace={selectedPlace}
+              selectedZone={selectedZone}
+              mapLayer={mapLayer}
+              zoomLevel={zoomLevel}
+              onSelectPlace={(place) => {
+                const matchingPlace = mapDestinations.find(
+                  (destination) => destination.id === place.id,
+                );
+                if (matchingPlace) setSelectedPlace(matchingPlace);
+              }}
+            />
             <svg
-              className="w-full h-full absolute inset-0 cursor-grab active:cursor-grabbing"
+              className="hidden"
               viewBox="0 0 1000 800"
               preserveAspectRatio="xMidYMid slice"
             >

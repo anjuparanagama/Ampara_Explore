@@ -28,3 +28,34 @@ body {
   -webkit-backdrop-filter: blur(16px);
 }
 
+.ampara-center-marker,
+.ampara-place-marker {
+  background: transparent;
+  border: 0;
+}
+
+.ampara-center-marker__dot,
+.ampara-place-marker__dot {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-radius: 9999px;
+  background: #0284c7;
+  box-shadow: 0 1px 5px rgb(15 23 42 / 45%);
+}
+
+.ampara-center-marker__dot {
+  width: 20px;
+  height: 20px;
+  background: #0084d1;
+  box-shadow: 0 0 0 7px rgb(2 132 199 / 22%), 0 1px 5px rgb(15 23 42 / 45%);
+}
+
+.ampara-place-marker__dot.is-selected {
+  width: 24px;
+  height: 24px;
+  margin: -3px;
+  background: #7c3aed;
+  box-shadow: 0 0 0 7px rgb(124 58 237 / 25%), 0 1px 5px rgb(15 23 42 / 45%);
+}

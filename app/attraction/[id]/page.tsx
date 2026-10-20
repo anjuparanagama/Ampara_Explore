@@ -787,9 +787,9 @@ function AttractionDetailContent() {
       />
 
       {/* 2. Top Breadcrumb Bar */}
-      <div className="w-full bg-white border-b border-slate-200/80 px-4 sm:px-8 pt-20 sm:pt-24 pb-2.5">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between text-xs text-slate-500">
-          <div className="flex items-center gap-2">
+      <div className="w-full px-4 sm:px-8 py-3">
+        <div className="max-w-[1370px] mx-auto flex items-center justify-between gap-4 text-xs text-slate-500">
+          <div className="flex min-w-0 items-center gap-2">
             <Link href="/" className="hover:text-[#0084d1]">
               Home
             </Link>
@@ -798,7 +798,7 @@ function AttractionDetailContent() {
               Explore
             </Link>
             <span>/</span>
-            <span className="text-slate-900 font-bold truncate max-w-[200px] sm:max-w-none">
+            <span className="text-slate-900 font-bold truncate max-w-[180px] sm:max-w-none">
               {attraction.name}
             </span>
           </div>
@@ -808,151 +808,191 @@ function AttractionDetailContent() {
             className="inline-flex items-center gap-1 text-slate-600 hover:text-[#0084d1] font-bold transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to Explore Directory</span>
+            <span className="hidden sm:inline">Back to Explore Directory</span>
           </Link>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <main className="max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5 space-y-6 flex-1">
+      <main className="!max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5 space-y-6 flex-1">
         {/* 3. Hero Visual Gallery Stack */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Main Large Hero Banner (Left 8 cols) */}
-          <div className="lg:col-span-8 relative rounded-3xl overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-between p-6 sm:p-8 border border-slate-200/80 shadow-md group">
-            {/* Background Image - Specific to attraction */}
-            <Image
-              src={attraction.image}
-              alt={attraction.name}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 66vw"
-              className="object-cover object-center transform group-hover:scale-102 transition-transform duration-1000 ease-out"
-            />
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:items-start">
+          <div className="lg:col-span-7 space-y-4">
+            {/* Main Large Hero Banner (Left 8 cols) */}
+            <div className="relative rounded-3xl overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-between p-6 sm:p-8 border border-slate-200/80 shadow-md group">
+              {/* Background Image - Specific to attraction */}
+              <Image
+                src={attraction.image}
+                alt={attraction.name}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 66vw"
+                className="object-cover object-center transform group-hover:scale-102 transition-transform duration-1000 ease-out"
+              />
 
-            {/* Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-slate-950/50" />
+              {/* Gradient Overlays */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-slate-950/50" />
 
-            {/* Top Bar Badges & Actions */}
-            <div className="relative z-10 flex items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/20 text-white text-xs font-bold">
-                  <Compass className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="uppercase">
-                    {attraction.radialZone} RING
+              {/* Top Bar Badges & Actions */}
+              <div className="relative z-10 flex items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/20 text-white text-xs font-bold">
+                    <Compass className="w-3.5 h-3.5 text-sky-400" />
+                    <span className="uppercase">
+                      {attraction.radialZone} RING
+                    </span>
                   </span>
-                </span>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/20 text-sky-300 text-xs font-semibold">
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span>{attraction.distanceKm} km from Ampara Town</span>
-                </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/20 text-sky-300 text-xs font-semibold">
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>{attraction.distanceKm} km from Ampara Town</span>
+                  </span>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsFavorite(!isFavorite)}
+                    className={`w-9 h-9 rounded-full backdrop-blur-md border flex items-center justify-center transition-all cursor-pointer ${
+                      isFavorite
+                        ? "bg-red-500/90 border-red-400 text-white"
+                        : "bg-slate-900/50 border-white/20 text-white hover:bg-white hover:text-red-500"
+                    }`}
+                    title="Favorite"
+                  >
+                    <Heart
+                      className={`w-4 h-4 ${isFavorite ? "fill-white" : ""}`}
+                    />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (
+                        typeof window !== "undefined" &&
+                        navigator.clipboard
+                      ) {
+                        navigator.clipboard.writeText(window.location.href);
+                        alert("Destination link copied to clipboard!");
+                      }
+                    }}
+                    className="w-9 h-9 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer"
+                    title="Share destination"
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsFavorite(!isFavorite)}
-                  className={`w-9 h-9 rounded-full backdrop-blur-md border flex items-center justify-center transition-all cursor-pointer ${
-                    isFavorite
-                      ? "bg-red-500/90 border-red-400 text-white"
-                      : "bg-slate-900/50 border-white/20 text-white hover:bg-white hover:text-red-500"
-                  }`}
-                  title="Favorite"
-                >
-                  <Heart
-                    className={`w-4 h-4 ${isFavorite ? "fill-white" : ""}`}
-                  />
-                </button>
+              {/* Bottom Title & Badges */}
+              <div className="relative z-10 space-y-2 mt-auto pt-16">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className={`inline-flex items-center gap-1 ${profile.tagColor} text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-xs`}
+                  >
+                    {profile.tag}
+                  </span>
+                  <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
+                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    <span>
+                      {attraction.rating} ({attraction.reviewsCount}+ Reviews)
+                    </span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
+                    <Clock className="w-3 h-3 text-sky-400" />
+                    <span>{attraction.duration}</span>
+                  </span>
+                </div>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (typeof window !== "undefined" && navigator.clipboard) {
-                      navigator.clipboard.writeText(window.location.href);
-                      alert("Destination link copied to clipboard!");
-                    }
-                  }}
-                  className="w-9 h-9 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer"
-                  title="Share destination"
-                >
-                  <Share2 className="w-4 h-4" />
-                </button>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight drop-shadow-md">
+                  {attraction.name}
+                </h1>
+
+                <p className="text-slate-200 text-xs sm:text-sm font-medium">
+                  {profile.subtitle}
+                </p>
               </div>
             </div>
 
-            {/* Bottom Title & Badges */}
-            <div className="relative z-10 space-y-2 mt-auto pt-16">
-              <div className="flex flex-wrap items-center gap-2">
-                <span
-                  className={`inline-flex items-center gap-1 ${profile.tagColor} text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-xs`}
+            {/* Supporting Gallery */}
+            <div className="grid grid-cols-2 gap-3">
+              {profile.galleryImages.slice(0, 2).map((img, idx) => (
+                <div
+                  key={idx}
+                  className="relative h-28 sm:h-36 rounded-2xl overflow-hidden border border-slate-200/80 group"
                 >
-                  {profile.tag}
-                </span>
-                <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                  <span>
-                    {attraction.rating} ({attraction.reviewsCount}+ Reviews)
+                  <Image
+                    src={img.url}
+                    alt={img.caption}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <span className="absolute bottom-2 left-3 text-[11px] font-bold text-white flex items-center gap-1 drop-shadow-sm">
+                    {img.caption}
                   </span>
-                </span>
-                <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
-                  <Clock className="w-3 h-3 text-sky-400" />
-                  <span>{attraction.duration}</span>
-                </span>
-              </div>
+                </div>
+              ))}
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight drop-shadow-md">
-                {attraction.name}
-              </h1>
-
-              <p className="text-slate-200 text-xs sm:text-sm font-medium">
-                {profile.subtitle}
-              </p>
+              {/* Gallery Trigger Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  alert(
+                    `Viewing gallery for ${attraction.name}. Photo collection verified by Sri Lanka Tourism.`,
+                  );
+                }}
+                className="relative col-span-2 h-20 rounded-2xl overflow-hidden bg-gradient-to-r from-[#006699] to-[#0284c7] text-white p-3 flex items-center justify-between px-5 hover:brightness-105 transition-all cursor-pointer shadow-sm group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
+                    <Camera className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-black">+6 Verified Photos</div>
+                    <div className="text-[10px] text-sky-100 font-semibold">
+                      View Panorama &amp; Highlights
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-sky-200 group-hover:translate-x-1 transition-transform" />
+              </button>
             </div>
           </div>
 
-          {/* Right Gallery Stack (Right 4 cols) */}
-          <div className="lg:col-span-4 flex flex-col gap-3">
-            {profile.galleryImages.slice(0, 2).map((img, idx) => (
-              <div
-                key={idx}
-                className="relative h-28 sm:h-36 rounded-2xl overflow-hidden border border-slate-200/80 group"
-              >
-                <Image
-                  src={img.url}
-                  alt={img.caption}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                <span className="absolute bottom-2 left-3 text-[11px] font-bold text-white flex items-center gap-1 drop-shadow-sm">
-                  {img.caption}
-                </span>
-              </div>
-            ))}
+          {/* About section beside the image gallery */}
+          <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center gap-2 text-lg font-black text-slate-900">
+              <Info className="w-5 h-5 text-[#0084d1]" />
+              <h2>{profile.aboutTitle}</h2>
+            </div>
 
-            {/* Gallery Trigger Button */}
-            <button
-              type="button"
-              onClick={() => {
-                alert(
-                  `Viewing gallery for ${attraction.name}. Photo collection verified by Sri Lanka Tourism.`,
-                );
-              }}
-              className="relative h-20 rounded-2xl overflow-hidden bg-gradient-to-r from-[#006699] to-[#0284c7] text-white p-3 flex items-center justify-between px-5 hover:brightness-105 transition-all cursor-pointer shadow-sm group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
-                  <Camera className="w-5 h-5 text-white" />
-                </div>
-                <div className="text-left">
-                  <div className="text-sm font-black">+6 Verified Photos</div>
-                  <div className="text-[10px] text-sky-100 font-semibold">
-                    View Panorama &amp; Highlights
-                  </div>
-                </div>
+            <div className="text-xs sm:text-sm text-slate-600 leading-relaxed space-y-3">
+              {profile.aboutParagraphs.map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
+
+            <div className="bg-sky-50/70 border-l-4 border-[#0084d1] rounded-r-2xl p-4 text-xs italic text-slate-700 leading-relaxed font-medium">
+              &ldquo;{profile.quote}&rdquo;
+            </div>
+
+            <div className="pt-2">
+              <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                Featured Highlights
               </div>
-              <ChevronRight className="w-5 h-5 text-sky-200 group-hover:translate-x-1 transition-transform" />
-            </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {attraction.highlights.map((hl, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 text-xs font-semibold text-slate-800 flex items-center gap-2"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-[#0084d1] shrink-0" />
+                    <span className="truncate">{hl}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1115,43 +1155,6 @@ function AttractionDetailContent() {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column: About & Field Tips (7 cols) */}
           <div className="lg:col-span-7 space-y-8">
-            {/* About Card */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-              <div className="flex items-center gap-2 text-lg font-black text-slate-900">
-                <Info className="w-5 h-5 text-[#0084d1]" />
-                <h2>{profile.aboutTitle}</h2>
-              </div>
-
-              <div className="text-xs sm:text-sm text-slate-600 leading-relaxed space-y-3 font-normal">
-                {profile.aboutParagraphs.map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
-              </div>
-
-              {/* Quote Callout */}
-              <div className="bg-sky-50/70 border-l-4 border-[#0084d1] rounded-r-2xl p-4 text-xs italic text-slate-700 mt-4 leading-relaxed font-medium">
-                &ldquo;{profile.quote}&rdquo;
-              </div>
-
-              {/* Key Highlights Checklist */}
-              <div className="pt-2">
-                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
-                  Featured Highlights
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {attraction.highlights.map((hl, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 text-xs font-semibold text-slate-800 flex items-center gap-2"
-                    >
-                      <span className="w-2 h-2 rounded-full bg-[#0084d1] shrink-0" />
-                      <span className="truncate">{hl}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
             {/* Visitor Guide & Field Tips */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -1320,64 +1323,6 @@ function AttractionDetailContent() {
                   <span>Open My Planner Timeline</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
-              </div>
-            </div>
-
-            {/* Practical Details Card */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-              <div className="flex items-center gap-2 text-base font-black text-slate-900">
-                <Compass className="w-4 h-4 text-[#0084d1]" />
-                <h3>Practical Details</h3>
-              </div>
-
-              <div className="space-y-3.5 text-xs text-slate-600 divide-y divide-slate-100">
-                <div className="pt-2 flex items-start gap-2.5">
-                  <Clock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-bold text-slate-900">
-                      Operating Hours
-                    </div>
-                    <div className="text-slate-500 mt-0.5">
-                      {profile.hours} ({profile.hoursDetail})
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 flex items-start gap-2.5">
-                  <Building className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-bold text-slate-900">
-                      Governing Authority
-                    </div>
-                    <div className="text-slate-500 mt-0.5">
-                      {profile.authority}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 flex items-start gap-2.5">
-                  <Trees className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-bold text-slate-900">
-                      Onsite Facilities
-                    </div>
-                    <div className="text-slate-500 mt-0.5">
-                      {profile.facilities}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-3 flex items-start gap-2.5">
-                  <Phone className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-bold text-slate-900">
-                      Visitor Assistance Desk
-                    </div>
-                    <div className="text-slate-500 mt-0.5 font-medium">
-                      +94 63 222 2000 (Ampara District Tourism Project)
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

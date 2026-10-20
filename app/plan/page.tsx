@@ -177,7 +177,7 @@ export default function MyVisitPlanPage() {
       />
 
       {/* 2. Top Breadcrumbs & State Switcher */}
-      <div className="max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-2">
+      <div className="max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4 sm:pt-5 pb-2">
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
           {/* Breadcrumb */}
           <div className="flex items-center gap-1.5 text-slate-500 font-medium">

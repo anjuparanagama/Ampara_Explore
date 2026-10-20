@@ -60,7 +60,7 @@ export default function Navbar({
     languages.find((l) => l.code === language) || languages[0];
 
   return (
-    <header className="fixed top-0 left-0 right-0 mt-4 z-50 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 transition-all duration-300">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between transition-all hover:shadow-md">
           {/* Logo Brand */}
