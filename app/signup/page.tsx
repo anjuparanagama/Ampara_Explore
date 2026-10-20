@@ -1,5 +1,5 @@
-import RegisterPage from "../register/page";
+import AuthPage from "@/components/AuthPage";
 
 export default function SignupPage() {
-  return <RegisterPage />;
+  return <AuthPage mode="signup" />;
 }
