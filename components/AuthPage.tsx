@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import {
   ArrowLeft,
@@ -28,17 +29,45 @@ export default function AuthPage({ mode }: AuthPageProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const passwordsMatch =
     isLogin || (password.length > 0 && password === confirmPassword);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!passwordsMatch) return;
-    window.localStorage.setItem("ampara_auth", "true");
-    window.dispatchEvent(new Event("ampara-auth-change"));
-    setSubmitted(true);
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`/api/auth/${isLogin ? "login" : "register"}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...(isLogin ? {} : { name }),
+          email,
+          password,
+          ...(isLogin ? { rememberMe } : {}),
+        }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.message ?? "Unable to complete authentication.");
+        return;
+      }
+
+      window.dispatchEvent(new Event("ampara-auth-change"));
+      router.push(result.user?.role === "admin" ? "/admin" : "/");
+      router.refresh();
+    } catch {
+      setError("Unable to connect to the authentication service.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -257,20 +286,23 @@ export default function AuthPage({ mode }: AuthPageProps) {
 
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-sky-600 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300 focus:ring-offset-2"
                 >
-                  {isLogin ? "Sign in" : "Create account"}
-                  <ArrowRight className="h-4 w-4" />
+                  {isSubmitting
+                    ? "Please wait..."
+                    : isLogin
+                      ? "Sign in"
+                      : "Create account"}
+                  {!isSubmitting && <ArrowRight className="h-4 w-4" />}
                 </button>
 
-                {submitted && (
+                {error && (
                   <p
-                    role="status"
-                    className="rounded-md bg-emerald-50 px-3 py-2 text-center text-xs text-emerald-700"
+                    role="alert"
+                    className="rounded-md bg-rose-50 px-3 py-2 text-center text-xs text-rose-700"
                   >
-                    {isLogin
-                      ? "Sign-in details submitted."
-                      : "Account details submitted."}
+                    {error}
                   </p>
                 )}
               </form>

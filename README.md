@@ -20,6 +20,39 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Authentication and TiDB
+
+Authentication uses TiDB through server-only route handlers. Passwords are
+hashed with bcrypt, and authenticated users receive a revocable HttpOnly
+session cookie backed by the `users` and `sessions` tables.
+
+1. Copy the TiDB connection string into `DB_URL` in `.env.local`. The
+   connection must target an application database, not a restricted system
+   database, and the account must have permission to create tables for the
+   initial migration.
+2. Run the migration:
+
+   ```bash
+   npm run db:migrate
+   ```
+
+3. Optionally set `SEED_USER_NAME`, `SEED_USER_EMAIL`, and
+   `SEED_USER_PASSWORD` in the environment, then run:
+
+   ```bash
+   npm run db:seed
+   ```
+
+   Alternatively, pass credentials directly:
+
+   ```powershell
+   npm run db:seed -- --name="Ampara Explorer" --email="explorer@example.com" --password="ChangeMe123"
+   ```
+
+The connection parser enforces certificate-validated TLS for TiDB Serverless.
+After the initial migration, the application runtime only needs normal
+database read/write permissions.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

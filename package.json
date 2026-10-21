@@ -6,11 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:migrate": "node scripts/migrate.mjs",
+    "db:seed": "node scripts/seed.mjs"
   },
   "dependencies": {
+    "@next/env": "^16.4.2",
+    "bcryptjs": "^3.0.3",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.52.0",
+    "mysql2": "^3.24.6",
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { X, User, Mail, Lock, ArrowRight, ShieldCheck } from "lucide-react";
 
 interface AuthModalProps {
@@ -13,13 +14,43 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(isRegister ? "Account created successfully! Welcome to Ampara Explore." : "Welcome back to Ampara Explore!");
-    onClose();
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`/api/auth/${isRegister ? "register" : "login"}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...(isRegister ? { name } : {}),
+          email,
+          password,
+          ...(isRegister ? {} : { rememberMe: true }),
+        }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.message ?? "Unable to complete authentication.");
+        return;
+      }
+
+      window.dispatchEvent(new Event("ampara-auth-change"));
+      onClose();
+      router.push(result.user?.role === "admin" ? "/admin" : "/");
+    } catch {
+      setError("Unable to connect to the authentication service.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -106,11 +137,23 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
           <button
             type="submit"
+            disabled={isSubmitting}
             className="w-full bg-[#006699] hover:bg-[#0284c7] text-white py-3 rounded-full font-bold text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer mt-2"
           >
-            <span>{isRegister ? "Create Account" : "Sign In"}</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>
+              {isSubmitting
+                ? "Please wait..."
+                : isRegister
+                  ? "Create Account"
+                  : "Sign In"}
+            </span>
+            {!isSubmitting && <ArrowRight className="w-4 h-4" />}
           </button>
+          {error && (
+            <p role="alert" className="text-center text-xs text-rose-600">
+              {error}
+            </p>
+          )}
         </form>
 
         <div className="mt-6 text-center text-xs text-slate-600">
@@ -127,4 +170,3 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     </div>
   );
 }
-

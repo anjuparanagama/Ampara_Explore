@@ -28,8 +28,14 @@ export default function Navbar({
   const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
-    const syncAuthState = () => {
-      setIsAuthenticated(localStorage.getItem("ampara_auth") === "true");
+    const syncAuthState = async () => {
+      try {
+        const response = await fetch("/api/auth/me", { cache: "no-store" });
+        const result = await response.json();
+        setIsAuthenticated(Boolean(result.user));
+      } catch {
+        setIsAuthenticated(false);
+      }
     };
 
     syncAuthState();
