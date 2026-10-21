@@ -933,30 +933,6 @@ function AttractionDetailContent() {
                   </span>
                 </div>
               ))}
-
-              {/* Gallery Trigger Button */}
-              <button
-                type="button"
-                onClick={() => {
-                  alert(
-                    `Viewing gallery for ${attraction.name}. Photo collection verified by Sri Lanka Tourism.`,
-                  );
-                }}
-                className="relative col-span-2 h-20 rounded-2xl overflow-hidden bg-gradient-to-r from-[#006699] to-[#0284c7] text-white p-3 flex items-center justify-between px-5 hover:brightness-105 transition-all cursor-pointer shadow-sm group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
-                    <Camera className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm font-black">+6 Verified Photos</div>
-                    <div className="text-[10px] text-sky-100 font-semibold">
-                      View Panorama &amp; Highlights
-                    </div>
-                  </div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-sky-200 group-hover:translate-x-1 transition-transform" />
-              </button>
             </div>
           </div>
 
