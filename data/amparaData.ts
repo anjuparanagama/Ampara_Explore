@@ -1,7 +1,7 @@
 export interface Attraction {
   id: string;
   name: string;
-  category: 'Nature' | 'Historical' | 'Religious' | 'Beaches' | 'Waterfalls' | 'Wildlife' | 'Cultural';
+  category: 'Nature' | 'Historical' | 'Religious' | 'Beaches' | 'Waterfalls' | 'Wildlife' | 'Cultural' | 'Religious and Historical' | string;
   distanceKm: number;
   duration: string;
   rating: number;
@@ -15,7 +15,8 @@ export interface Attraction {
 
 export interface InterestCategory {
   id: string;
-  title: 'Nature' | 'Historical' | 'Religious' | 'Beaches' | 'Waterfalls' | 'Wildlife' | 'Cultural';
+  title: string;
+  description?: string;
   count: number;
   iconName: string;
   color: string;
@@ -23,13 +24,42 @@ export interface InterestCategory {
 }
 
 export const interestCategories: InterestCategory[] = [
-  { id: 'nature', title: 'Nature', count: 3, iconName: 'Trees', color: '#0284c7', bgLight: '#e0f2fe' },
-  { id: 'historical', title: 'Historical', count: 3, iconName: 'Landmark', color: '#2563eb', bgLight: '#dbeafe' },
-  { id: 'religious', title: 'Religious', count: 4, iconName: 'Church', color: '#0d9488', bgLight: '#ccfbf1' },
-  { id: 'beaches', title: 'Beaches', count: 3, iconName: 'Waves', color: '#06b6d4', bgLight: '#cffafe' },
-  { id: 'waterfalls', title: 'Waterfalls', count: 3, iconName: 'Droplets', color: '#3b82f6', bgLight: '#eff6ff' },
-  { id: 'wildlife', title: 'Wildlife', count: 3, iconName: 'PawPrint', color: '#059669', bgLight: '#d1fae5' },
-  { id: 'cultural', title: 'Cultural', count: 3, iconName: 'Theater', color: '#7c3aed', bgLight: '#ede9fe' },
+  {
+    id: 'nature',
+    title: 'Nature',
+    description: 'Explore serene reservoirs, lush green landscapes, and tranquil retreats.',
+    count: 3,
+    iconName: 'TreePine',
+    color: '#0284c7',
+    bgLight: '#e0f2fe',
+  },
+  {
+    id: 'religious-historical',
+    title: 'Religious and Historical',
+    description: 'Discover sacred ancient stupas, rock cave hermitages, and historic heritage ruins.',
+    count: 7,
+    iconName: 'Landmark',
+    color: '#d97706',
+    bgLight: '#fef3c7',
+  },
+  {
+    id: 'beaches',
+    title: 'Beaches',
+    description: 'Experience world-famous surf breaks, pristine golden coastlines, and coastal lagoons.',
+    count: 3,
+    iconName: 'WavesHorizontal',
+    color: '#06b6d4',
+    bgLight: '#cffafe',
+  },
+  {
+    id: 'wildlife',
+    title: 'Wildlife',
+    description: 'Witness swimming elephant safaris, exotic bird sanctuaries, and national parks.',
+    count: 3,
+    iconName: 'PawPrint',
+    color: '#059669',
+    bgLight: '#d1fae5',
+  },
 ];
 
 export const amparaAttractions: Attraction[] = [

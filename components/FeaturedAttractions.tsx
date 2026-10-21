@@ -48,9 +48,20 @@ export default function FeaturedAttractions({
         h.toLowerCase().includes(searchQuery.toLowerCase()),
       );
 
-    const matchesCategory =
-      !selectedCategory ||
-      item.category.toLowerCase() === selectedCategory.toLowerCase();
+    const matchesCategory = (() => {
+      if (!selectedCategory) return true;
+      const sel = selectedCategory.toLowerCase().trim();
+      const cat = (item.category || "").toLowerCase().trim();
+      if (sel === "religious and historical" || sel === "religious & historical") {
+        return (
+          cat === "religious" ||
+          cat === "historical" ||
+          cat === "religious and historical" ||
+          cat === "religious & historical"
+        );
+      }
+      return cat === sel;
+    })();
 
     // When browsing by category, ensure full 25km radius is covered so attractions aren't clipped
     const matchesRadius = selectedCategory

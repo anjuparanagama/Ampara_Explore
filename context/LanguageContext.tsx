@@ -146,10 +146,31 @@ export const translations: Translations = {
   catNature: { en: "Nature", si: "ස්වභාව සෞන්දර්යය", ta: "இயற்கை" },
   catHistorical: { en: "Historical", si: "ඓතිහාසික", ta: "வரலாற்று சிறப்பு" },
   catReligious: { en: "Religious", si: "ආගමික පුදබිම්", ta: "புனித தலங்கள்" },
+  catReligiousHistorical: { en: "Religious and Historical", si: "ආගමික සහ ඓතිහාසික", ta: "புனித மற்றும் வரலாற்று தலங்கள்" },
   catBeaches: { en: "Beaches", si: "වෙරළ තීරයන්", ta: "கடற்கரைகள்" },
   catWaterfalls: { en: "Waterfalls", si: "දියඇලි", ta: "நீர்வீழ்ச்சிகள்" },
   catWildlife: { en: "Wildlife", si: "වනජීවී", ta: "வனவிலங்குகள்" },
   catCultural: { en: "Cultural", si: "සංස්කෘතික", ta: "கலாச்சாரம்" },
+  catNatureDesc: {
+    en: "Explore serene reservoirs, lush green landscapes, and tranquil retreats.",
+    si: "නෙත් සිත් ඇදගන්නා මනරම් ජලාශ, හරිත පරිසරය හා ස්වභාවික නිමැවුම්.",
+    ta: "அழகிய நீர்த்தேக்கங்கள் மற்றும் இயற்கை எழில் கொஞ்சும் இடங்களை அனுபவியுங்கள்.",
+  },
+  catReligiousHistoricalDesc: {
+    en: "Discover sacred ancient stupas, rock cave hermitages, and historic heritage ruins.",
+    si: "පෞරාණික පූජනීය වෙහෙර විහාර, ගල් ලෙන් ආරාම හා ඓතිහාසික උරුමයන් සොයා යන්න.",
+    ta: "பண்டைய புனித ஸ்தூபிகள், குகை ஆசிரமங்கள் மற்றும் வரலாற்று சின்னங்கள்.",
+  },
+  catBeachesDesc: {
+    en: "Experience world-famous surf breaks, pristine golden coastlines, and coastal lagoons.",
+    si: "ලෝකප්‍රකට රළ මත ලිස්සා යාමේ වෙරළ, රන්වන් වැලි තලාවන් හා වෙරළබඩ කලපු.",
+    ta: "உலகப் புகழ்பெற்ற அலைச்சறுக்கு மற்றும் தங்க கடற்கரைகளை கண்டறியுங்கள்.",
+  },
+  catWildlifeDesc: {
+    en: "Witness swimming elephant safaris, exotic bird sanctuaries, and national parks.",
+    si: "දිය පිහිනන වන අලි ඇතුන්, විදේශීය පක්ෂීන් සහ ජාතික වනෝද්‍යාන සෆාරි.",
+    ta: "நீந்தும் யானைகள், அரிய பறவைகள் மற்றும் வனவிலங்கு சரணාලயங்கள்.",
+  },
 
   // Destinations Grid
   destinationsTitle: {

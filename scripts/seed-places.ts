@@ -33,7 +33,10 @@ async function seedPlaces() {
     }
 
     for (const attraction of amparaAttractions) {
-      const categoryId = categoryIds.get(attraction.category);
+      const categoryId =
+        categoryIds.get(attraction.category) ||
+        categoryIds.get("Religious and Historical") ||
+        categoryIds.get("Nature");
       if (!categoryId) throw new Error(`Missing category for ${attraction.name}.`);
       await pool.execute(
       `INSERT INTO attractions
