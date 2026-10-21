@@ -2,7 +2,18 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { ImagePlus, Link2, Trash2, Upload, X } from "lucide-react";
+import {
+  ImagePlus,
+  LayoutDashboard,
+  Link2,
+  LogOut,
+  MapPinned,
+  Plus,
+  Tags,
+  Trash2,
+  Upload,
+  X,
+} from "lucide-react";
 
 type Category = { id: string; name: string; description: string | null };
 type Attraction = {
@@ -90,6 +101,8 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [imageUrls, setImageUrls] = useState("");
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [activeSection, setActiveSection] = useState<"dashboard" | "places" | "categories">("dashboard");
+  const [showPlaceForm, setShowPlaceForm] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
@@ -171,7 +184,7 @@ export default function AdminDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      setForm(blankAttraction); setImageUrls(""); setImageFiles([]); setEditingId(null); setMessage("Attraction saved."); await loadData();
+      setForm(blankAttraction); setImageUrls(""); setImageFiles([]); setEditingId(null); setShowPlaceForm(false); setMessage("Attraction saved."); await loadData();
     } catch (saveError) { setError(saveError instanceof Error ? saveError.message : "Unable to save attraction."); }
   };
 
@@ -195,6 +208,8 @@ export default function AdminDashboard() {
 
   const startEditing = (attraction: Attraction) => {
     setEditingId(attraction.id);
+    setActiveSection("places");
+    setShowPlaceForm(true);
     const nextForm = toForm(attraction);
     setForm(nextForm);
     setImageUrls("");
@@ -203,27 +218,68 @@ export default function AdminDashboard() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-6 text-slate-900 sm:px-8">
-      <div className="mx-auto max-w-7xl">
-        <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-600">Ampara Explore</p>
-            <h1 className="mt-1 text-3xl font-bold">Administrator dashboard</h1>
-            <p className="mt-1 text-sm text-slate-500">Manage attractions and destination categories.</p>
+    <main className="min-h-screen bg-[#f5f8fc] text-slate-900">
+      <div className="flex min-h-screen">
+        <aside className="hidden w-64 shrink-0 flex-col bg-[#082f49] px-4 py-6 text-white lg:flex">
+          <div className="mb-10 px-3">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">Ampara Explore</p>
+            <p className="mt-2 text-lg font-bold">Admin Portal</p>
           </div>
-          <Link href="/" className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:text-sky-600">Back to website</Link>
+          <nav className="space-y-2">
+            {[
+              { id: "dashboard" as const, label: "Dashboard", icon: LayoutDashboard },
+              { id: "places" as const, label: "Places", icon: MapPinned },
+              { id: "categories" as const, label: "Categories", icon: Tags },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <button key={item.id} onClick={() => setActiveSection(item.id)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${activeSection === item.id ? "bg-cyan-400 text-[#082f49] shadow-lg shadow-cyan-950/20" : "text-sky-100/75 hover:bg-white/10 hover:text-white"}`}>
+                  <Icon className="h-5 w-5" /> {item.label}
+                </button>
+              );
+            })}
+          </nav>
+          <div className="mt-auto space-y-2">
+            <Link href="/" className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-300 hover:bg-white/10 hover:text-white"><LogOut className="h-5 w-5" /> Back to website</Link>
+          </div>
+        </aside>
+
+        <div className="min-w-0 flex-1 px-4 py-6 sm:px-8">
+          <div className="mx-auto max-w-7xl">
+            <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-600">Ampara Explore / ADMIN</p>
+            <h1 className="mt-1 text-3xl font-bold">
+              {activeSection === "dashboard" ? "Dashboard" : activeSection === "places" ? "Places" : "Categories"}
+            </h1>
+            <p className="mt-1 text-sm text-slate-500">Manage your tourism content from one place.</p>
+          </div>
+          {activeSection === "places" && <button onClick={() => { setEditingId(null); setForm(blankAttraction); setImageUrls(""); setImageFiles([]); setShowPlaceForm(true); }} className="inline-flex items-center gap-2 rounded-xl bg-[#0e7490] px-4 py-2.5 text-sm font-bold text-white shadow-sm shadow-cyan-900/10 transition hover:bg-[#155e75]"><Plus className="h-4 w-4" /> Add place</button>}
         </header>
 
-        {loading && <p className="rounded-lg bg-white p-4 text-sm text-slate-600">Loading admin data...</p>}
-        {error && <p role="alert" className="mb-4 rounded-lg bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
-        {message && <p role="status" className="mb-4 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-700">{message}</p>}
+        {loading && <p className="rounded-xl border border-sky-100 bg-white p-4 text-sm text-slate-600 shadow-sm">Loading admin data...</p>}
+        {error && <p role="alert" className="mb-4 rounded-xl border border-rose-100 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
+        {message && <p role="status" className="mb-4 rounded-xl border border-emerald-100 bg-emerald-50 p-3 text-sm text-emerald-700">{message}</p>}
 
-        <section className="mb-8 rounded-2xl bg-white p-5 shadow-sm">
+        {activeSection === "dashboard" && (
+          <section className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"><p className="text-sm text-slate-500">Total places</p><p className="mt-2 text-3xl font-bold text-[#082f49]">{attractions.length}</p><p className="mt-1 text-xs text-slate-400">Published destinations</p></div>
+            <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"><p className="text-sm text-slate-500">Categories</p><p className="mt-2 text-3xl font-bold text-[#082f49]">{categories.length}</p><p className="mt-1 text-xs text-slate-400">Organized destination groups</p></div>
+            <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"><p className="text-sm text-slate-500">Average rating</p><p className="mt-2 text-3xl font-bold text-[#082f49]">{attractions.length ? (attractions.reduce((sum, item) => sum + Number(item.rating || 0), 0) / attractions.length).toFixed(1) : "0.0"}</p><p className="mt-1 text-xs text-slate-400">Across all places</p></div>
+            <div className="rounded-2xl border border-sky-100 bg-white p-6 shadow-sm sm:col-span-3">
+              <h2 className="text-xl font-bold">Welcome to your admin dashboard</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Use the sidebar to manage places and categories. Add new destinations with photos, descriptions, location details, and visitor information.</p>
+              <button onClick={() => { setActiveSection("places"); setShowPlaceForm(true); }} className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#0e7490] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#155e75]"><Plus className="h-4 w-4" /> Add your first place</button>
+            </div>
+          </section>
+        )}
+
+        {activeSection === "categories" && <section className="mb-8 rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-xl font-bold">Category management</h2>
           <form onSubmit={submitCategory} className="grid gap-3 md:grid-cols-[1fr_2fr_auto]">
             <input required value={categoryName} onChange={(event) => setCategoryName(event.target.value)} placeholder="Category name" className="rounded-lg border border-slate-200 px-3 py-2 text-sm" />
             <input value={categoryDescription} onChange={(event) => setCategoryDescription(event.target.value)} placeholder="Short description (optional)" className="rounded-lg border border-slate-200 px-3 py-2 text-sm" />
-            <button className="rounded-lg bg-sky-600 px-5 py-2 text-sm font-semibold text-white hover:bg-sky-700">{editingCategory ? "Update" : "Add category"}</button>
+            <button className="rounded-xl bg-[#0e7490] px-5 py-2 text-sm font-semibold text-white hover:bg-[#155e75]">{editingCategory ? "Update" : "Add category"}</button>
           </form>
           {editingCategory && <button onClick={() => { setEditingCategory(null); setCategoryName(""); setCategoryDescription(""); }} className="mt-2 text-xs font-semibold text-slate-500 hover:text-slate-800">Cancel editing</button>}
           <div className="mt-4 flex flex-wrap gap-2">
@@ -235,9 +291,9 @@ export default function AdminDashboard() {
               </div>
             ))}
           </div>
-        </section>
+        </section>}
 
-        <section className="mb-8 rounded-2xl bg-white p-5 shadow-sm">
+        {activeSection === "places" && showPlaceForm && <section className="mb-8 rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-xl font-bold">{editingId ? "Edit attraction" : "Create attraction"}</h2>
           <form onSubmit={submitAttraction} className="grid gap-3 md:grid-cols-2">
             {(["name", "slug", "location", "distanceKm", "duration", "rating", "reviewsCount", "radialZone"] as const).map((key) => (
@@ -250,7 +306,7 @@ export default function AdminDashboard() {
             <input value={form.highlights} onChange={(event) => updateForm("highlights", event.target.value)} placeholder="Highlights separated by commas" className="rounded-lg border border-slate-200 px-3 py-2 text-sm" />
             <div className="rounded-xl border-2 border-sky-100 bg-sky-50/40 p-4 md:col-span-2">
               <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-sky-600 p-2 text-white">
+                <div className="rounded-lg bg-[#0e7490] p-2 text-white">
                   <ImagePlus className="h-5 w-5" />
                 </div>
                 <div>
@@ -323,14 +379,17 @@ export default function AdminDashboard() {
             </div>
             <textarea required value={form.description} onChange={(event) => updateForm("description", event.target.value)} placeholder="Description" className="min-h-24 rounded-lg border border-slate-200 px-3 py-2 text-sm md:col-span-2" />
             <div className="flex gap-3 md:col-span-2">
-              <button className="rounded-lg bg-sky-600 px-5 py-2 text-sm font-semibold text-white hover:bg-sky-700">{editingId ? "Update attraction" : "Create attraction"}</button>
-              {editingId && <button type="button" onClick={() => { setEditingId(null); setForm(blankAttraction); }} className="rounded-lg border border-slate-300 px-5 py-2 text-sm font-semibold">Cancel</button>}
+              <button className="rounded-xl bg-[#0e7490] px-5 py-2 text-sm font-semibold text-white hover:bg-[#155e75]">{editingId ? "Update attraction" : "Create attraction"}</button>
+              <button type="button" onClick={() => { setEditingId(null); setForm(blankAttraction); setImageUrls(""); setImageFiles([]); setShowPlaceForm(false); }} className="rounded-lg border border-slate-300 px-5 py-2 text-sm font-semibold">Cancel</button>
             </div>
           </form>
-        </section>
+        </section>}
 
-        <section className="rounded-2xl bg-white p-5 shadow-sm">
-          <h2 className="mb-4 text-xl font-bold">Attractions ({attractions.length})</h2>
+        {activeSection === "places" && <section className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div><h2 className="text-xl font-bold">Places</h2><p className="mt-1 text-sm text-slate-500">All tourist attractions in your database ({attractions.length})</p></div>
+            <button onClick={() => setShowPlaceForm(true)} className="inline-flex items-center gap-2 rounded-lg border border-sky-200 px-3 py-2 text-sm font-bold text-sky-700 hover:bg-sky-50"><Plus className="h-4 w-4" /> Add place</button>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[760px] text-left text-sm">
               <thead><tr className="border-b border-slate-200 text-xs uppercase text-slate-500"><th className="p-3">Name</th><th className="p-3">Category</th><th className="p-3">Location</th><th className="p-3">Rating</th><th className="p-3">Actions</th></tr></thead>
@@ -343,7 +402,9 @@ export default function AdminDashboard() {
               </tbody>
             </table>
           </div>
-        </section>
+        </section>}
+          </div>
+        </div>
       </div>
     </main>
   );

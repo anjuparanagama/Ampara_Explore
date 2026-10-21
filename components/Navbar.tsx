@@ -94,15 +94,18 @@ export default function Navbar({
           {/* Logo Brand */}
           <button
             onClick={() => handleNavClick("home")}
-            className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none"
+            className="flex items-center text-left group cursor-pointer focus:outline-none"
+            aria-label={t("brandTitle")}
           >
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 group-hover:text-[#0284c7] transition-colors">
-                  {t("brandTitle")}
-                </span>
-              </div>
-            </div>
+            <Image
+              src="/logo.png"
+              alt={t("brandTitle")}
+              width={217}
+              height={72}
+              className="h-8 sm:h-9 md:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+              priority
+            />
+            <span className="sr-only">{t("brandTitle")}</span>
           </button>
 
           {/* Desktop Navigation Pills */}

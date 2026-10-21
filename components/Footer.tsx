@@ -104,11 +104,6 @@ export default function Footer() {
               Cultural Guidelines
             </a>
           </div>
-          <p className="flex items-center gap-1 text-slate-400">
-            Made with{" "}
-            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for
-            explorers in Sri Lanka
-          </p>
         </div>
       </div>
     </footer>
