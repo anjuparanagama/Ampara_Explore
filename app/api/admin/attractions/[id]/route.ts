@@ -28,9 +28,9 @@ export async function PUT(request: Request, context: RouteContext) {
       return NextResponse.json({ message: "Distance, rating, and review count must be valid positive values." }, { status: 400 });
     }
     const [result] = await db.execute(
-      `UPDATE attractions SET category_id = ?, name = ?, slug = ?, description = ?, location = ?, image = ?, distance_km = ?, duration = ?, highlights = ?, rating = ?, reviews_count = ?, radial_zone = ?
+      `UPDATE attractions SET category_id = ?, name = ?, slug = ?, description = ?, location = ?, image = ?, images = ?, distance_km = ?, duration = ?, highlights = ?, rating = ?, reviews_count = ?, radial_zone = ?
        WHERE id = ?`,
-      [categoryId, name, slug, description, location, typeof body.image === "string" ? body.image.trim() || null : null, distanceKm, typeof body.duration === "string" ? body.duration.trim() || null : null, JSON.stringify(highlights), rating, reviewsCount, typeof body.radialZone === "string" ? body.radialZone.trim() || null : null, id],
+      [categoryId, name, slug, description, location, typeof body.image === "string" ? body.image.trim() || null : null, JSON.stringify(Array.isArray(body.images) ? body.images.filter((item: unknown): item is string => typeof item === "string" && /^(https?:\/\/|\/uploads\/)/i.test(item)).map((item: string) => item.trim()).filter(Boolean).slice(0, 5) : []), distanceKm, typeof body.duration === "string" ? body.duration.trim() || null : null, JSON.stringify(highlights), rating, reviewsCount, typeof body.radialZone === "string" ? body.radialZone.trim() || null : null, id],
     );
     if ((result as { affectedRows: number }).affectedRows === 0) return NextResponse.json({ message: "Attraction not found." }, { status: 404 });
     return NextResponse.json({ success: true });

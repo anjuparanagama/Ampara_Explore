@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { interestCategories, amparaAttractions } from "@/data/amparaData";
+import { interestCategories, Attraction } from "@/data/amparaData";
 import { useLanguage } from "@/context/LanguageContext";
 import {
   Church,
@@ -14,19 +14,23 @@ import {
 } from "lucide-react";
 
 interface BrowseByInterestProps {
+  attractions: Attraction[];
   selectedCategory: string | null;
   onSelectCategory: (category: string | null) => void;
 }
 
 export default function BrowseByInterest({
+  attractions,
   selectedCategory,
   onSelectCategory,
 }: BrowseByInterestProps) {
   const { t } = useLanguage();
 
   const getCategoryCount = (title: string) => {
-    return amparaAttractions.filter(
-      (a) => a.category.toLowerCase() === title.toLowerCase(),
+    return attractions.filter(
+      (a) =>
+        typeof a.category === "string" &&
+        a.category.toLowerCase() === title.toLowerCase(),
     ).length;
   };
 

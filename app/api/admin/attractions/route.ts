@@ -9,7 +9,7 @@ function isAdminError(error: unknown) {
 
 const selectAttractions = `
   SELECT a.id, a.category_id, c.name AS category_name, a.name, a.slug,
-    a.description, a.location, a.image, a.distance_km, a.duration,
+    a.description, a.location, a.image, a.images, a.distance_km, a.duration,
     a.highlights, a.rating, a.reviews_count, a.radial_zone,
     a.created_at, a.updated_at
   FROM attractions a
@@ -39,6 +39,9 @@ function parseAttraction(body: Record<string, unknown>) {
     value: {
       name, slug, categoryId, description, location,
       image: typeof body.image === "string" ? body.image.trim() || null : null,
+      images: Array.isArray(body.images)
+        ? body.images.filter((item): item is string => typeof item === "string" && /^(https?:\/\/|\/uploads\/)/i.test(item)).map((item) => item.trim()).filter(Boolean).slice(0, 5)
+        : [],
       distanceKm, duration: typeof body.duration === "string" ? body.duration.trim() || null : null,
       highlights, rating, reviewsCount,
       radialZone: typeof body.radialZone === "string" ? body.radialZone.trim() || null : null,
@@ -67,9 +70,9 @@ export async function POST(request: Request) {
     const id = randomUUID();
     await db.execute(
       `INSERT INTO attractions
-       (id, category_id, name, slug, description, location, image, distance_km, duration, highlights, rating, reviews_count, radial_zone)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, value.categoryId, value.name, value.slug, value.description, value.location, value.image, value.distanceKm, value.duration, JSON.stringify(value.highlights), value.rating, value.reviewsCount, value.radialZone],
+       (id, category_id, name, slug, description, location, image, images, distance_km, duration, highlights, rating, reviews_count, radial_zone)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [id, value.categoryId, value.name, value.slug, value.description, value.location, value.image, JSON.stringify(value.images), value.distanceKm, value.duration, JSON.stringify(value.highlights), value.rating, value.reviewsCount, value.radialZone],
     );
     return NextResponse.json({ attraction: { id, ...value } }, { status: 201 });
   } catch (error) {

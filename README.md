@@ -53,6 +53,14 @@ The connection parser enforces certificate-validated TLS for TiDB Serverless.
 After the initial migration, the application runtime only needs normal
 database read/write permissions.
 
+Admin attraction images can be uploaded from the dashboard or entered as
+external `http`/`https` URLs. Up to five images are stored per attraction.
+Uploaded images are validated (JPG, PNG, WEBP, or GIF; 5 MB maximum each) and
+saved to `public/uploads/attractions`, while their public paths are stored in
+TiDB. This local filesystem approach is suitable for self-hosted deployments;
+deployments with ephemeral filesystems should replace the upload storage with
+object storage before production.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

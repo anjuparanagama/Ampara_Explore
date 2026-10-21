@@ -37,8 +37,8 @@ export async function createSession(userId: string, rememberMe = false) {
   });
 }
 
-export async function getCurrentUser(): Promise<AuthUser | null> {
-  const token = (await cookies()).get(SESSION_COOKIE)?.value;
+export async function getCurrentUser(sessionToken?: string): Promise<AuthUser | null> {
+  const token = sessionToken ?? (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
 
   const [rows] = await db.execute(

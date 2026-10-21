@@ -1,18 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
-import { amparaAttractions, Attraction } from "@/data/amparaData";
+import { Attraction } from "@/data/amparaData";
 import { Target, Compass, Sparkles } from "lucide-react";
 
 interface RadialMapViewProps {
+  attractions: Attraction[];
   onSelectAttraction: (attraction: Attraction) => void;
 }
 
 export default function RadialMapView({
+  attractions,
   onSelectAttraction,
 }: RadialMapViewProps) {
   const [activePin, setActivePin] = useState<Attraction | null>(
-    amparaAttractions[0],
+    attractions[0] ?? null,
   );
   const [filterRadius, setFilterRadius] = useState<number>(25);
 
@@ -226,7 +228,7 @@ export default function RadialMapView({
               </text>
 
               {/* Attraction Pin Markers */}
-              {amparaAttractions.map((attraction) => {
+              {attractions.map((attraction) => {
                 const angle = angleMapping[attraction.id] || 45;
                 const { x, y } = calculateRadarPos(
                   attraction.distanceKm,

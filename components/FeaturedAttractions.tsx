@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { amparaAttractions, Attraction } from "@/data/amparaData";
+import { Attraction } from "@/data/amparaData";
 import {
   Star,
   MapPin,
@@ -16,6 +16,7 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 
 interface FeaturedAttractionsProps {
+  attractions: Attraction[];
   searchQuery: string;
   selectedCategory: string | null;
   selectedRadius: number;
@@ -26,6 +27,7 @@ interface FeaturedAttractionsProps {
 }
 
 export default function FeaturedAttractions({
+  attractions,
   searchQuery,
   selectedCategory,
   selectedRadius,
@@ -37,7 +39,7 @@ export default function FeaturedAttractions({
   const { t } = useLanguage();
 
   // Filter attractions based on search, category, and radius
-  const filteredAttractions = amparaAttractions.filter((item) => {
+  const filteredAttractions = attractions.filter((item) => {
     const matchesSearch =
       !searchQuery ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:migrate": "node scripts/migrate.mjs",
-    "db:seed": "node scripts/seed.mjs"
+    "db:seed": "node scripts/seed.mjs",
+    "db:seed:places": "tsx scripts/seed-places.ts"
   },
   "dependencies": {
     "@next/env": "^16.4.2",
@@ -30,6 +31,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "tsx": "^4.20.6"
   }
 }
