@@ -350,7 +350,13 @@ export default function HeroTimeLapseBg() {
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950/40 to-transparent" />
 
       {/* Floating Interactive Time-of-Day Widget Pill (Right Bottom Corner) */}
-      <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-30 pointer-events-auto flex flex-col items-end gap-2">
+      <div
+        className={`absolute right-14 z-30 flex flex-col items-end gap-2 pointer-events-auto transition-[bottom] duration-300 sm:right-10 ${
+          showControls
+            ? "bottom-52 sm:bottom-56"
+            : "bottom-16 sm:bottom-4"
+        }`}
+      >
         {/* Time Controller Drawer Popover (Opens Upward) */}
         {showControls && (
           <div className="bg-slate-900/95 backdrop-blur-xl border border-white/15 p-3.5 rounded-2xl shadow-2xl text-white w-72 text-xs flex flex-col gap-3 animate-fadeIn mb-1">
@@ -447,7 +453,7 @@ export default function HeroTimeLapseBg() {
         <button
           type="button"
           onClick={() => setShowControls(!showControls)}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white shadow-lg text-xs font-semibold transition-all hover:bg-slate-900/95 cursor-pointer"
+          className="inline-flex origin-bottom-right rotate-90 items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white shadow-lg text-xs font-semibold transition-all hover:bg-slate-900/95 cursor-pointer"
         >
           <span className="flex items-center gap-1.5 text-sky-400">
             {timeInfo.period === "morning" && (

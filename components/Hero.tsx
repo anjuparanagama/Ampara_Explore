@@ -62,27 +62,28 @@ export default function Hero({
 
       {/* Main Content Container */}
       <div className="max-w-4xl w-full mx-auto text-center flex flex-1 flex-col items-center justify-center relative z-10">
-        {/* Hero Title */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-200 leading-[1.1] mb-3 sm:mb-4 drop-shadow-xs">
-          {t("heroTitleDiscover")}{" "}
-          <span className="text-[#0084d1] text-transparent bg-clip-text bg-gradient-to-r from-[#0284c7] to-[#0ea5e9]">
-            {t("heroTitleCity")}
-          </span>
-        </h1>
+        {/* Hero Title and Subtitle */}
+        <div className="max-w-3xl px-4 py-3 sm:px-8 sm:py-4">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1] mb-3 sm:mb-4 drop-shadow-[0_3px_3px_rgba(15,23,42,0.9)]">
+            {t("heroTitleDiscover")}
+            <span className="text-[#0084d1] text-transparent bg-clip-text bg-gradient-to-r from-[#38bdf8] to-[#0ea5e9] drop-shadow-[0_2px_2px_rgba(15,23,42,0.9)]">
+              {t("heroTitleCity")}
+            </span>
+          </h1>
 
-        {/* Hero Subtitle */}
-        <p className="text-xs sm:text-sm md:text-base text-slate-200 font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)] mb-4 sm:mb-5">
-          {t("heroSubtitle")}
-          <span className="block sm:inline font-semibold text-slate-200">
-            {t("heroSubtitleSuffix")}
-          </span>
-        </p>
+          <p className="text-xs sm:text-sm md:text-base text-white font-semibold max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_2px_rgba(15,23,42,0.95)]">
+            {t("heroSubtitle")}
+            <span className="block sm:inline font-bold text-white">
+              {t("heroSubtitleSuffix")}
+            </span>
+          </p>
+        </div>
 
         {/* Main Search Input Form */}
         <div className="w-full max-w-2xl mx-auto relative mb-3 sm:mb-4">
           <form
             onSubmit={handleSearchSubmit}
-            className="bg-white/95 backdrop-blur-md rounded-full p-1.5 pl-4 sm:pl-5 shadow-xl shadow-slate-900/10 border border-slate-200/90 flex items-center gap-2 transition-all duration-300 focus-within:ring-4 focus-within:ring-sky-200 focus-within:border-sky-400"
+            className="bg-white backdrop-blur-md rounded-full p-1.5 pl-4 sm:pl-5 shadow-xl shadow-slate-900/10 border border-slate-200/90 flex items-center gap-2 transition-all duration-300 focus-within:ring-4 focus-within:ring-sky-200 focus-within:border-sky-400"
           >
             <Search className="w-4 h-4 text-slate-400 shrink-0 ml-1" />
             <input
@@ -176,7 +177,7 @@ export default function Hero({
       <div className="max-w-5xl mx-auto w-full mt-4 sm:mt-6 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3.5">
           {/* Card 1: 40+ Attractions */}
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
+          <div className="bg-white backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
             <div className="text-xl sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform">
               {t("stat1Number")}
             </div>
@@ -186,7 +187,7 @@ export default function Hero({
           </div>
 
           {/* Card 2: 25 km Radius */}
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
+          <div className="bg-white backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
             <div className="text-xl sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform">
               {t("stat2Number")}
             </div>
@@ -196,7 +197,7 @@ export default function Hero({
           </div>
 
           {/* Card 3: 1-Day Plans */}
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
+          <div className="bg-white backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
             <div className="text-xl sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform">
               {t("stat3Number")}
             </div>
@@ -206,7 +207,7 @@ export default function Hero({
           </div>
 
           {/* Card 4: 4.9 Satisfaction */}
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
+          <div className="bg-white backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
             <div className="flex items-center justify-center gap-1 text-xl sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform">
               <span>4.9</span>
               <Star className="w-5 h-5 fill-amber-400 text-amber-400 inline-block" />

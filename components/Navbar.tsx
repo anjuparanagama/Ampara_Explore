@@ -139,7 +139,7 @@ export default function Navbar({
       } top-0 left-0 z-50 w-full px-4 pt-3 pb-2 transition-all duration-300 sm:px-6 lg:px-8`}
     >
       <div className="max-w-7xl mx-auto">
-        <div className="bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-sm rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between transition-all hover:shadow-md">
+        <div className="bg-white backdrop-blur-md border border-slate-200/80 shadow-sm rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between transition-all hover:shadow-md">
           {/* Logo Brand */}
           <button
             onClick={() => handleNavClick("home")}
