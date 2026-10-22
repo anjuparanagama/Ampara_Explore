@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
+import Input from "@/components/Input";
 import {
   ImagePlus,
   LayoutDashboard,
@@ -285,8 +286,8 @@ export default function AdminDashboard() {
         {activeSection === "categories" && <section className="mb-8 rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-xl font-bold">Category management</h2>
           <form onSubmit={submitCategory} className="grid gap-3 md:grid-cols-[1fr_2fr_auto]">
-            <input required value={categoryName} onChange={(event) => setCategoryName(event.target.value)} placeholder="Category name" className="rounded-lg border border-slate-200 px-3 py-2 text-sm" />
-            <input value={categoryDescription} onChange={(event) => setCategoryDescription(event.target.value)} placeholder="Short description (optional)" className="rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+            <Input required value={categoryName} onChange={(event) => setCategoryName(event.target.value)} placeholder="Category name" />
+            <Input value={categoryDescription} onChange={(event) => setCategoryDescription(event.target.value)} placeholder="Short description (optional)" />
             <button className="rounded-xl bg-[#0e7490] px-5 py-2 text-sm font-semibold text-white hover:bg-[#155e75]">{editingCategory ? "Update" : "Add category"}</button>
           </form>
           {editingCategory && <button onClick={() => { setEditingCategory(null); setCategoryName(""); setCategoryDescription(""); }} className="mt-2 text-xs font-semibold text-slate-500 hover:text-slate-800">Cancel editing</button>}
@@ -305,13 +306,13 @@ export default function AdminDashboard() {
           <h2 className="mb-4 text-xl font-bold">{editingId ? "Edit attraction" : "Create attraction"}</h2>
           <form onSubmit={submitAttraction} className="grid gap-3 md:grid-cols-2">
             {(["name", "slug", "location", "latitude", "longitude", "distanceKm", "duration", "rating", "reviewsCount", "radialZone"] as const).map((key) => (
-              <input key={key} type={["latitude", "longitude", "distanceKm", "rating", "reviewsCount"].includes(key) ? "number" : "text"} min={key === "latitude" ? -90 : key === "longitude" ? -180 : undefined} max={key === "latitude" ? 90 : key === "longitude" ? 180 : undefined} step={["latitude", "longitude"].includes(key) ? "any" : undefined} required={["name", "slug", "location", "latitude", "longitude", "distanceKm", "rating", "reviewsCount"].includes(key)} value={form[key]} onChange={(event) => updateForm(key, event.target.value)} placeholder={key === "slug" ? "slug (example: gal-oya-park)" : key === "latitude" ? "latitude (e.g. 7.291)" : key === "longitude" ? "longitude (e.g. 81.672)" : key} className="rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+              <Input key={key} type={["latitude", "longitude", "distanceKm", "rating", "reviewsCount"].includes(key) ? "number" : "text"} min={key === "latitude" ? -90 : key === "longitude" ? -180 : undefined} max={key === "latitude" ? 90 : key === "longitude" ? 180 : undefined} step={["latitude", "longitude"].includes(key) ? "any" : undefined} required={["name", "slug", "location", "latitude", "longitude", "distanceKm", "rating", "reviewsCount"].includes(key)} value={form[key]} onChange={(event) => updateForm(key, event.target.value)} placeholder={key === "slug" ? "slug (example: gal-oya-park)" : key === "latitude" ? "latitude (e.g. 7.291)" : key === "longitude" ? "longitude (e.g. 81.672)" : key} />
             ))}
             <select required value={form.categoryId} onChange={(event) => updateForm("categoryId", event.target.value)} className="rounded-lg border border-slate-200 px-3 py-2 text-sm">
               <option value="">Select category</option>
               {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
             </select>
-            <input value={form.highlights} onChange={(event) => updateForm("highlights", event.target.value)} placeholder="Highlights separated by commas" className="rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+            <Input value={form.highlights} onChange={(event) => updateForm("highlights", event.target.value)} placeholder="Highlights separated by commas" />
             <div className="rounded-xl border-2 border-sky-100 bg-sky-50/40 p-4 md:col-span-2">
               <div className="flex items-start gap-3">
                 <div className="rounded-lg bg-[#0e7490] p-2 text-white">

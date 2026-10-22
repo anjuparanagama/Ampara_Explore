@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import Input from "@/components/Input";
 import {
   ArrowLeft,
   ArrowRight,
@@ -137,13 +138,13 @@ export default function AuthPage({ mode }: AuthPageProps) {
                     </span>
                     <span className="relative block">
                       <UserRound className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
-                      <input
+                      <Input
                         required
                         type="text"
                         value={name}
                         onChange={(event) => setName(event.target.value)}
                         placeholder="Your full name"
-                        className="h-11 w-full rounded-md border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                        className="h-11 w-full rounded-md bg-white pl-10 pr-3"
                       />
                     </span>
                   </label>
@@ -155,13 +156,13 @@ export default function AuthPage({ mode }: AuthPageProps) {
                   </span>
                   <span className="relative block">
                     <Mail className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
-                    <input
+                    <Input
                       required
                       type="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       placeholder="you@example.com"
-                      className="h-11 w-full rounded-md border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                      className="h-11 w-full rounded-md bg-white pl-10 pr-3"
                     />
                   </span>
                 </label>
@@ -172,7 +173,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                   </span>
                   <span className="relative block">
                     <LockKeyhole className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
-                    <input
+                    <Input
                       required
                       minLength={isLogin ? undefined : 8}
                       type={showPassword ? "text" : "password"}
@@ -181,7 +182,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                       placeholder={
                         isLogin ? "Your password" : "At least 8 characters"
                       }
-                      className="h-11 w-full rounded-md border border-slate-200 bg-white pl-10 pr-11 text-sm outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                      className="h-11 w-full rounded-md bg-white pl-10 pr-11"
                     />
                     <button
                       type="button"
@@ -207,7 +208,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                     </span>
                     <span className="relative block">
                       <LockKeyhole className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
-                      <input
+                      <Input
                         required
                         type={showConfirmPassword ? "text" : "password"}
                         value={confirmPassword}
@@ -215,7 +216,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                           setConfirmPassword(event.target.value)
                         }
                         placeholder="Repeat your password"
-                        className="h-11 w-full rounded-md border border-slate-200 bg-white pl-10 pr-11 text-sm outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                        className="h-11 w-full rounded-md bg-white pl-10 pr-11"
                       />
                       <button
                         type="button"
