@@ -28,8 +28,6 @@ import {
   ShieldCheck,
   RotateCcw,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import { amparaAttractions, Attraction } from "@/data/amparaData";
@@ -62,7 +60,6 @@ export default function MyVisitPlanPage() {
   const [isOptimized, setIsOptimized] = useState(false);
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("plan");
 
   // Sample initial stops matching the reference design
   const [stops, setStops] = useState<PlanStop[]>([
@@ -168,14 +165,6 @@ export default function MyVisitPlanPage() {
   return (
     <div className="min-h-screen bg-[#f3f6fa] text-slate-900 font-sans selection:bg-[#0284c7] selection:text-white flex flex-col justify-between">
       {/* 1. Global Navigation Bar */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
-        onOpenPlan={() => setIsPlanDrawerOpen(true)}
-        planCount={stops.length}
-      />
-
       {/* 2. Top Breadcrumbs & State Switcher */}
       <div className="max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4 sm:pt-5 pb-2">
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
@@ -734,8 +723,6 @@ export default function MyVisitPlanPage() {
         onClose={() => setIsAuthModalOpen(false)}
       />
 
-      {/* 5. Global Footer */}
-      <Footer />
     </div>
   );
 }

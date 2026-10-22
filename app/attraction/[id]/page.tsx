@@ -32,10 +32,8 @@ import {
   Shield,
   HelpCircle,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
-import Footer from "@/components/Footer";
 import { amparaAttractions, Attraction } from "@/data/amparaData";
 
 // Comprehensive rich profile data for Ampara destinations
@@ -742,7 +740,6 @@ function AttractionDetailContent() {
   const [isAddedToPlan, setIsAddedToPlan] = useState(true);
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("explore");
 
   const [visitPlan, setVisitPlan] = useState<Attraction[]>([
     amparaAttractions[0],
@@ -778,14 +775,6 @@ function AttractionDetailContent() {
   return (
     <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
       {/* 1. Header Bar */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
-        onOpenPlan={() => setIsPlanDrawerOpen(true)}
-        planCount={visitPlan.length}
-      />
-
       {/* 2. Top Breadcrumb Bar */}
       <div className="w-full px-4 sm:px-8 py-3">
         <div className="max-w-[1370px] mx-auto flex items-center justify-between gap-4 text-xs text-slate-500">
@@ -1609,8 +1598,6 @@ function AttractionDetailContent() {
         onClose={() => setIsAuthModalOpen(false)}
       />
 
-      {/* 11. Footer */}
-      <Footer />
     </div>
   );
 }

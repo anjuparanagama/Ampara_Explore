@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
+import PublicLayout from "@/components/PublicLayout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,7 +33,11 @@ export default function RootLayout({
         className="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-[#0284c7] selection:text-white"
         suppressHydrationWarning
       >
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          <Suspense fallback={<div className="min-h-screen">{children}</div>}>
+            <PublicLayout>{children}</PublicLayout>
+          </Suspense>
+        </LanguageProvider>
       </body>
     </html>
   );

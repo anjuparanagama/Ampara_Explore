@@ -1,13 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Attraction } from "@/data/amparaData";
+import type { Attraction } from "@/data/amparaData";
 import { Target, Compass, Sparkles } from "lucide-react";
-
-interface RadialMapViewProps {
-  attractions: Attraction[];
-  onSelectAttraction: (attraction: Attraction) => void;
-}
+import type { RadialMapViewProps } from "@/interface/home.types";
 
 export default function RadialMapView({
   attractions,

@@ -2,15 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { Attraction } from "@/data/amparaData";
 import { X, Star, MapPin, Clock, Plus, Check, ExternalLink } from "lucide-react";
-
-interface AttractionModalProps {
-  attraction: Attraction | null;
-  onClose: () => void;
-  isAdded: boolean;
-  onTogglePlan: (attraction: Attraction) => void;
-}
+import type { AttractionModalProps } from "@/interface/home.types";
 
 export default function AttractionModal({
   attraction,
@@ -141,4 +134,3 @@ export default function AttractionModal({
     </div>
   );
 }
-

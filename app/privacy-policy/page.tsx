@@ -17,7 +17,6 @@ import {
   HelpCircle,
   ChevronRight,
 } from "lucide-react";
-import Footer from "@/components/Footer";
 
 export default function PrivacyPolicyPage() {
   const lastUpdated = "October 2024 (Version 2.4)";
@@ -347,8 +346,6 @@ export default function PrivacyPolicyPage() {
         </div>
       </main>
 
-      {/* 3. Footer */}
-      <Footer />
     </div>
   );
 }

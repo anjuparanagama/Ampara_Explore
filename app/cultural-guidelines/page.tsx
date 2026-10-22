@@ -19,7 +19,6 @@ import {
   ChevronRight,
   Info,
 } from "lucide-react";
-import Footer from "@/components/Footer";
 
 export default function CulturalGuidelinesPage() {
   const [activeTab, setActiveTab] = useState<
@@ -347,8 +346,6 @@ export default function CulturalGuidelinesPage() {
         </div>
       </main>
 
-      {/* 3. Footer */}
-      <Footer />
     </div>
   );
 }

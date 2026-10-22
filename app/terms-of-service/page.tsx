@@ -16,7 +16,6 @@ import {
   ChevronRight,
   ExternalLink,
 } from "lucide-react";
-import Footer from "@/components/Footer";
 
 export default function TermsOfServicePage() {
   const lastUpdated = "October 2024 (Version 1.8)";
@@ -306,8 +305,6 @@ export default function TermsOfServicePage() {
         </div>
       </main>
 
-      {/* 3. Footer */}
-      <Footer />
     </div>
   );
 }

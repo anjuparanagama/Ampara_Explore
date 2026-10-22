@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Attraction } from "@/data/amparaData";
 import {
   Star,
   MapPin,
@@ -14,17 +13,7 @@ import {
   Compass,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-
-interface FeaturedAttractionsProps {
-  attractions: Attraction[];
-  searchQuery: string;
-  selectedCategory: string | null;
-  selectedRadius: number;
-  visitPlan: Attraction[];
-  onTogglePlan: (attraction: Attraction) => void;
-  onSelectAttraction: (attraction: Attraction) => void;
-  onClearCategory?: () => void;
-}
+import type { FeaturedAttractionsProps } from "@/interface/home.types";
 
 export default function FeaturedAttractions({
   attractions,

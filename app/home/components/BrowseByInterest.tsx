@@ -2,14 +2,9 @@
 
 import React from "react";
 import Image from "next/image";
-import { interestCategories, Attraction } from "@/data/amparaData";
+import { interestCategories } from "@/data/amparaData";
 import { useLanguage } from "@/context/LanguageContext";
-
-interface BrowseByInterestProps {
-  attractions: Attraction[];
-  selectedCategory: string | null;
-  onSelectCategory: (category: string | null) => void;
-}
+import type { BrowseByInterestProps } from "@/interface/home.types";
 
 export default function BrowseByInterest({
   attractions,

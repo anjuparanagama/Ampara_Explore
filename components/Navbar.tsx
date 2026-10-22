@@ -3,24 +3,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, Globe, ChevronDown, Check, LogOut, ShieldCheck, MapPin } from "lucide-react";
+import {
+  Menu,
+  X,
+  Globe,
+  ChevronDown,
+  Check,
+  LogOut,
+  ShieldCheck,
+  MapPin,
+} from "lucide-react";
 import { useLanguage, Language } from "@/context/LanguageContext";
 
 interface NavbarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  onOpenAuth: () => void;
-  onOpenPlan: () => void;
-  planCount: number;
 }
 
-export default function Navbar({
-  activeTab,
-  setActiveTab,
-  onOpenAuth,
-  onOpenPlan,
-  planCount,
-}: NavbarProps) {
+export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -138,7 +138,7 @@ export default function Navbar({
         pathname === "/" ? "absolute" : "relative"
       } top-0 left-0 z-50 w-full px-4 pt-3 pb-2 transition-all duration-300 sm:px-6 lg:px-8`}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="bg-white backdrop-blur-md border border-slate-200/80 shadow-sm rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between transition-all hover:shadow-md">
           {/* Logo Brand */}
           <button

@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { Sparkles } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import { amparaAttractions } from "@/data/amparaData";
@@ -33,7 +31,6 @@ export default function MyVisitPlansPage() {
   // App UI state
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("plan");
   const [currentUser, setCurrentUser] = useState<{ name?: string } | null>(
     null,
   );
@@ -224,14 +221,6 @@ export default function MyVisitPlansPage() {
       )}
 
       {/* Global Navigation Bar */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
-        onOpenPlan={() => setIsPlanDrawerOpen(true)}
-        planCount={plans.length}
-      />
-
       <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
         {/* Header Component */}
         <PlanHeader userName={currentUser?.name} />
@@ -277,9 +266,6 @@ export default function MyVisitPlansPage() {
         onFinishTrip={handleFinishTrip}
         onRestartTrip={handleRestartTrip}
       />
-
-      {/* Global Shared Footer */}
-      <Footer />
 
       {/* Visit Plan Drawer & Auth Modal */}
       <VisitPlanDrawer

@@ -10,18 +10,9 @@ import {
   Star,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import type { HeroProps } from "@/interface/home.types";
 
 import HeroTimeLapseBg from "./HeroTimeLapseBg";
-
-interface HeroProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  onSearch: (query: string) => void;
-  selectedRadius: number;
-  setSelectedRadius: (radius: number) => void;
-  onExploreClick: () => void;
-  onMapClick: () => void;
-}
 
 export default function Hero({
   searchQuery,

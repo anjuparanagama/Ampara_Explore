@@ -29,8 +29,6 @@ import {
   Eye,
   Car,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import { amparaAttractions, Attraction } from "@/data/amparaData";
@@ -189,7 +187,6 @@ export default function MapPage() {
   const [mapDestinations, setMapDestinations] = useState<MapPlace[]>(
     initialMapDestinations,
   );
-  const [activeTab, setActiveTab] = useState("map");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedZone, setSelectedZone] = useState<number>(25);
@@ -323,14 +320,6 @@ export default function MapPage() {
   return (
     <div className="min-h-screen bg-[#f3f6fa] text-slate-900 font-sans selection:bg-[#0284c7] selection:text-white flex flex-col justify-between">
       {/* 1. Navigation Header */}
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
-        onOpenPlan={() => setIsPlanDrawerOpen(true)}
-        planCount={visitPlan.length}
-      />
-
       {/* 2. Main Map Dashboard (Split Layout) */}
       <main className="max-w-[1600px] w-full mx-auto px-3 sm:px-5 lg:px-8 pt-4 sm:pt-5 pb-6 sm:pb-8 flex-1 flex flex-col lg:flex-row gap-4 lg:gap-5 items-stretch">
         {/* LEFT PANEL: Explore Places Directory (approx 380px) */}
@@ -950,9 +939,6 @@ export default function MapPage() {
           </div>
         </div>
       </main>
-
-      {/* 3. Global Footer */}
-      <Footer />
 
       {/* Drawers & Modals */}
       <VisitPlanDrawer

@@ -21,7 +21,6 @@ import {
   Shield,
   HelpCircle,
 } from "lucide-react";
-import Footer from "@/components/Footer";
 
 type FlowStep = "request" | "verify" | "reset" | "success" | "error";
 
@@ -728,8 +727,6 @@ export default function ForgotPasswordPage() {
         </div>
       </main>
 
-      {/* 3. Footer */}
-      <Footer />
     </div>
   );
 }
