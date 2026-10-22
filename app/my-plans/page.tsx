@@ -8,7 +8,11 @@ import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import { amparaAttractions } from "@/data/amparaData";
 
-import { SavedPlan, FilterTabType, initialPlans } from "@/interface/myPlans.types";
+import {
+  SavedPlan,
+  FilterTabType,
+  initialPlans,
+} from "@/interface/myPlans.types";
 import {
   PlanHeader,
   PlanFilters,
@@ -210,7 +214,7 @@ export default function MyVisitPlansPage() {
   }, [plans]);
 
   return (
-    <div className="min-h-screen bg-slate-50/60 text-slate-900 font-sans flex flex-col justify-between selection:bg-sky-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50/60 text-slate-900 font-sans flex flex-col justify-between selection:bg-sky-500 selection:text-white max-w-[1440px] w-full">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-200">

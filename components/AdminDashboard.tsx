@@ -24,6 +24,8 @@ type Attraction = {
   slug: string;
   description: string;
   location: string;
+  latitude: number;
+  longitude: number;
   image: string | null;
   images: string[] | string | null;
   distance_km: number;
@@ -40,6 +42,8 @@ type AttractionForm = {
   categoryId: string;
   description: string;
   location: string;
+  latitude: string;
+  longitude: string;
   image: string;
   images: string[];
   distanceKm: string;
@@ -52,6 +56,7 @@ type AttractionForm = {
 
 const blankAttraction: AttractionForm = {
   name: "", slug: "", categoryId: "", description: "", location: "",
+  latitude: "", longitude: "",
   image: "", images: [], distanceKm: "0", duration: "", highlights: "", rating: "0",
   reviewsCount: "0", radialZone: "",
 };
@@ -81,6 +86,7 @@ function toForm(attraction: Attraction): AttractionForm {
   return {
     name: attraction.name, slug: attraction.slug, categoryId: attraction.category_id,
     description: attraction.description, location: attraction.location,
+    latitude: String(attraction.latitude ?? ""), longitude: String(attraction.longitude ?? ""),
     image: attraction.image || "", images, distanceKm: String(attraction.distance_km),
     duration: attraction.duration || "", highlights: highlights.join(", "),
     rating: String(attraction.rating), reviewsCount: String(attraction.reviews_count),
@@ -176,6 +182,8 @@ export default function AdminDashboard() {
       distanceKm: Number(form.distanceKm),
       rating: Number(form.rating),
       reviewsCount: Number(form.reviewsCount),
+      latitude: Number(form.latitude),
+      longitude: Number(form.longitude),
       highlights: form.highlights.split(",").map((item) => item.trim()).filter(Boolean),
     };
     try {
@@ -296,8 +304,8 @@ export default function AdminDashboard() {
         {activeSection === "places" && showPlaceForm && <section className="mb-8 rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-xl font-bold">{editingId ? "Edit attraction" : "Create attraction"}</h2>
           <form onSubmit={submitAttraction} className="grid gap-3 md:grid-cols-2">
-            {(["name", "slug", "location", "distanceKm", "duration", "rating", "reviewsCount", "radialZone"] as const).map((key) => (
-              <input key={key} required={["name", "slug", "location", "distanceKm", "rating", "reviewsCount"].includes(key)} value={form[key]} onChange={(event) => updateForm(key, event.target.value)} placeholder={key === "slug" ? "slug (example: gal-oya-park)" : key} className="rounded-lg border border-slate-200 px-3 py-2 text-sm" />
+            {(["name", "slug", "location", "latitude", "longitude", "distanceKm", "duration", "rating", "reviewsCount", "radialZone"] as const).map((key) => (
+              <input key={key} type={["latitude", "longitude", "distanceKm", "rating", "reviewsCount"].includes(key) ? "number" : "text"} min={key === "latitude" ? -90 : key === "longitude" ? -180 : undefined} max={key === "latitude" ? 90 : key === "longitude" ? 180 : undefined} step={["latitude", "longitude"].includes(key) ? "any" : undefined} required={["name", "slug", "location", "latitude", "longitude", "distanceKm", "rating", "reviewsCount"].includes(key)} value={form[key]} onChange={(event) => updateForm(key, event.target.value)} placeholder={key === "slug" ? "slug (example: gal-oya-park)" : key === "latitude" ? "latitude (e.g. 7.291)" : key === "longitude" ? "longitude (e.g. 81.672)" : key} className="rounded-lg border border-slate-200 px-3 py-2 text-sm" />
             ))}
             <select required value={form.categoryId} onChange={(event) => updateForm("categoryId", event.target.value)} className="rounded-lg border border-slate-200 px-3 py-2 text-sm">
               <option value="">Select category</option>

@@ -22,7 +22,7 @@ export async function GET(request: Request) {
   try {
     const [rows] = await db.execute(
       `SELECT a.id, a.category_id, c.name AS category_name, a.name, a.slug,
-        a.description, a.location, a.image, a.images, a.distance_km, a.duration,
+        a.description, a.location, a.latitude, a.longitude, a.image, a.images, a.distance_km, a.duration,
         a.highlights, a.rating, a.reviews_count, a.radial_zone
        FROM attractions a
        INNER JOIN categories c ON c.id = a.category_id

@@ -52,7 +52,10 @@ export default function FeaturedAttractions({
       if (!selectedCategory) return true;
       const sel = selectedCategory.toLowerCase().trim();
       const cat = (item.category || "").toLowerCase().trim();
-      if (sel === "religious and historical" || sel === "religious & historical") {
+      if (
+        sel === "religious and historical" ||
+        sel === "religious & historical"
+      ) {
         return (
           cat === "religious" ||
           cat === "historical" ||
@@ -74,7 +77,7 @@ export default function FeaturedAttractions({
   return (
     <section
       id="destinations"
-      className="scroll-mt-24 py-10 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto"
+      className="mx-auto w-full max-w-[1440px] scroll-mt-24 py-10 px-4 sm:px-6 lg:px-8"
     >
       {/* Section Subheader */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 pb-4 border-b border-slate-200/80 gap-3">
@@ -154,116 +157,113 @@ export default function FeaturedAttractions({
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredAttractions.map((attraction) => {
             const isAdded = visitPlan.some((p) => p.id === attraction.id);
 
             return (
               <div
                 key={attraction.id}
-                className="group bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5"
+                className="group relative h-[380px] overflow-hidden rounded-[1.35rem] border border-white/70 bg-slate-900 shadow-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl focus-within:-translate-y-1.5 focus-within:shadow-2xl"
               >
                 {/* Image Container */}
                 <div
                   onClick={() => onSelectAttraction(attraction)}
-                  className="relative h-52 w-full overflow-hidden bg-slate-100 cursor-pointer"
+                  className="absolute inset-0 cursor-pointer bg-slate-100"
                   title={`Quick preview ${attraction.name}`}
                 >
                   <Image
                     src={attraction.image}
                     alt={attraction.name}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/10 transition-colors duration-300 group-hover:from-black/95 group-hover:via-black/60" />
 
                   {/* Radial Zone & Category Badge */}
                   <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                    <span className="bg-white/90 backdrop-blur-md text-slate-800 text-[11px] font-extrabold px-2.5 py-1 rounded-full shadow-xs">
+                    <span className="rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-extrabold text-slate-800 shadow-xs backdrop-blur-md">
                       {attraction.category}
                     </span>
-                    <span className="bg-[#0284c7]/90 backdrop-blur-md text-white text-[11px] font-bold px-2 py-1 rounded-full shadow-xs">
+                    <span className="rounded-full bg-[#0284c7]/90 px-2 py-1 text-[11px] font-bold text-white shadow-xs backdrop-blur-md">
                       {attraction.distanceKm} km
                     </span>
                   </div>
 
                   {/* Rating Pill */}
-                  <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                  <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-md">
                     <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                     <span>{attraction.rating}</span>
                   </div>
-
-                  {/* Location Title Over Image Bottom */}
-                  <div className="absolute bottom-3 left-3 right-3 text-white">
-                    <span className="text-[11px] text-sky-200 flex items-center gap-1 font-medium">
-                      <MapPin className="w-3 h-3" />
-                      {attraction.location}
-                    </span>
-                  </div>
                 </div>
 
-                {/* Content Card Body */}
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div>
+                {/* Card details reveal inside the image on hover/focus. */}
+                <div className="absolute inset-x-0 bottom-0 z-10 p-4 text-white transition-transform duration-300 group-hover:-translate-y-0 group-focus-within:-translate-y-0">
+                  <div className="pointer-events-none transition-transform duration-300 group-hover:-translate-y-1 group-focus-within:-translate-y-1">
+                    <span className="mb-1 flex items-center gap-1 text-[11px] font-medium text-sky-200">
+                      <MapPin className="h-3 w-3" />
+                      {attraction.location}
+                    </span>
                     <Link
                       href={`/attraction/${attraction.id}`}
-                      className="font-bold text-slate-900 text-base leading-snug hover:text-[#0284c7] transition-colors mb-2 line-clamp-1 block"
+                      className="block line-clamp-2 text-lg font-extrabold leading-tight text-white transition-colors hover:text-sky-200 focus:text-sky-200"
                     >
                       {attraction.name}
                     </Link>
-                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
+                  </div>
+
+                  <div className="max-h-0 overflow-hidden opacity-0 transition-all duration-300 group-hover:max-h-44 group-hover:pt-3 group-hover:opacity-100 group-focus-within:max-h-44 group-focus-within:pt-3 group-focus-within:opacity-100">
+                    <p className="mb-3 line-clamp-3 text-xs leading-relaxed text-slate-200">
                       {attraction.description}
                     </p>
 
-                    {/* Highlight Tags */}
-                    <div className="flex flex-wrap gap-1.5 mb-4">
+                    <div className="mb-3 flex flex-wrap gap-1.5">
                       {attraction.highlights.slice(0, 2).map((hl, idx) => (
                         <span
                           key={idx}
-                          className="text-[10px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md"
+                          className="rounded-md bg-white/15 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm"
                         >
                           {hl}
                         </span>
                       ))}
                     </div>
-                  </div>
 
-                  {/* Card Bottom Meta & Actions */}
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <div className="flex items-center gap-1 text-slate-500 text-xs font-medium">
-                      <Clock className="w-3.5 h-3.5 text-slate-400" />
-                      <span>{attraction.duration}</span>
-                    </div>
+                    <div className="flex items-center justify-between border-t border-white/20 pt-3">
+                      <div className="flex items-center gap-1 text-xs font-medium text-slate-200">
+                        <Clock className="h-3.5 w-3.5 text-sky-200" />
+                        <span>{attraction.duration}</span>
+                      </div>
 
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/attraction/${attraction.id}`}
-                        className="text-xs font-bold text-slate-600 hover:text-[#0284c7] p-2 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
-                        title={t("viewDetails")}
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </Link>
+                      <div className="flex items-center gap-1.5">
+                        <Link
+                          href={`/attraction/${attraction.id}`}
+                          className="rounded-full p-2 text-white transition-colors hover:bg-white/20 focus:bg-white/20"
+                          title={t("viewDetails")}
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                        </Link>
 
-                      <button
-                        onClick={() => onTogglePlan(attraction)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
-                          isAdded
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-300"
-                            : "bg-sky-50 text-[#0284c7] hover:bg-[#0284c7] hover:text-white border border-sky-200"
-                        }`}
-                      >
-                        {isAdded ? (
-                          <>
-                            <Check className="w-3.5 h-3.5" />
-                            <span>{t("addedBtn")}</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus className="w-3.5 h-3.5" />
-                            <span>{t("addBtn")}</span>
-                          </>
-                        )}
-                      </button>
+                        <button
+                          onClick={() => onTogglePlan(attraction)}
+                          className={`flex cursor-pointer items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
+                            isAdded
+                              ? "border border-emerald-300 bg-emerald-50 text-emerald-700"
+                              : "border border-white/50 bg-white text-[#0284c7] hover:bg-sky-50"
+                          }`}
+                        >
+                          {isAdded ? (
+                            <>
+                              <Check className="h-3.5 w-3.5" />
+                              <span>{t("addedBtn")}</span>
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="h-3.5 w-3.5" />
+                              <span>{t("addBtn")}</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

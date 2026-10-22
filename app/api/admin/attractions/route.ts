@@ -9,7 +9,7 @@ function isAdminError(error: unknown) {
 
 const selectAttractions = `
   SELECT a.id, a.category_id, c.name AS category_name, a.name, a.slug,
-    a.description, a.location, a.image, a.images, a.distance_km, a.duration,
+    a.description, a.location, a.latitude, a.longitude, a.image, a.images, a.distance_km, a.duration,
     a.highlights, a.rating, a.reviews_count, a.radial_zone,
     a.created_at, a.updated_at
   FROM attractions a
@@ -22,6 +22,8 @@ function parseAttraction(body: Record<string, unknown>) {
   const categoryId = typeof body.categoryId === "string" ? body.categoryId : "";
   const description = typeof body.description === "string" ? body.description.trim() : "";
   const location = typeof body.location === "string" ? body.location.trim() : "";
+  const latitude = Number(body.latitude);
+  const longitude = Number(body.longitude);
   const distanceKm = Number(body.distanceKm);
   const rating = Number(body.rating ?? 0);
   const reviewsCount = Number(body.reviewsCount ?? 0);
@@ -32,12 +34,15 @@ function parseAttraction(body: Record<string, unknown>) {
   if (!name || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || !categoryId || !description || !location) {
     return { error: "Name, slug, category, description, and location are required." };
   }
+  if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90 || !Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
+    return { error: "Latitude must be between -90 and 90, and longitude must be between -180 and 180." };
+  }
   if (!Number.isFinite(distanceKm) || distanceKm < 0 || !Number.isFinite(rating) || rating < 0 || rating > 5 || !Number.isInteger(reviewsCount) || reviewsCount < 0) {
     return { error: "Distance, rating, and review count must be valid positive values." };
   }
   return {
     value: {
-      name, slug, categoryId, description, location,
+      name, slug, categoryId, description, location, latitude, longitude,
       image: typeof body.image === "string" ? body.image.trim() || null : null,
       images: Array.isArray(body.images)
         ? body.images.filter((item): item is string => typeof item === "string" && /^(https?:\/\/|\/uploads\/)/i.test(item)).map((item) => item.trim()).filter(Boolean).slice(0, 5)
@@ -70,9 +75,9 @@ export async function POST(request: Request) {
     const id = randomUUID();
     await db.execute(
       `INSERT INTO attractions
-       (id, category_id, name, slug, description, location, image, images, distance_km, duration, highlights, rating, reviews_count, radial_zone)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, value.categoryId, value.name, value.slug, value.description, value.location, value.image, JSON.stringify(value.images), value.distanceKm, value.duration, JSON.stringify(value.highlights), value.rating, value.reviewsCount, value.radialZone],
+       (id, category_id, name, slug, description, location, latitude, longitude, image, images, distance_km, duration, highlights, rating, reviews_count, radial_zone)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` ,
+      [id, value.categoryId, value.name, value.slug, value.description, value.location, value.latitude, value.longitude, value.image, JSON.stringify(value.images), value.distanceKm, value.duration, JSON.stringify(value.highlights), value.rating, value.reviewsCount, value.radialZone],
     );
     return NextResponse.json({ attraction: { id, ...value } }, { status: 201 });
   } catch (error) {

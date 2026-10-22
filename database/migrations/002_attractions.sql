@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS attractions (
   slug VARCHAR(180) NOT NULL UNIQUE,
   description TEXT NOT NULL,
   location VARCHAR(180) NOT NULL,
+  latitude DECIMAL(10,7) NULL,
+  longitude DECIMAL(10,7) NULL,
   image VARCHAR(500) NULL,
   distance_km DECIMAL(6,2) NOT NULL DEFAULT 0,
   duration VARCHAR(80) NULL,
