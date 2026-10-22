@@ -19,7 +19,8 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedRadius, setSelectedRadius] = useState<number>(25);
   const [attractions, setAttractions] = useState<Attraction[]>([]);
-  const [selectedAttraction, setSelectedAttraction] = useState<Attraction | null>(null);
+  const [selectedAttraction, setSelectedAttraction] =
+    useState<Attraction | null>(null);
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [visitPlan, setVisitPlan] = useState<Attraction[]>([]);
@@ -43,19 +44,23 @@ export default function Home() {
       .then(async (response) => (response.ok ? response.json() : null))
       .then((result) => {
         if (!result?.plan?.stops) return;
-        setVisitPlan(result.plan.stops.map((stop: Record<string, unknown>) => ({
-          ...stop,
-          category: String(stop.category_name || "Nature") as Attraction["category"],
-          distanceKm: Number(stop.distance_km || 0),
-          duration: String(stop.duration || ""),
-          rating: 0,
-          reviewsCount: 0,
-          description: "",
-          highlights: [],
-          image: String(stop.image || "/images/hero-bg.jpg"),
-          radialZone: "0-5km",
-          location: String(stop.location || ""),
-        })));
+        setVisitPlan(
+          result.plan.stops.map((stop: Record<string, unknown>) => ({
+            ...stop,
+            category: String(
+              stop.category_name || "Nature",
+            ) as Attraction["category"],
+            distanceKm: Number(stop.distance_km || 0),
+            duration: String(stop.duration || ""),
+            rating: 0,
+            reviewsCount: 0,
+            description: "",
+            highlights: [],
+            image: String(stop.image || "/images/hero-bg.jpg"),
+            radialZone: "0-5km",
+            location: String(stop.location || ""),
+          })),
+        );
       })
       .catch(() => undefined);
   }, []);
@@ -63,7 +68,10 @@ export default function Home() {
   const handleTogglePlan = (attraction: Attraction) => {
     if (visitPlan.some((item) => item.id === attraction.id)) {
       setVisitPlan(visitPlan.filter((item) => item.id !== attraction.id));
-      void fetch(`/api/plans/stops?attractionId=${encodeURIComponent(attraction.id)}`, { method: "DELETE" });
+      void fetch(
+        `/api/plans/stops?attractionId=${encodeURIComponent(attraction.id)}`,
+        { method: "DELETE" },
+      );
     } else {
       setVisitPlan([...visitPlan, attraction]);
       void fetch("/api/plans/stops", {
@@ -72,7 +80,9 @@ export default function Home() {
         body: JSON.stringify({ attractionId: attraction.id }),
       }).then((response) => {
         if (response.status === 401) {
-          setVisitPlan((current) => current.filter((item) => item.id !== attraction.id));
+          setVisitPlan((current) =>
+            current.filter((item) => item.id !== attraction.id),
+          );
           alert("Please sign in to save a visit plan.");
         }
       });
@@ -81,7 +91,9 @@ export default function Home() {
 
   const handleRemoveFromPlan = (id: string) => {
     setVisitPlan(visitPlan.filter((item) => item.id !== id));
-    void fetch(`/api/plans/stops?attractionId=${encodeURIComponent(id)}`, { method: "DELETE" });
+    void fetch(`/api/plans/stops?attractionId=${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    });
   };
 
   const handleClearPlan = () => {
@@ -169,12 +181,6 @@ export default function Home() {
         onTogglePlan={handleTogglePlan}
         onSelectAttraction={(attr) => setSelectedAttraction(attr)}
         onClearCategory={() => handleCategorySelect(null)}
-      />
-
-      {/* 25km Radial Horizon Radar & Map Visualization */}
-      <RadialMapView
-        attractions={attractions}
-        onSelectAttraction={(attr) => setSelectedAttraction(attr)}
       />
 
       {/* Destination Quick-View Modal */}

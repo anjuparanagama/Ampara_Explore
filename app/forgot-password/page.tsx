@@ -21,6 +21,7 @@ import {
   Shield,
   HelpCircle,
 } from "lucide-react";
+import Footer from "@/components/Footer";
 
 type FlowStep = "request" | "verify" | "reset" | "success" | "error";
 
@@ -728,34 +729,7 @@ export default function ForgotPasswordPage() {
       </main>
 
       {/* 3. Footer */}
-      <footer className="w-full border-t border-slate-200/80 bg-white px-4 sm:px-8 py-4 text-slate-500 text-xs mt-6">
-        <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-          <div>
-            © 2024 Ampara Regional Discovery Project. 25 km Radial Heritage &
-            Wildlife Portal.
-          </div>
-          <div className="flex items-center gap-5 font-semibold text-slate-600">
-            <Link
-              href="/privacy-policy"
-              className="hover:text-[#0084d1] transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms-of-service"
-              className="hover:text-[#0084d1] transition-colors"
-            >
-              Terms of Service
-            </Link>
-            <Link
-              href="/cultural-guidelines"
-              className="hover:text-[#0084d1] transition-colors"
-            >
-              Cultural Guidelines
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

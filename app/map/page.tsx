@@ -30,6 +30,7 @@ import {
   Car,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import { amparaAttractions, Attraction } from "@/data/amparaData";
@@ -866,91 +867,7 @@ export default function MapPage() {
       </main>
 
       {/* 3. Global Footer */}
-      <footer className="w-full bg-white border-t border-slate-200/90 mt-8 pt-8 pb-6 text-slate-600 text-xs">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-            <div className="md:col-span-5 space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full bg-[#0084d1] flex items-center justify-center text-white font-bold">
-                  <Compass className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-base font-black text-slate-900">
-                  Ampara Explore
-                </span>
-                <span className="bg-sky-100 text-[#0084d1] text-[10px] font-extrabold px-2 py-0.5 rounded-md border border-sky-200 uppercase">
-                  OFFICIAL GUIDE
-                </span>
-              </div>
-              <p className="text-slate-500 text-xs leading-relaxed max-w-sm">
-                Guiding ancient stupas, untouched reservoir sanctuaries, and
-                coastal peripheries nestled strictly within a 25 km radius of
-                Ampara. Travel thoughtfully with genuine regional insight.
-              </p>
-            </div>
-
-            <div className="md:col-span-3 space-y-2.5">
-              <div className="text-[11px] font-black uppercase tracking-wider text-slate-900">
-                QUICK LINKS
-              </div>
-              <ul className="space-y-2 text-xs font-semibold text-slate-600">
-                <li>
-                  <Link
-                    href="/#explore"
-                    className="hover:text-[#0084d1] transition-colors"
-                  >
-                    Explore Attractions
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/map"
-                    className="hover:text-[#0084d1] transition-colors"
-                  >
-                    Radar Zone Map
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/plan"
-                    className="hover:text-[#0084d1] transition-colors"
-                  >
-                    One-Day Visit Planner
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/#explore"
-                    className="hover:text-[#0084d1] transition-colors"
-                  >
-                    Ancient Forest
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="md:col-span-4 space-y-2.5">
-              <div className="text-[11px] font-black uppercase tracking-wider text-slate-900">
-                HERITAGE &amp; WILDLIFE
-              </div>
-              <p className="text-slate-500 text-xs leading-relaxed">
-                A 2,500-year-old ecological conservation index showcasing
-                Senanayake Samudraya, Dighavapi, and Buddhangala sacred
-                monasteries.
-              </p>
-            </div>
-          </div>
-
-          <div className="pt-6 border-t border-slate-150 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
-            <div>
-              © 2024 Ampara Explore • Sri Lanka Tourism Development Authority
-              aligned.
-            </div>
-            <div className="font-bold text-slate-700">
-              Eastern Province, Sri Lanka
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Drawers & Modals */}
       <VisitPlanDrawer
