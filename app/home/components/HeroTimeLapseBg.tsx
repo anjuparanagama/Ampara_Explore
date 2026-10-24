@@ -12,32 +12,35 @@ import {
   Clock,
 } from "lucide-react";
 
-const TOTAL_FRAMES = 300;
+const TOTAL_FRAMES = 40;
 
 function getFrameUrl(index: number): string {
   const paddedIndex = String(index).padStart(3, "0");
-  return `/Hero/ezgif-frame-${paddedIndex}.jpg`;
+  return `/images-new/ezgif-frame-${paddedIndex}.jpg`;
 }
 
-// Convert current 24-hour time to 1..300 frame index
+// Convert current 24-hour time to 1..40 frame index
 function getFrameIndexFromDate(date: Date): number {
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const seconds = date.getSeconds();
   const totalSecondsInDay = hours * 3600 + minutes * 60 + seconds;
-  const fraction = totalSecondsInDay / 86400; // 0.0 to 1.0
+  // Shift by 6 hours so 06:00 AM aligns with Frame 1 (Sunrise)
+  const secondsFrom6AM = (totalSecondsInDay - 6 * 3600 + 86400) % 86400;
+  const fraction = secondsFrom6AM / 86400; // 0.0 to 1.0
   const frame = Math.floor(fraction * (TOTAL_FRAMES - 1)) + 1;
   return Math.min(TOTAL_FRAMES, Math.max(1, frame));
 }
 
-// Get time string and metadata from frame index (1..300)
+// Get time string and metadata from frame index (1..40)
 function getTimeInfoFromFrame(frame: number): {
   timeStr: string;
   label: string;
   period: "morning" | "noon" | "sunset" | "night";
 } {
   const fraction = (frame - 1) / (TOTAL_FRAMES - 1);
-  const totalSeconds = Math.round(fraction * 86400);
+  const totalSecondsFrom6AM = Math.round(fraction * 86400);
+  const totalSeconds = (totalSecondsFrom6AM + 6 * 3600) % 86400;
   const hours24 = Math.floor(totalSeconds / 3600) % 24;
   const minutes = Math.floor((totalSeconds % 3600) / 60);
 
@@ -104,13 +107,13 @@ export default function HeroTimeLapseBg() {
     const liveTarget = getFrameIndexFromDate(now);
     targetFrameRef.current = liveTarget;
 
-    // Load key frames first (frame 1, liveTarget, and 10 evenly spaced frames)
+    // Load key frames first (frame 1, liveTarget, and evenly spaced frames)
     const priorityIndices = new Set<number>([
       1,
       liveTarget,
       ...Array.from(
-        { length: 15 },
-        (_, i) => Math.floor((i * (TOTAL_FRAMES - 1)) / 14) + 1,
+        { length: 8 },
+        (_, i) => Math.floor((i * (TOTAL_FRAMES - 1)) / 7) + 1,
       ),
     ]);
 
@@ -341,7 +344,7 @@ export default function HeroTimeLapseBg() {
       {!isLoaded && (
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700"
-          style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
+          style={{ backgroundImage: "url('/images-new/ezgif-frame-001.jpg')" }}
         />
       )}
 
@@ -391,28 +394,28 @@ export default function HeroTimeLapseBg() {
             {/* Time Preset Buttons */}
             <div className="grid grid-cols-4 gap-1.5">
               <button
-                onClick={() => handlePresetSelect(76)} // 06:00 AM
+                onClick={() => handlePresetSelect(1)} // 06:00 AM
                 className="flex flex-col items-center gap-1 p-1.5 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 transition-colors text-[10px] text-slate-300"
               >
                 <Sunrise className="w-3.5 h-3.5 text-amber-400" />
                 <span>Morning</span>
               </button>
               <button
-                onClick={() => handlePresetSelect(150)} // 12:00 PM
+                onClick={() => handlePresetSelect(11)} // 12:00 PM
                 className="flex flex-col items-center gap-1 p-1.5 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 transition-colors text-[10px] text-slate-300"
               >
                 <Sun className="w-3.5 h-3.5 text-amber-300" />
                 <span>Noon</span>
               </button>
               <button
-                onClick={() => handlePresetSelect(225)} // 06:00 PM
+                onClick={() => handlePresetSelect(21)} // 06:00 PM
                 className="flex flex-col items-center gap-1 p-1.5 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 transition-colors text-[10px] text-slate-300"
               >
                 <Sunset className="w-3.5 h-3.5 text-orange-400" />
                 <span>Sunset</span>
               </button>
               <button
-                onClick={() => handlePresetSelect(275)} // 10:00 PM
+                onClick={() => handlePresetSelect(36)} // 10:00 PM - 11:00 PM
                 className="flex flex-col items-center gap-1 p-1.5 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 transition-colors text-[10px] text-slate-300"
               >
                 <Moon className="w-3.5 h-3.5 text-indigo-300" />

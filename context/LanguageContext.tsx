@@ -72,9 +72,9 @@ export const translations: Translations = {
     ta: "இயற்கை நீர்த்தேக்கங்கள், பழம்பெரும் தூபிகள் மற்றும் காட்டு யானைக் கூட்டங்கள்",
   },
   heroSubtitleSuffix: {
-    en: " —all nestled within a crisp 25 km radial horizon.",
-    si: " —සියල්ල අම්පාර නගරයේ සිට කිලෝමීටර් 25ක සීමාව තුළ.",
-    ta: " —அனைத்தும் 25 கி.மீ சுற்று எல்லைக்குள்.",
+    en: " — all nestled within a crisp 25 km radial horizon.",
+    si: " — සියල්ල අම්පාර නගරයේ සිට කිලෝමීටර් 25ක සීමාව තුළ.",
+    ta: " — அனைத்தும் 25 கி.மீ சுற்று எல்லைக்குள்.",
   },
   searchPlaceholder: {
     en: "Search places to visit, temples, wildlife...",
@@ -146,7 +146,11 @@ export const translations: Translations = {
   catNature: { en: "Nature", si: "ස්වභාව සෞන්දර්යය", ta: "இயற்கை" },
   catHistorical: { en: "Historical", si: "ඓතිහාසික", ta: "வரலாற்று சிறப்பு" },
   catReligious: { en: "Religious", si: "ආගමික පුදබිම්", ta: "புனித தலங்கள்" },
-  catReligiousHistorical: { en: "Religious and Historical", si: "ආගමික සහ ඓතිහාසික", ta: "புனித மற்றும் வரலாற்று தலங்கள்" },
+  catReligiousHistorical: {
+    en: "Religious and Historical",
+    si: "ආගමික සහ ඓතිහාසික",
+    ta: "புனித மற்றும் வரலாற்று தலங்கள்",
+  },
   catBeaches: { en: "Beaches", si: "වෙරළ තීරයන්", ta: "கடற்கரைகள்" },
   catWaterfalls: { en: "Waterfalls", si: "දියඇලි", ta: "நீர்வீழ்ச்சிகள்" },
   catWildlife: { en: "Wildlife", si: "වනජීවී", ta: "வனவிலங்குகள்" },
@@ -197,7 +201,11 @@ export const translations: Translations = {
     si: "අම්පාර නගරයේ සිට කිලෝමීටර් 25ක සීමාව තුළ පිහිටි පුරාණ සෑරදුන්, මහා ජලාශ සහ වනජීවී රක්ෂිත වෙත නිවැරදි මාර්ගෝපදේශනය.",
     ta: "அம்பாறையிலிருந்து 25 கி.மீ எல்லைக்குள் உள்ள புராதன தூபிகள் மற்றும் இயற்கை வனவிலங்கு சரணாலயங்களுக்கான வழிகாட்டி.",
   },
-  quickLinks: { en: "QUICK LINKS", si: "ක්ෂණික සබැඳි", ta: "விரைவு இணைப்புகள்" },
+  quickLinks: {
+    en: "QUICK LINKS",
+    si: "ක්ෂණික සබැඳි",
+    ta: "விரைவு இணைப்புகள்",
+  },
   heritageWildlife: {
     en: "HERITAGE & WILDLIFE",
     si: "උරුමය සහ වනජීවී",

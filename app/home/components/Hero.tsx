@@ -145,7 +145,7 @@ export default function Hero({
         </div> */}
 
         {/* Action CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
+        {/*         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
           <button
             onClick={onExploreClick}
             className="w-full sm:w-auto bg-[#006699] hover:bg-[#0275a8] text-white px-6 py-2.5 sm:py-3 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-sky-950/20 hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-0.5"
@@ -161,7 +161,7 @@ export default function Hero({
             <MapPin className="w-4 h-4 text-[#0284c7]" />
             <span>{t("ctaMap")}</span>
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* 4 Bottom Key Metrics Stat Cards */}
