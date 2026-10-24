@@ -46,23 +46,23 @@ export default function Hero({
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col justify-between pt-0 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative min-h-[100dvh] flex flex-col justify-between pt-16 sm:pt-20 pb-3 sm:pb-6 px-3.5 sm:px-6 lg:px-8 overflow-x-hidden"
     >
       {/* Dynamic Smooth Time-Lapse Hero Background synced with Current Local Time */}
       <HeroTimeLapseBg />
 
       {/* Main Content Container */}
-      <div className="max-w-4xl w-full mx-auto text-center flex flex-1 flex-col items-center justify-center relative z-10">
+      <div className="max-w-4xl w-full mx-auto text-center flex flex-1 flex-col items-center justify-center relative z-10 py-1 sm:py-4">
         {/* Hero Title and Subtitle */}
-        <div className="max-w-3xl px-4 py-3 sm:px-8 sm:py-4">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1] mb-3 sm:mb-4 drop-shadow-[0_3px_3px_rgba(15,23,42,0.9)]">
+        <div className="max-w-3xl px-2 py-1 sm:px-8 sm:py-4">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1] mb-2 sm:mb-4 drop-shadow-[0_3px_3px_rgba(15,23,42,0.9)]">
             {t("heroTitleDiscover")}
             <span className="text-[#0084d1] text-transparent bg-clip-text bg-gradient-to-r from-[#38bdf8] to-[#0ea5e9] drop-shadow-[0_2px_2px_rgba(15,23,42,0.9)]">
               {t("heroTitleCity")}
             </span>
           </h1>
 
-          <p className="text-xs sm:text-sm md:text-base text-white font-semibold max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_2px_rgba(15,23,42,0.95)]">
+          <p className="text-xs sm:text-sm md:text-base text-white font-semibold max-w-2xl mx-auto leading-snug sm:leading-relaxed drop-shadow-[0_2px_2px_rgba(15,23,42,0.95)]">
             {t("heroSubtitle")}
             <span className="block sm:inline font-bold text-white">
               {t("heroSubtitleSuffix")}
@@ -71,7 +71,7 @@ export default function Hero({
         </div>
 
         {/* Main Search Input Form */}
-        <div className="w-full max-w-2xl mx-auto relative mb-3 sm:mb-4">
+        <div className="w-full max-w-2xl mx-auto relative mb-2 sm:mb-4">
           <form
             onSubmit={handleSearchSubmit}
             className="bg-white backdrop-blur-md rounded-full p-1.5 pl-4 sm:pl-5 shadow-xl shadow-slate-900/10 border border-slate-200/90 flex items-center gap-2 transition-all duration-300 focus-within:ring-4 focus-within:ring-sky-200 focus-within:border-sky-400"
@@ -165,45 +165,45 @@ export default function Hero({
       </div>
 
       {/* 4 Bottom Key Metrics Stat Cards */}
-      <div className="max-w-5xl mx-auto w-full mt-4 sm:mt-6 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3.5">
+      <div className="max-w-5xl mx-auto w-full mt-2 sm:mt-6 relative z-10">
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-3.5">
           {/* Card 1: 40+ Attractions */}
-          <div className="bg-white backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
-            <div className="text-xl sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform">
+          <div className="bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl py-2 px-1 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
+            <div className="text-base sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform leading-tight">
               {t("stat1Number")}
             </div>
-            <div className="text-[11px] sm:text-xs font-semibold text-slate-600 mt-0.5">
+            <div className="text-[9px] sm:text-xs font-semibold text-slate-600 mt-0.5 leading-tight">
               {t("stat1Label")}
             </div>
           </div>
 
           {/* Card 2: 25 km Radius */}
-          <div className="bg-white backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
-            <div className="text-xl sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform">
+          <div className="bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl py-2 px-1 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
+            <div className="text-base sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform leading-tight">
               {t("stat2Number")}
             </div>
-            <div className="text-[11px] sm:text-xs font-semibold text-slate-600 mt-0.5">
+            <div className="text-[9px] sm:text-xs font-semibold text-slate-600 mt-0.5 leading-tight">
               {t("stat2Label")}
             </div>
           </div>
 
           {/* Card 3: 1-Day Plans */}
-          <div className="bg-white backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
-            <div className="text-xl sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform">
+          <div className="bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl py-2 px-1 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
+            <div className="text-base sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform leading-tight">
               {t("stat3Number")}
             </div>
-            <div className="text-[11px] sm:text-xs font-semibold text-slate-600 mt-0.5">
+            <div className="text-[9px] sm:text-xs font-semibold text-slate-600 mt-0.5 leading-tight">
               {t("stat3Label")}
             </div>
           </div>
 
           {/* Card 4: 4.9 Satisfaction */}
-          <div className="bg-white backdrop-blur-md rounded-2xl p-2.5 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
-            <div className="flex items-center justify-center gap-1 text-xl sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform">
+          <div className="bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl py-2 px-1 sm:p-3.5 text-center border border-slate-200/80 shadow-md hover:shadow-lg transition-all group hover:-translate-y-0.5">
+            <div className="flex items-center justify-center gap-0.5 sm:gap-1 text-base sm:text-2xl lg:text-3xl font-black text-[#006699] tracking-tight group-hover:scale-105 transition-transform leading-tight">
               <span>4.9</span>
-              <Star className="w-5 h-5 fill-amber-400 text-amber-400 inline-block" />
+              <Star className="w-3 h-3 sm:w-5 sm:h-5 fill-amber-400 text-amber-400 inline-block" />
             </div>
-            <div className="text-[11px] sm:text-xs font-semibold text-slate-600 mt-0.5">
+            <div className="text-[9px] sm:text-xs font-semibold text-slate-600 mt-0.5 leading-tight">
               {t("stat4Label")}
             </div>
           </div>

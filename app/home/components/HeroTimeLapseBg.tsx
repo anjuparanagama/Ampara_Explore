@@ -332,37 +332,33 @@ export default function HeroTimeLapseBg() {
   const timeInfo = getTimeInfoFromFrame(displayFrame);
 
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      {/* HTML5 Canvas Rendering HD Time-Lapse Frames */}
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full object-cover transform scale-105 transition-opacity duration-700 ease-out"
-        style={{ opacity: isLoaded ? 1 : 0 }}
-      />
-
-      {/* Fallback Static Hero Image until canvas initial frame renders */}
-      {!isLoaded && (
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700"
-          style={{ backgroundImage: "url('/images-new/ezgif-frame-001.jpg')" }}
+    <>
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {/* HTML5 Canvas Rendering HD Time-Lapse Frames */}
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full object-cover transform scale-105 transition-opacity duration-700 ease-out"
+          style={{ opacity: isLoaded ? 1 : 0 }}
         />
-      )}
 
-      {/* Subtle cinematic gradient overlays for optimal text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/10 to-slate-950/60" />
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950/40 to-transparent" />
+        {/* Fallback Static Hero Image until canvas initial frame renders */}
+        {!isLoaded && (
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700"
+            style={{ backgroundImage: "url('/images-new/ezgif-frame-001.jpg')" }}
+          />
+        )}
 
-      {/* Floating Interactive Time-of-Day Widget Pill (Right Bottom Corner) */}
-      <div
-        className={`absolute right-14 z-30 flex flex-col items-end gap-2 pointer-events-auto transition-[bottom] duration-300 sm:right-10 ${
-          showControls
-            ? "bottom-52 sm:bottom-56"
-            : "bottom-16 sm:bottom-4"
-        }`}
-      >
-        {/* Time Controller Drawer Popover (Opens Upward) */}
+        {/* Subtle cinematic gradient overlays for optimal text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/10 to-slate-950/60" />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950/40 to-transparent" />
+      </div>
+
+      {/* Floating Interactive Time-of-Day Widget Pill */}
+      <div className="absolute top-16 right-3 sm:top-auto sm:bottom-4 sm:right-10 z-30 pointer-events-auto">
+        {/* Time Controller Drawer Popover (Opens Downward on Mobile, Upward on Desktop) */}
         {showControls && (
-          <div className="bg-slate-900/95 backdrop-blur-xl border border-white/15 p-3.5 rounded-2xl shadow-2xl text-white w-72 text-xs flex flex-col gap-3 animate-fadeIn mb-1">
+          <div className="absolute right-0 top-full mt-2 sm:top-auto sm:bottom-full sm:mb-3 bg-slate-900/95 backdrop-blur-xl border border-white/15 p-3.5 rounded-2xl shadow-2xl text-white w-[min(calc(100vw-24px),288px)] text-xs flex flex-col gap-3 animate-fadeIn z-40">
             <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <div className="font-bold text-slate-200 flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-sky-400" />
@@ -436,18 +432,6 @@ export default function HeroTimeLapseBg() {
                 <RotateCcw className="w-3 h-3" />
                 <span>Live Time Sync</span>
               </button>
-
-              {/*               <button
-                onClick={handleTogglePlayLoop}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg font-semibold text-[11px] transition-all ${
-                  isPlayingLoop
-                    ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
-                    : "bg-white/10 text-slate-300 hover:bg-white/20"
-                }`}
-              >
-                {isPlayingLoop ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-                <span>{isPlayingLoop ? "Pause Loop" : "Play Video"}</span>
-              </button> */}
             </div>
           </div>
         )}
@@ -456,7 +440,7 @@ export default function HeroTimeLapseBg() {
         <button
           type="button"
           onClick={() => setShowControls(!showControls)}
-          className="inline-flex origin-bottom-right rotate-90 items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white shadow-lg text-xs font-semibold transition-all hover:bg-slate-900/95 cursor-pointer"
+          className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white shadow-lg text-xs font-semibold transition-all hover:bg-slate-900/95 cursor-pointer sm:origin-bottom-right sm:rotate-90"
         >
           <span className="flex items-center gap-1.5 text-sky-400">
             {timeInfo.period === "morning" && (
@@ -488,6 +472,6 @@ export default function HeroTimeLapseBg() {
           )}
         </button>
       </div>
-    </div>
+    </>
   );
 }

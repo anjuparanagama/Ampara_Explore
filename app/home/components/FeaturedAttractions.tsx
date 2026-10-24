@@ -71,9 +71,9 @@ export default function FeaturedAttractions({
       {/* Section Subheader */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 pb-4 border-b border-slate-200/80 gap-3">
         <div>
-          <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+          <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">
             <span>{t("destinationsTitle")}</span>
-            <span className="bg-sky-100 text-[#0284c7] text-xs font-bold px-2.5 py-0.5 rounded-full">
+            <span className="ml-2 inline-flex items-center align-middle bg-sky-100 text-[#0284c7] text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
               {filteredAttractions.length} Found
             </span>
           </h3>
@@ -83,17 +83,15 @@ export default function FeaturedAttractions({
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-3 text-xs text-slate-600 font-medium">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> 0-5 km
-            Inner
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-slate-600 font-medium">
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" /> 0-5 km Inner
           </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-sky-500" /> 5-15 km Mid
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
+            <span className="w-2.5 h-2.5 rounded-full bg-sky-500 shrink-0" /> 5-15 km Mid
           </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" /> 15-25 km
-            Horizon
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
+            <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 shrink-0" /> 15-25 km Horizon
           </span>
         </div>
       </div>

@@ -144,8 +144,8 @@ export default function BrowseByInterest({
         </p>
       </div>
 
-      {/* 4 Category Feature Cards with Artistic Corner Designs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {/* 4 Category Feature Cards with Artistic Corner Designs (2 cols on mobile, 4 cols on desktop) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
         {interestCategories.map((cat) => {
           const isSelected = selectedCategory === cat.title;
           const translatedTitle = getCategoryTranslation(cat.title);
@@ -158,7 +158,7 @@ export default function BrowseByInterest({
             <button
               key={cat.id}
               onClick={() => onSelectCategory(isSelected ? null : cat.title)}
-              className={`group relative flex flex-col justify-between text-left p-6 sm:p-7 rounded-3xl bg-gradient-to-b from-white via-white to-slate-50/80 border transition-all duration-300 cursor-pointer overflow-hidden ${
+              className={`group relative flex flex-col justify-between text-left p-3.5 sm:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white via-white to-slate-50/80 border transition-all duration-300 cursor-pointer overflow-hidden ${
                 isSelected
                   ? "border-[#0284c7] ring-2 ring-sky-300 shadow-xl scale-[1.02] bg-gradient-to-b from-sky-50/60 via-white to-white"
                   : `border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1.5 ${styles.hoverBorder}`
@@ -224,9 +224,9 @@ export default function BrowseByInterest({
               />
 
               {/* Top Row: Icon & Place Count Badge */}
-              <div className="relative z-10 flex items-start justify-between w-full mb-4">
+              <div className="relative z-10 flex items-start justify-between w-full mb-3 sm:mb-4">
                 <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-xs border border-white/90 ring-1 ring-slate-100 p-2.5"
+                  className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-xs border border-white/90 ring-1 ring-slate-100 p-1.5 sm:p-2.5"
                   style={{ backgroundColor: styles.lightBg }}
                 >
                   <Image
@@ -240,14 +240,14 @@ export default function BrowseByInterest({
 
                 {/* Count Pill with Category Accent Dot */}
                 <div
-                  className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border transition-all duration-300 ${
+                  className={`flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border transition-all duration-300 ${
                     isSelected
                       ? "bg-[#0284c7] text-white border-[#0284c7] shadow-xs"
                       : `${styles.badgeBg} group-hover:shadow-xs`
                   }`}
                 >
                   <span
-                    className={`w-1.5 h-1.5 rounded-full ${
+                    className={`w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full ${
                       isSelected ? "bg-white animate-pulse" : ""
                     }`}
                     style={
@@ -262,16 +262,16 @@ export default function BrowseByInterest({
 
               {/* Title and Short Description */}
               <div className="relative z-10 flex-1 flex flex-col justify-start mb-2">
-                <h3 className="font-extrabold text-slate-900 text-lg mb-1.5 group-hover:text-[#0284c7] transition-colors flex items-center gap-1.5">
+                <h3 className="font-extrabold text-slate-900 text-sm sm:text-lg mb-1 sm:mb-1.5 group-hover:text-[#0284c7] transition-colors flex items-center gap-1.5 leading-snug">
                   <span>{translatedTitle}</span>
                 </h3>
-                <p className="text-xs text-slate-500 leading-relaxed font-normal">
+                <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed font-normal line-clamp-2 sm:line-clamp-none">
                   {translatedDesc}
                 </p>
               </div>
 
               {/* Bottom Subtle Interactive Indicator */}
-              <div className="relative z-10 mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
+              <div className="relative z-10 mt-3 sm:mt-5 pt-2.5 sm:pt-3.5 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs font-semibold">
                 <span
                   className={
                     isSelected
@@ -279,17 +279,17 @@ export default function BrowseByInterest({
                       : "text-slate-400 group-hover:text-[#0284c7] transition-colors"
                   }
                 >
-                  {isSelected ? "Active Filter" : "Explore Category"}
+                  {isSelected ? "Active" : "Explore"} <span className="hidden sm:inline">{isSelected ? "Filter" : "Category"}</span>
                 </span>
 
                 <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
+                  className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
                     isSelected
                       ? "bg-[#0284c7] text-white scale-110 shadow-xs"
                       : "bg-slate-100 text-slate-500 group-hover:bg-[#0284c7] group-hover:text-white group-hover:translate-x-1"
                   }`}
                 >
-                  <span className="text-xs font-bold">→</span>
+                  <span className="text-[10px] sm:text-xs font-bold">→</span>
                 </div>
               </div>
             </button>
