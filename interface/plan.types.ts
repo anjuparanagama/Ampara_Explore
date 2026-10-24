@@ -35,6 +35,7 @@ export interface PlanControlsProps {
   showPaceDropdown: boolean;
   setShowPaceDropdown: React.Dispatch<React.SetStateAction<boolean>>;
   onOptimizeRoute: () => void;
+  onCreatePlan?: () => void;
 }
 
 export interface PlanStopCardProps {

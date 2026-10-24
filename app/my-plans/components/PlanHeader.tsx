@@ -6,9 +6,13 @@ import { Plus } from "lucide-react";
 
 interface PlanHeaderProps {
   userName?: string | null;
+  onCreatePlan?: () => void;
 }
 
-export default function PlanHeader({ userName }: PlanHeaderProps) {
+export default function PlanHeader({
+  userName,
+  onCreatePlan,
+}: PlanHeaderProps) {
   return (
     <div className="space-y-4">
       {/* Breadcrumb */}
@@ -31,13 +35,24 @@ export default function PlanHeader({ userName }: PlanHeaderProps) {
           </p>
         </div>
 
-        <Link
-          href="/plan"
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold text-sm shadow-sm shadow-sky-600/20 hover:shadow-md transition-all self-start sm:self-auto cursor-pointer"
-        >
-          <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>Create New Plan</span>
-        </Link>
+        {onCreatePlan ? (
+          <button
+            type="button"
+            onClick={onCreatePlan}
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold text-sm shadow-sm shadow-sky-600/20 hover:shadow-md transition-all self-start sm:self-auto cursor-pointer"
+          >
+            <Plus className="w-4 h-4 stroke-[2.5]" />
+            <span>Create New Plan</span>
+          </button>
+        ) : (
+          <Link
+            href="/plan"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold text-sm shadow-sm shadow-sky-600/20 hover:shadow-md transition-all self-start sm:self-auto cursor-pointer"
+          >
+            <Plus className="w-4 h-4 stroke-[2.5]" />
+            <span>Create New Plan</span>
+          </Link>
+        )}
       </div>
     </div>
   );

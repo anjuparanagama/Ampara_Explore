@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
+import CreatePlanModal from "@/components/CreatePlanModal";
 import { amparaAttractions } from "@/data/amparaData";
 import { PlanStop, PlanViewState, initialPlanStops } from "@/interface";
 import {
@@ -15,15 +16,31 @@ import {
 } from "./components";
 
 export default function MyVisitPlanPage() {
-  const [viewState, setViewState] = useState<PlanViewState>("active");
+  const [viewState, setViewState] = useState<PlanViewState>("empty");
   const [pace, setPace] = useState("Balanced (3–4 stops)");
   const [showPaceDropdown, setShowPaceDropdown] = useState(false);
   const [, setIsOptimized] = useState(false);
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isCreatePlanOpen, setIsCreatePlanOpen] = useState(false);
 
-  // Sample initial stops matching the reference design
-  const [stops, setStops] = useState<PlanStop[]>(initialPlanStops);
+  // Stops state: loads user's active plan from localStorage, or defaults to empty (no default forced places!)
+  const [stops, setStops] = useState<PlanStop[]>([]);
+
+  useEffect(() => {
+    try {
+      const activeRaw = localStorage.getItem("ampara_active_plan");
+      if (activeRaw) {
+        const active = JSON.parse(activeRaw);
+        if (active?.stops && Array.isArray(active.stops) && active.stops.length > 0) {
+          setStops(active.stops);
+          setViewState("active");
+          if (active.pace) setPace(active.pace);
+          return;
+        }
+      }
+    } catch {}
+  }, []);
 
   const handleMoveStop = (index: number, direction: "up" | "down") => {
     const newStops = [...stops];
@@ -48,7 +65,12 @@ export default function MyVisitPlanPage() {
       stop.order = `0${idx + 1}`;
     });
     setStops(filtered);
-    if (filtered.length === 0) setViewState("empty");
+    if (filtered.length === 0) {
+      setViewState("empty");
+      try {
+        localStorage.removeItem("ampara_active_plan");
+      } catch {}
+    }
   };
 
   const handleOptimizeRoute = () => {
@@ -79,11 +101,12 @@ export default function MyVisitPlanPage() {
           showPaceDropdown={showPaceDropdown}
           setShowPaceDropdown={setShowPaceDropdown}
           onOptimizeRoute={handleOptimizeRoute}
+          onCreatePlan={() => setIsCreatePlanOpen(true)}
         />
 
         {/* 3. Main 2-Column Itinerary Content or Empty State */}
         {viewState === "empty" || stops.length === 0 ? (
-          <PlanEmptyState />
+          <PlanEmptyState onCreatePlan={() => setIsCreatePlanOpen(true)} />
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* Sequential Timeline & Stops */}
@@ -99,6 +122,28 @@ export default function MyVisitPlanPage() {
         )}
       </main>
 
+      {/* Create Plan Modal */}
+      {isCreatePlanOpen && (
+        <CreatePlanModal
+          isOpen={isCreatePlanOpen}
+          onClose={() => setIsCreatePlanOpen(false)}
+          onCreatePlan={() => {
+            // Read newly stored active plan stops
+            try {
+              const raw = localStorage.getItem("ampara_active_plan");
+              if (raw) {
+                const parsed = JSON.parse(raw);
+                if (parsed?.stops) {
+                  setStops(parsed.stops);
+                  setViewState("active");
+                  if (parsed.pace) setPace(parsed.pace);
+                }
+              }
+            } catch {}
+          }}
+        />
+      )}
+
       {/* Drawers & Modals */}
       <VisitPlanDrawer
         isOpen={isPlanDrawerOpen}
@@ -111,6 +156,9 @@ export default function MyVisitPlanPage() {
         onClear={() => {
           setStops([]);
           setViewState("empty");
+          try {
+            localStorage.removeItem("ampara_active_plan");
+          } catch {}
         }}
       />
 

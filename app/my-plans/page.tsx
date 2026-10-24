@@ -17,6 +17,7 @@ import {
   PlanCard,
   PlanEmptyState,
   PlanModal,
+  CreatePlanModal,
 } from "./components";
 
 export default function MyVisitPlansPage() {
@@ -25,8 +26,9 @@ export default function MyVisitPlansPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Modal active plan state
+  // Modal states
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const [isCreatePlanOpen, setIsCreatePlanOpen] = useState(false);
 
   // App UI state
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
@@ -34,6 +36,19 @@ export default function MyVisitPlansPage() {
   const [currentUser, setCurrentUser] = useState<{ name?: string } | null>(
     null,
   );
+
+  // Load persisted plans from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("ampara_saved_plans");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setPlans(parsed);
+        }
+      }
+    } catch {}
+  }, []);
 
   useEffect(() => {
     fetch("/api/auth/me", { cache: "no-store" })
@@ -223,7 +238,10 @@ export default function MyVisitPlansPage() {
       {/* Global Navigation Bar */}
       <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
         {/* Header Component */}
-        <PlanHeader userName={currentUser?.name} />
+        <PlanHeader
+          userName={currentUser?.name}
+          onCreatePlan={() => setIsCreatePlanOpen(true)}
+        />
 
         {/* Filters and Search Component */}
         <PlanFilters
@@ -240,6 +258,7 @@ export default function MyVisitPlansPage() {
             searchQuery={searchQuery}
             activeFilter={activeFilter}
             onClearSearch={() => setSearchQuery("")}
+            onCreatePlan={() => setIsCreatePlanOpen(true)}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -266,6 +285,18 @@ export default function MyVisitPlansPage() {
         onFinishTrip={handleFinishTrip}
         onRestartTrip={handleRestartTrip}
       />
+
+      {/* Create New Visit Plan Modal */}
+      {isCreatePlanOpen && (
+        <CreatePlanModal
+          isOpen={isCreatePlanOpen}
+          onClose={() => setIsCreatePlanOpen(false)}
+          onCreatePlan={(newPlan) => {
+            setPlans((prev) => [newPlan, ...prev]);
+            showToast(`Itinerary "${newPlan.title}" created successfully!`);
+          }}
+        />
+      )}
 
       {/* Visit Plan Drawer & Auth Modal */}
       <VisitPlanDrawer

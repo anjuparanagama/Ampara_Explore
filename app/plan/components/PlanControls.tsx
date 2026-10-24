@@ -7,6 +7,7 @@ import {
   Zap,
   FileText,
   Share2,
+  Plus,
 } from "lucide-react";
 import { PlanControlsProps } from "@/interface";
 
@@ -16,6 +17,7 @@ export default function PlanControls({
   showPaceDropdown,
   setShowPaceDropdown,
   onOptimizeRoute,
+  onCreatePlan,
 }: PlanControlsProps) {
   const paceOptions = [
     "Relaxed (1–2 stops)",
@@ -84,6 +86,17 @@ export default function PlanControls({
 
       {/* Action CTAs */}
       <div className="flex items-center gap-2">
+        {onCreatePlan && (
+          <button
+            type="button"
+            onClick={onCreatePlan}
+            className="bg-sky-600 hover:bg-sky-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>New Plan</span>
+          </button>
+        )}
+
         <button
           type="button"
           onClick={onOptimizeRoute}
