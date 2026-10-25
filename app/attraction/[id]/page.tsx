@@ -1116,51 +1116,45 @@ function AttractionDetailContent() {
           </div>
         </section>
 
-        {/* 5. 2-Column Main Section */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column: About & Field Tips (7 cols) */}
-          <div className="lg:col-span-7 space-y-8">
-            {/* Visitor Guide & Field Tips */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-black text-slate-900">
-                  Visitor Guide &amp; Field Tips
-                </h3>
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded-full">
-                  Updated Season 2024 / 2025
-                </span>
-              </div>
+        {/* 5. Visitor Guide & Field Tips Section */}
+        <section className="w-full space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-black text-slate-900">
+              Visitor Guide &amp; Field Tips
+            </h3>
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded-full">
+              Updated Season 2024 / 2025
+            </span>
+          </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                {profile.tips.map((tip, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs space-y-2 flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="w-8 h-8 rounded-xl bg-sky-100 text-[#0084d1] flex items-center justify-center mb-2">
-                        {tip.icon === "sunrise" ? (
-                          <Sunrise className="w-4 h-4" />
-                        ) : tip.icon === "trees" ? (
-                          <Trees className="w-4 h-4" />
-                        ) : (
-                          <Sun className="w-4 h-4" />
-                        )}
-                      </div>
-                      <div className="text-xs font-bold text-slate-900 leading-snug">
-                        {tip.title}
-                      </div>
-                      <div className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                        {tip.desc}
-                      </div>
-                    </div>
-                    <div className="text-[10px] font-bold text-[#0084d1] pt-2">
-                      Explorer Guideline →
-                    </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+            {profile.tips.map((tip, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-2xl p-5 border border-slate-200 shadow-2xs space-y-3 flex flex-col justify-between hover:shadow-sm transition-shadow"
+              >
+                <div>
+                  <div className="w-9 h-9 rounded-xl bg-sky-100 text-[#0084d1] flex items-center justify-center mb-3">
+                    {tip.icon === "sunrise" ? (
+                      <Sunrise className="w-4 h-4" />
+                    ) : tip.icon === "trees" ? (
+                      <Trees className="w-4 h-4" />
+                    ) : (
+                      <Sun className="w-4 h-4" />
+                    )}
                   </div>
-                ))}
+                  <div className="text-sm font-bold text-slate-900 leading-snug">
+                    {tip.title}
+                  </div>
+                  <div className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                    {tip.desc}
+                  </div>
+                </div>
+                <div className="text-[11px] font-bold text-[#0084d1] pt-2">
+                  Explorer Guideline →
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </section>
 
