@@ -773,7 +773,7 @@ function AttractionDetailContent() {
     }));
 
   return (
-    <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
       {/* 1. Header Bar */}
       {/* 2. Top Breadcrumb Bar */}
       <div className="w-full px-4 sm:px-8 py-3">
@@ -1597,7 +1597,6 @@ function AttractionDetailContent() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
       />
-
     </div>
   );
 }
