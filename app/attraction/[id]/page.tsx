@@ -52,12 +52,19 @@ function AttractionDetailContent() {
     const list: GalleryImage[] = [];
     const seen = new Set<string>();
 
-    if (attraction.image) {
+    const primaryImg =
+      typeof attraction.image === "string"
+        ? attraction.image
+        : attraction.image && typeof attraction.image === "object" && "url" in attraction.image
+          ? String((attraction.image as { url: string }).url)
+          : "";
+
+    if (primaryImg && !primaryImg.includes("[object Object]")) {
       list.push({
-        url: attraction.image,
+        url: primaryImg,
         caption: attraction.name,
       });
-      seen.add(attraction.image);
+      seen.add(primaryImg);
     }
 
     if (Array.isArray(attraction.galleryImages)) {
@@ -253,7 +260,7 @@ function AttractionDetailContent() {
               className="relative rounded-3xl overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-between p-6 sm:p-8 border border-slate-200/80 shadow-md group cursor-pointer"
             >
               <Image
-                src={allImages[0]?.url || attraction.image}
+                src={allImages[0]?.url || (typeof attraction.image === "string" && !attraction.image.includes("[object") ? attraction.image : "/images/hero-bg.jpg")}
                 alt={attraction.name}
                 fill
                 priority

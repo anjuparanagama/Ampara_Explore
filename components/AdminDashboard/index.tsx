@@ -65,17 +65,38 @@ function toForm(attraction: AdminDashboardAttraction): AdminDashboardAttractionF
     }
   }
   let images: string[] = [];
-  if (Array.isArray(attraction.images)) images = attraction.images;
-  else if (typeof attraction.images === "string") {
-    try {
-      const parsed = JSON.parse(attraction.images);
-      if (Array.isArray(parsed))
-        images = parsed.filter((item): item is string => typeof item === "string");
-    } catch {
-      images = [];
-    }
+  const rawImages = Array.isArray(attraction.images)
+    ? attraction.images
+    : typeof attraction.images === "string"
+      ? (() => {
+          try {
+            return JSON.parse(attraction.images);
+          } catch {
+            return [];
+          }
+        })()
+      : [];
+
+  if (Array.isArray(rawImages)) {
+    images = rawImages
+      .map((item) => {
+        if (typeof item === "string") return item;
+        if (item && typeof item === "object" && "url" in item && typeof (item as { url: unknown }).url === "string") {
+          return (item as { url: string }).url;
+        }
+        return "";
+      })
+      .filter(Boolean);
   }
-  if (!images.length && attraction.image) images = [attraction.image];
+
+  const primaryImage =
+    typeof attraction.image === "string" && attraction.image
+      ? attraction.image
+      : attraction.image && typeof attraction.image === "object" && "url" in attraction.image && typeof (attraction.image as { url: unknown }).url === "string"
+        ? (attraction.image as { url: string }).url
+        : "";
+
+  if (!images.length && primaryImage) images = [primaryImage];
 
   let aboutParagraphs = "";
   if (Array.isArray(attraction.about_paragraphs)) {

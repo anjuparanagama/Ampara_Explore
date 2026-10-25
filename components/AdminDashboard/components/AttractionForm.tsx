@@ -229,32 +229,41 @@ export default function AttractionForm({
                 Saved photos
               </p>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-                {form.images.map((image, index) => (
-                  <div
-                    key={`${image}-${index}`}
-                    className="group relative aspect-video overflow-hidden rounded-lg border border-slate-200 bg-white"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={image}
-                      alt={`Saved place photo ${index + 1}`}
-                      className="h-full w-full object-cover"
-                    />
-                    {index === 0 && (
-                      <span className="absolute bottom-1 left-1 rounded bg-slate-900/75 px-1.5 py-0.5 text-[10px] font-bold text-white">
-                        Main photo
-                      </span>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => onRemoveExistingImage(index)}
-                      aria-label={`Remove saved photo ${index + 1}`}
-                      className="absolute right-1 top-1 rounded-full bg-white/90 p-1 text-rose-600 shadow-sm opacity-0 transition group-hover:opacity-100"
+                {form.images.map((image, index) => {
+                  const imageSrc =
+                    typeof image === "string"
+                      ? image
+                      : image && typeof image === "object" && "url" in image && typeof (image as { url: unknown }).url === "string"
+                        ? (image as { url: string }).url
+                        : "";
+                  if (!imageSrc) return null;
+                  return (
+                    <div
+                      key={`${imageSrc}-${index}`}
+                      className="group relative aspect-video overflow-hidden rounded-lg border border-slate-200 bg-white"
                     >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ))}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={imageSrc}
+                        alt={`Saved place photo ${index + 1}`}
+                        className="h-full w-full object-cover"
+                      />
+                      {index === 0 && (
+                        <span className="absolute bottom-1 left-1 rounded bg-slate-900/75 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          Main photo
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => onRemoveExistingImage(index)}
+                        aria-label={`Remove saved photo ${index + 1}`}
+                        className="absolute right-1 top-1 rounded-full bg-white/90 p-1 text-rose-600 shadow-sm opacity-0 transition group-hover:opacity-100"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

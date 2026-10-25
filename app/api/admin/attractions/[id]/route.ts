@@ -133,6 +133,7 @@ export async function PUT(request: Request, context: RouteContext) {
   } catch (error) {
     if (isAdminError(error)) return NextResponse.json({ message: "Admin access is required." }, { status: 403 });
     if (typeof error === "object" && error !== null && "code" in error && error.code === "ER_DUP_ENTRY") return NextResponse.json({ message: "An attraction with this slug already exists." }, { status: 409 });
+    if (typeof error === "object" && error !== null && "code" in error && error.code === "ER_DATA_TOO_LONG") return NextResponse.json({ message: "One of the text fields exceeds maximum allowed length." }, { status: 400 });
     console.error("Failed to update attraction", error);
     return NextResponse.json({ message: "Unable to update attraction." }, { status: 500 });
   }

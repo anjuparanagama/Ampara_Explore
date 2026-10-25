@@ -137,6 +137,9 @@ export async function POST(request: Request) {
     if (typeof error === "object" && error !== null && "code" in error && error.code === "ER_DUP_ENTRY") {
       return NextResponse.json({ message: "An attraction with this slug already exists." }, { status: 409 });
     }
+    if (typeof error === "object" && error !== null && "code" in error && error.code === "ER_DATA_TOO_LONG") {
+      return NextResponse.json({ message: "One of the text fields exceeds maximum allowed length." }, { status: 400 });
+    }
     console.error("Failed to create attraction", error);
     return NextResponse.json({ message: "Unable to create attraction." }, { status: 500 });
   }
