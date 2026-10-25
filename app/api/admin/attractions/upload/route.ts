@@ -1,5 +1,6 @@
-import { randomUUID } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { access, mkdir, writeFile } from "node:fs/promises";
+import { constants } from "node:fs";
 import path from "node:path";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth/admin";
@@ -32,8 +33,16 @@ export async function POST(request: Request) {
       if (!extension || file.size > MAX_FILE_SIZE) {
         return NextResponse.json({ message: "Only JPG, PNG, WEBP, or GIF images up to 5 MB are allowed." }, { status: 400 });
       }
-      const filename = `${randomUUID()}${extension}`;
-      await writeFile(path.join(directory, filename), Buffer.from(await file.arrayBuffer()));
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const hash = createHash("sha256").update(buffer).digest("hex");
+      const filename = `${hash}${extension}`;
+      const filePath = path.join(directory, filename);
+
+      try {
+        await access(filePath, constants.F_OK);
+      } catch {
+        await writeFile(filePath, buffer);
+      }
       urls.push(`/uploads/attractions/${filename}`);
     }
 

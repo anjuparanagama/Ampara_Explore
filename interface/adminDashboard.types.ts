@@ -26,6 +26,10 @@ export interface AdminDashboardAttraction {
   rating: number;
   reviews_count: number;
   radial_zone: string | null;
+  subtitle?: string | null;
+  about_title?: string | null;
+  about_paragraphs?: string[] | string | null;
+  quote?: string | null;
 }
 
 export type Attraction = AdminDashboardAttraction;
@@ -46,6 +50,10 @@ export interface AdminDashboardAttractionForm {
   rating: string;
   reviewsCount: string;
   radialZone: string;
+  subtitle: string;
+  aboutTitle: string;
+  aboutParagraphs: string;
+  quote: string;
 }
 
 export type AttractionForm = AdminDashboardAttractionForm;
@@ -99,6 +107,7 @@ export interface AttractionFormProps {
   onImageFilesChange: (files: File[]) => void;
   onRemoveExistingImage: (index: number) => void;
   onRemoveImageFile: (index: number) => void;
+  isSubmitting?: boolean;
   onSubmit: (event: FormEvent) => void;
   onCancel: () => void;
   onError: (message: string) => void;

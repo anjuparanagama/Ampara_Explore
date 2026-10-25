@@ -1,6 +1,6 @@
 "use client";
 
-import { ImagePlus, Link2, Trash2, Upload, X } from "lucide-react";
+import { BookOpen, ImagePlus, Link2, Trash2, Upload, X } from "lucide-react";
 import Input from "@/components/Input";
 import { AttractionFormProps } from "@/interface";
 
@@ -15,6 +15,7 @@ export default function AttractionForm({
   onImageFilesChange,
   onRemoveExistingImage,
   onRemoveImageFile,
+  isSubmitting = false,
   onSubmit,
   onCancel,
   onError,
@@ -192,12 +193,12 @@ export default function AttractionForm({
 
         <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700">
           <span>
-            Highlights <span className="font-normal text-slate-400">(optional)</span>
+            Featured Highlight Tags <span className="font-normal text-slate-400">(optional)</span>
           </span>
           <Input
             value={form.highlights}
             onChange={(event) => onFormChange("highlights", event.target.value)}
-            placeholder="e.g. Wildlife, Boat safari, Camping (comma separated)"
+            placeholder="e.g. Ancient Stupa, Jungle Trekking, Wildlife (comma separated)"
           />
         </label>
 
@@ -335,25 +336,103 @@ export default function AttractionForm({
 
         <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700 md:col-span-2">
           <span>
-            Description <span className="text-rose-500">*</span>
+            Overview Description / Tagline <span className="text-rose-500">*</span>
           </span>
           <textarea
             required
             value={form.description}
             onChange={(event) => onFormChange("description", event.target.value)}
-            placeholder="Detailed description of the attraction..."
-            className="min-h-24 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+            placeholder="A concise overview / tagline shown on explore cards, search results, and the top hero banner..."
+            className="min-h-20 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
           />
+          <span className="text-[11px] font-normal text-slate-500">
+            Displayed on explore directory cards, search highlights, and the top hero banner.
+          </span>
         </label>
 
+        {/* Detailed Destination Story & About Page Section */}
+        <div className="space-y-4 rounded-xl border-2 border-sky-100 bg-sky-50/40 p-4 md:col-span-2">
+          <div className="flex items-start gap-3">
+            <div className="rounded-lg bg-[#0084d1] p-2 text-white">
+              <BookOpen className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-slate-900">
+                Destination Story &amp; About Section
+              </h3>
+              <p className="mt-0.5 text-xs text-slate-600">
+                Powers the &ldquo;About Destination&rdquo; section on the destination details page.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700 md:col-span-2">
+              <span>
+                About Card Heading <span className="font-normal text-slate-400">(optional)</span>
+              </span>
+              <Input
+                value={form.aboutTitle}
+                onChange={(event) => onFormChange("aboutTitle", event.target.value)}
+                placeholder={`e.g. About ${form.name || "this destination"} (defaults to "About [Place Name]" if blank)`}
+              />
+            </label>
+
+            <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700 md:col-span-2">
+              <span>
+                About Description <span className="text-rose-500">*</span>
+              </span>
+              <textarea
+                required
+                value={form.aboutParagraphs}
+                onChange={(event) => onFormChange("aboutParagraphs", event.target.value)}
+                placeholder={"Built by King Saddhatissa in the 3rd century BC, Dighavapi (Deegawapi) is venerated as one of the Solosmasthana...\n\nWith an immense ancient circumference that rivalled the great stupas of Anuradhapura, ongoing national archaeological excavations..."}
+                rows={6}
+                className="min-h-32 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+              />
+              <span className="text-[11px] font-normal text-slate-500">
+                Powers the About section beside the gallery. Separate paragraphs with a blank line (press Enter twice) if needed.
+              </span>
+            </label>
+
+            <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700 md:col-span-2">
+              <span>
+                Inspirational Quote <span className="font-normal text-slate-400">(optional)</span>
+              </span>
+              <Input
+                value={form.quote}
+                onChange={(event) => onFormChange("quote", event.target.value)}
+                placeholder="e.g. A sacred sanctuary where centuries of royal devotion and spiritual silence converge under the eastern skies."
+              />
+              <span className="text-[11px] font-normal text-slate-500">
+                Displayed in the stylized blue accent quote box inside the About section.
+              </span>
+            </label>
+          </div>
+        </div>
+
         <div className="flex gap-3 md:col-span-2">
-          <button className="rounded-xl bg-[#0e7490] px-5 py-2 text-sm font-semibold text-white hover:bg-[#155e75]">
-            {editingId ? "Update attraction" : "Create attraction"}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex items-center gap-2 rounded-xl bg-[#0e7490] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#155e75] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSubmitting ? (
+              <>
+                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                <span>Saving...</span>
+              </>
+            ) : editingId ? (
+              "Update attraction"
+            ) : (
+              "Create attraction"
+            )}
           </button>
           <button
             type="button"
+            disabled={isSubmitting}
             onClick={onCancel}
-            className="rounded-lg border border-slate-300 px-5 py-2 text-sm font-semibold"
+            className="rounded-lg border border-slate-300 px-5 py-2 text-sm font-semibold transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
             Cancel
           </button>

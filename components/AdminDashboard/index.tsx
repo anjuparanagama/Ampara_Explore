@@ -43,6 +43,10 @@ const blankAttraction: AdminDashboardAttractionForm = {
   rating: "",
   reviewsCount: "",
   radialZone: "",
+  subtitle: "",
+  aboutTitle: "",
+  aboutParagraphs: "",
+  quote: "",
 };
 
 async function requestJson(url: string, options?: RequestInit) {
@@ -74,6 +78,23 @@ function toForm(attraction: AdminDashboardAttraction): AdminDashboardAttractionF
     }
   }
   if (!images.length && attraction.image) images = [attraction.image];
+
+  let aboutParagraphs = "";
+  if (Array.isArray(attraction.about_paragraphs)) {
+    aboutParagraphs = attraction.about_paragraphs.join("\n\n");
+  } else if (typeof attraction.about_paragraphs === "string") {
+    try {
+      const parsed = JSON.parse(attraction.about_paragraphs);
+      if (Array.isArray(parsed)) {
+        aboutParagraphs = parsed.join("\n\n");
+      } else {
+        aboutParagraphs = attraction.about_paragraphs;
+      }
+    } catch {
+      aboutParagraphs = attraction.about_paragraphs;
+    }
+  }
+
   return {
     name: attraction.name,
     slug: attraction.slug,
@@ -90,6 +111,10 @@ function toForm(attraction: AdminDashboardAttraction): AdminDashboardAttractionF
     rating: String(attraction.rating),
     reviewsCount: String(attraction.reviews_count),
     radialZone: attraction.radial_zone || "",
+    subtitle: attraction.subtitle || "",
+    aboutTitle: attraction.about_title || "",
+    aboutParagraphs,
+    quote: attraction.quote || "",
   };
 }
 
@@ -106,6 +131,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [imageUrls, setImageUrls] = useState("");
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeSection, setActiveSection] = useState<AdminSection>("dashboard");
   const [showPlaceForm, setShowPlaceForm] = useState(false);
 
@@ -174,31 +200,15 @@ export default function AdminDashboard() {
 
   const submitAttraction = async (event: FormEvent) => {
     event.preventDefault();
+    if (isSubmitting) return;
     setError("");
     setMessage("");
-    const urlImages = imageUrls
-      .split(/\r?\n/)
-      .map((item) => item.trim())
-      .filter(Boolean);
-    if (urlImages.some((url) => !/^https?:\/\//i.test(url))) {
-      setError("Image URLs must start with http:// or https://.");
+
+    if (!form.name.trim()) {
+      setError("Place Name is required.");
       return;
     }
-    if (imageFiles.length + urlImages.length + form.images.length > 5) {
-      setError("An attraction can have a maximum of 5 images.");
-      return;
-    }
-    let uploadedImages: string[] = [];
-    if (imageFiles.length) {
-      const uploadData = new FormData();
-      imageFiles.forEach((file) => uploadData.append("images", file));
-      const uploadResult = await requestJson("/api/admin/attractions/upload", {
-        method: "POST",
-        body: uploadData,
-      });
-      uploadedImages = uploadResult.urls;
-    }
-    const images = [...form.images, ...uploadedImages, ...urlImages].slice(0, 5);
+
     const sanitizedSlug = form.slug
       .trim()
       .toLowerCase()
@@ -210,22 +220,75 @@ export default function AdminDashboard() {
       return;
     }
 
-    const payload = {
-      ...form,
-      slug: sanitizedSlug,
-      image: images[0] || "",
-      images,
-      distanceKm: Number(form.distanceKm || 0),
-      rating: Number(form.rating || 0),
-      reviewsCount: Number(form.reviewsCount || 0),
-      latitude: Number(form.latitude || 0),
-      longitude: Number(form.longitude || 0),
-      highlights: form.highlights
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean),
-    };
+    if (!form.location.trim()) {
+      setError("Location / Area is required.");
+      return;
+    }
+
+    if (!form.categoryId) {
+      setError("Please select a category.");
+      return;
+    }
+
+    if (!form.description.trim()) {
+      setError("Overview description / tagline is required.");
+      return;
+    }
+
+    if (!form.aboutParagraphs.trim()) {
+      setError("About description is required.");
+      return;
+    }
+
+    const urlImages = imageUrls
+      .split(/\r?\n/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    if (urlImages.some((url) => !/^https?:\/\//i.test(url))) {
+      setError("Image URLs must start with http:// or https://.");
+      return;
+    }
+
+    if (imageFiles.length + urlImages.length + form.images.length > 5) {
+      setError("An attraction can have a maximum of 5 images.");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
+      let uploadedImages: string[] = [];
+      if (imageFiles.length) {
+        const uploadData = new FormData();
+        imageFiles.forEach((file) => uploadData.append("images", file));
+        const uploadResult = await requestJson("/api/admin/attractions/upload", {
+          method: "POST",
+          body: uploadData,
+        });
+        uploadedImages = uploadResult.urls;
+      }
+      const images = [...form.images, ...uploadedImages, ...urlImages].slice(0, 5);
+
+      const payload = {
+        ...form,
+        slug: sanitizedSlug,
+        image: images[0] || "",
+        images,
+        distanceKm: Number(form.distanceKm || 0),
+        rating: Number(form.rating || 0),
+        reviewsCount: Number(form.reviewsCount || 0),
+        latitude: Number(form.latitude || 0),
+        longitude: Number(form.longitude || 0),
+        highlights: form.highlights
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
+        subtitle: form.description.trim(),
+        aboutTitle: form.aboutTitle.trim(),
+        aboutParagraphs: form.aboutParagraphs.trim(),
+        quote: form.quote.trim(),
+      };
+
       await requestJson(
         editingId ? `/api/admin/attractions/${editingId}` : "/api/admin/attractions",
         {
@@ -243,6 +306,8 @@ export default function AdminDashboard() {
       await loadData();
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : "Unable to save attraction.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -360,6 +425,7 @@ export default function AdminDashboard() {
                     current.filter((_, fileIndex) => fileIndex !== index)
                   )
                 }
+                isSubmitting={isSubmitting}
                 onSubmit={submitAttraction}
                 onCancel={() => {
                   setEditingId(null);

@@ -11,10 +11,32 @@ const selectAttractions = `
   SELECT a.id, a.category_id, c.name AS category_name, a.name, a.slug,
     a.description, a.location, a.latitude, a.longitude, a.image, a.images, a.distance_km, a.duration,
     a.highlights, a.rating, a.reviews_count, a.radial_zone,
+    a.subtitle, a.about_title, a.about_paragraphs, a.quote,
     a.created_at, a.updated_at
   FROM attractions a
   INNER JOIN categories c ON c.id = a.category_id
 `;
+
+function parseParagraphs(input: unknown): string[] {
+  if (Array.isArray(input)) {
+    return input.map((p) => String(p).trim()).filter(Boolean);
+  }
+  if (typeof input === "string") {
+    const trimmed = input.trim();
+    if (!trimmed) return [];
+    if (/\r?\n\s*\r?\n/.test(trimmed)) {
+      return trimmed
+        .split(/\r?\n\s*\r?\n/)
+        .map((p) => p.trim().replace(/\r?\n/g, " "))
+        .filter(Boolean);
+    }
+    return trimmed
+      .split(/\r?\n/)
+      .map((p) => p.trim())
+      .filter(Boolean);
+  }
+  return [];
+}
 
 function parseAttraction(body: Record<string, unknown>) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
@@ -30,9 +52,15 @@ function parseAttraction(body: Record<string, unknown>) {
   const highlights = Array.isArray(body.highlights)
     ? body.highlights.filter((item): item is string => typeof item === "string").map((item) => item.trim()).filter(Boolean)
     : [];
+  const subtitle = typeof body.subtitle === "string" && body.subtitle.trim()
+    ? body.subtitle.trim()
+    : description;
+  const aboutTitle = typeof body.aboutTitle === "string" ? body.aboutTitle.trim() || null : null;
+  const aboutParagraphs = parseParagraphs(body.aboutParagraphs);
+  const quote = typeof body.quote === "string" ? body.quote.trim() || null : null;
 
-  if (!name || !slug || !categoryId || !description || !location) {
-    return { error: "Name, slug, category, description, and location are required." };
+  if (!name || !slug || !categoryId || !description || !location || aboutParagraphs.length === 0) {
+    return { error: "Name, slug, category, location, overview description, and about description are required." };
   }
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
     return { error: "Slug must contain only lowercase letters, numbers, and hyphens without spaces (e.g. buddhangala-temple)." };
@@ -53,6 +81,10 @@ function parseAttraction(body: Record<string, unknown>) {
       distanceKm, duration: typeof body.duration === "string" ? body.duration.trim() || null : null,
       highlights, rating, reviewsCount,
       radialZone: typeof body.radialZone === "string" ? body.radialZone.trim() || null : null,
+      subtitle,
+      aboutTitle,
+      aboutParagraphs,
+      quote,
     },
   };
 }
@@ -78,9 +110,30 @@ export async function POST(request: Request) {
     const id = randomUUID();
     await db.execute(
       `INSERT INTO attractions
-       (id, category_id, name, slug, description, location, latitude, longitude, image, images, distance_km, duration, highlights, rating, reviews_count, radial_zone)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` ,
-      [id, value.categoryId, value.name, value.slug, value.description, value.location, value.latitude, value.longitude, value.image, JSON.stringify(value.images), value.distanceKm, value.duration, JSON.stringify(value.highlights), value.rating, value.reviewsCount, value.radialZone],
+       (id, category_id, name, slug, description, location, latitude, longitude, image, images, distance_km, duration, highlights, rating, reviews_count, radial_zone, subtitle, about_title, about_paragraphs, quote)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        id,
+        value.categoryId,
+        value.name,
+        value.slug,
+        value.description,
+        value.location,
+        value.latitude,
+        value.longitude,
+        value.image,
+        JSON.stringify(value.images),
+        value.distanceKm,
+        value.duration,
+        JSON.stringify(value.highlights),
+        value.rating,
+        value.reviewsCount,
+        value.radialZone,
+        value.subtitle,
+        value.aboutTitle,
+        value.aboutParagraphs.length > 0 ? JSON.stringify(value.aboutParagraphs) : null,
+        value.quote,
+      ],
     );
     return NextResponse.json({ attraction: { id, ...value } }, { status: 201 });
   } catch (error) {
