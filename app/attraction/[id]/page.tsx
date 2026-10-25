@@ -18,12 +18,17 @@ import {
   Sun,
   ArrowRight,
   ShieldCheck,
+  Maximize2,
+  X,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import type { Attraction } from "@/data/amparaData";
 import {
   type AttractionDetail,
+  type GalleryImage,
   getCategoryBadgeColor,
 } from "@/lib/attractions";
 
@@ -40,6 +45,67 @@ function AttractionDetailContent() {
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [visitPlan, setVisitPlan] = useState<Attraction[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Extract all unique images (up to 5 or more)
+  const allImages = React.useMemo(() => {
+    if (!attraction) return [];
+    const list: GalleryImage[] = [];
+    const seen = new Set<string>();
+
+    if (attraction.image) {
+      list.push({
+        url: attraction.image,
+        caption: attraction.name,
+      });
+      seen.add(attraction.image);
+    }
+
+    if (Array.isArray(attraction.galleryImages)) {
+      for (const item of attraction.galleryImages) {
+        if (item?.url && !seen.has(item.url)) {
+          list.push({
+            url: item.url,
+            caption:
+              item.caption && item.caption !== attraction.name
+                ? item.caption
+                : `${attraction.name} - Photo ${list.length + 1}`,
+          });
+          seen.add(item.url);
+        }
+      }
+    }
+
+    return list;
+  }, [attraction]);
+
+  // Lightbox keyboard navigation & body scroll lock
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLightboxIndex(null);
+      } else if (e.key === "ArrowRight") {
+        setLightboxIndex((prev) =>
+          prev !== null ? (prev + 1) % allImages.length : 0,
+        );
+      } else if (e.key === "ArrowLeft") {
+        setLightboxIndex((prev) =>
+          prev !== null ? (prev - 1 + allImages.length) % allImages.length : 0,
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [lightboxIndex, allImages.length]);
 
   // Fetch attraction details from database
   useEffect(() => {
@@ -185,9 +251,12 @@ function AttractionDetailContent() {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:items-start">
           <div className="lg:col-span-7 space-y-4">
             {/* Main Large Hero Banner */}
-            <div className="relative rounded-3xl overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-between p-6 sm:p-8 border border-slate-200/80 shadow-md group">
+            <div
+              onClick={() => setLightboxIndex(0)}
+              className="relative rounded-3xl overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-between p-6 sm:p-8 border border-slate-200/80 shadow-md group cursor-pointer"
+            >
               <Image
-                src={attraction.image}
+                src={allImages[0]?.url || attraction.image}
                 alt={attraction.name}
                 fill
                 priority
@@ -217,7 +286,22 @@ function AttractionDetailContent() {
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => setIsFavorite(!isFavorite)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLightboxIndex(0);
+                    }}
+                    className="w-9 h-9 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer"
+                    title="View full screen"
+                  >
+                    <Maximize2 className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsFavorite(!isFavorite);
+                    }}
                     className={`w-9 h-9 rounded-full backdrop-blur-md border flex items-center justify-center transition-all cursor-pointer ${
                       isFavorite
                         ? "bg-red-500/90 border-red-400 text-white"
@@ -232,7 +316,8 @@ function AttractionDetailContent() {
 
                   <button
                     type="button"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       if (
                         typeof window !== "undefined" &&
                         navigator.clipboard
@@ -251,22 +336,38 @@ function AttractionDetailContent() {
 
               {/* Bottom Title & Badges */}
               <div className="relative z-10 space-y-2 mt-auto pt-16">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className={`inline-flex items-center gap-1 ${attraction.tagColor} text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-xs`}
-                  >
-                    {attraction.tag}
-                  </span>
-                  <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
-                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    <span>
-                      {attraction.rating} ({attraction.reviewsCount}+ Reviews)
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className={`inline-flex items-center gap-1 ${attraction.tagColor} text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-xs`}
+                    >
+                      {attraction.tag}
                     </span>
-                  </span>
-                  <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
-                    <Clock className="w-3 h-3 text-sky-400" />
-                    <span>{attraction.duration}</span>
-                  </span>
+                    <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
+                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      <span>
+                        {attraction.rating} ({attraction.reviewsCount}+ Reviews)
+                      </span>
+                    </span>
+                    <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
+                      <Clock className="w-3 h-3 text-sky-400" />
+                      <span>{attraction.duration}</span>
+                    </span>
+                  </div>
+
+                  {allImages.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLightboxIndex(0);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold transition-all shadow-sm hover:scale-105 cursor-pointer"
+                    >
+                      <Maximize2 className="w-3 h-3 text-sky-400" />
+                      <span>View All ({allImages.length} Photos)</span>
+                    </button>
+                  )}
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight drop-shadow-md">
@@ -279,26 +380,71 @@ function AttractionDetailContent() {
               </div>
             </div>
 
-            {/* Supporting Gallery Thumbnails */}
-            <div className="grid grid-cols-2 gap-3">
-              {attraction.galleryImages.slice(0, 2).map((img, idx) => (
-                <div
-                  key={idx}
-                  className="relative h-28 sm:h-36 rounded-2xl overflow-hidden border border-slate-200/80 group bg-slate-100"
-                >
-                  <Image
-                    src={img.url}
-                    alt={img.caption || attraction.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <span className="absolute bottom-2 left-3 text-[11px] font-bold text-white flex items-center gap-1 drop-shadow-sm">
-                    {img.caption}
-                  </span>
-                </div>
-              ))}
-            </div>
+            {/* Supporting Gallery Thumbnails - Displays up to 4 images to make 5 total with the hero */}
+            {allImages.length > 1 && (
+              <div
+                className={`grid gap-3 ${
+                  allImages.length === 2
+                    ? "grid-cols-1"
+                    : allImages.length === 3
+                      ? "grid-cols-2"
+                      : allImages.length === 4
+                        ? "grid-cols-3"
+                        : "grid-cols-2 sm:grid-cols-4"
+                }`}
+              >
+                {allImages.slice(1, 5).map((img, idx) => {
+                  const actualIndex = idx + 1;
+                  const isLastAndMore = idx === 3 && allImages.length > 5;
+                  const remainingCount = allImages.length - 5;
+
+                  return (
+                    <button
+                      key={actualIndex}
+                      type="button"
+                      onClick={() => setLightboxIndex(actualIndex)}
+                      className="relative h-28 sm:h-36 rounded-2xl overflow-hidden border border-slate-200/80 group bg-slate-100 text-left focus:outline-none focus:ring-2 focus:ring-[#0084d1] cursor-pointer"
+                    >
+                      <Image
+                        src={img.url}
+                        alt={
+                          img.caption ||
+                          `${attraction.name} photo ${actualIndex + 1}`
+                        }
+                        fill
+                        sizes="(max-width: 640px) 50vw, 25vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent group-hover:from-black/85 transition-colors" />
+
+                      {/* Hover expand hint icon */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                        <div className="w-8 h-8 rounded-full bg-white/25 backdrop-blur-md border border-white/40 flex items-center justify-center text-white">
+                          <Maximize2 className="w-4 h-4" />
+                        </div>
+                      </div>
+
+                      <span className="absolute bottom-2 left-2.5 right-2.5 text-[11px] font-bold text-white truncate drop-shadow-sm flex items-center gap-1">
+                        <span className="truncate">
+                          {img.caption || `Photo ${actualIndex + 1}`}
+                        </span>
+                      </span>
+
+                      {isLastAndMore && (
+                        <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px] flex flex-col items-center justify-center text-white p-2 text-center">
+                          <span className="text-lg font-black">
+                            +{remainingCount + 1}
+                          </span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider">
+                            More Photos
+                          </span>
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* About section beside the image gallery */}
@@ -688,6 +834,127 @@ function AttractionDetailContent() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
       />
+
+      {/* Full View Image Lightbox Modal */}
+      {lightboxIndex !== null && allImages[lightboxIndex] && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between p-4 sm:p-6 select-none animate-in fade-in duration-200"
+          onClick={() => setLightboxIndex(null)}
+        >
+          {/* Top Bar */}
+          <div
+            className="flex items-center justify-between gap-4 max-w-7xl w-full mx-auto z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-bold border border-white/15">
+                Photo {lightboxIndex + 1} of {allImages.length}
+              </span>
+              <h4 className="text-white font-bold text-sm sm:text-base truncate hidden sm:inline">
+                {allImages[lightboxIndex].caption || attraction.name}
+              </h4>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setLightboxIndex(null)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/20 cursor-pointer"
+                title="Close (Esc)"
+              >
+                <X className="w-4 h-4" />
+                <span className="hidden sm:inline">Close</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Main Photo Center Viewport */}
+          <div
+            className="relative flex-1 flex items-center justify-center my-2 sm:my-4 overflow-hidden w-full max-w-7xl mx-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Prev Button */}
+            {allImages.length > 1 && (
+              <button
+                type="button"
+                onClick={() =>
+                  setLightboxIndex(
+                    (lightboxIndex - 1 + allImages.length) % allImages.length,
+                  )
+                }
+                className="absolute left-2 sm:left-4 z-20 p-3 sm:p-4 rounded-full bg-slate-900/70 hover:bg-[#0084d1] text-white backdrop-blur-md border border-white/20 transition-all hover:scale-110 cursor-pointer shadow-xl"
+                title="Previous photo (Left arrow)"
+              >
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+            )}
+
+            {/* Next Button */}
+            {allImages.length > 1 && (
+              <button
+                type="button"
+                onClick={() =>
+                  setLightboxIndex((lightboxIndex + 1) % allImages.length)
+                }
+                className="absolute right-2 sm:right-4 z-20 p-3 sm:p-4 rounded-full bg-slate-900/70 hover:bg-[#0084d1] text-white backdrop-blur-md border border-white/20 transition-all hover:scale-110 cursor-pointer shadow-xl"
+                title="Next photo (Right arrow)"
+              >
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+            )}
+
+            {/* Image Container */}
+            <div className="relative w-full h-[65vh] sm:h-[75vh] max-w-5xl flex items-center justify-center">
+              <Image
+                src={allImages[lightboxIndex].url}
+                alt={allImages[lightboxIndex].caption || attraction.name}
+                fill
+                priority
+                sizes="100vw"
+                className="object-contain"
+              />
+            </div>
+
+            {/* Caption in Full View */}
+            {allImages[lightboxIndex].caption && (
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-md text-white text-xs sm:text-sm px-4 py-1.5 rounded-full border border-white/15 max-w-lg truncate text-center shadow-lg">
+                {allImages[lightboxIndex].caption}
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Thumbnails Carousel */}
+          {allImages.length > 1 && (
+            <div
+              className="flex items-center justify-center gap-2 overflow-x-auto py-2 px-4 max-w-3xl mx-auto scrollbar-none z-10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {allImages.map((img, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setLightboxIndex(i)}
+                  className={`relative h-14 w-20 sm:h-16 sm:w-24 shrink-0 rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
+                    i === lightboxIndex
+                      ? "border-[#0084d1] ring-2 ring-[#0084d1]/60 scale-105 opacity-100"
+                      : "border-transparent opacity-50 hover:opacity-90"
+                  }`}
+                >
+                  <Image
+                    src={img.url}
+                    alt={img.caption || `Photo ${i + 1}`}
+                    fill
+                    sizes="96px"
+                    className="object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

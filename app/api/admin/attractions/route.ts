@@ -31,8 +31,11 @@ function parseAttraction(body: Record<string, unknown>) {
     ? body.highlights.filter((item): item is string => typeof item === "string").map((item) => item.trim()).filter(Boolean)
     : [];
 
-  if (!name || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || !categoryId || !description || !location) {
+  if (!name || !slug || !categoryId || !description || !location) {
     return { error: "Name, slug, category, description, and location are required." };
+  }
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    return { error: "Slug must contain only lowercase letters, numbers, and hyphens without spaces (e.g. buddhangala-temple)." };
   }
   if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90 || !Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
     return { error: "Latitude must be between -90 and 90, and longitude must be between -180 and 180." };

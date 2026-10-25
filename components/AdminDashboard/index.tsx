@@ -1,65 +1,48 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import Input from "@/components/Input";
 import {
-  ImagePlus,
-  LayoutDashboard,
-  Link2,
-  LogOut,
-  MapPinned,
-  Plus,
-  Tags,
-  Trash2,
-  Upload,
-  X,
-} from "lucide-react";
+  AdminSidebar,
+  AdminHeader,
+  AdminAlerts,
+  AdminOverview,
+  CategoryManagement,
+  AttractionForm,
+  PlacesTable,
+} from "./components";
+import type {
+  AdminDashboardCategory,
+  AdminDashboardAttraction,
+  AdminDashboardAttractionForm,
+  AdminSection,
+} from "@/interface";
 
-type Category = { id: string; name: string; description: string | null };
-type Attraction = {
-  id: string;
-  category_id: string;
-  category_name: string;
-  name: string;
-  slug: string;
-  description: string;
-  location: string;
-  latitude: number;
-  longitude: number;
-  image: string | null;
-  images: string[] | string | null;
-  distance_km: number;
-  duration: string | null;
-  highlights: string[] | string | null;
-  rating: number;
-  reviews_count: number;
-  radial_zone: string | null;
+export type {
+  AdminDashboardCategory,
+  AdminDashboardAttraction,
+  AdminDashboardAttractionForm,
+  AdminSection,
 };
+export type Category = AdminDashboardCategory;
+export type Attraction = AdminDashboardAttraction;
+export type AttractionForm = AdminDashboardAttractionForm;
 
-type AttractionForm = {
-  name: string;
-  slug: string;
-  categoryId: string;
-  description: string;
-  location: string;
-  latitude: string;
-  longitude: string;
-  image: string;
-  images: string[];
-  distanceKm: string;
-  duration: string;
-  highlights: string;
-  rating: string;
-  reviewsCount: string;
-  radialZone: string;
-};
-
-const blankAttraction: AttractionForm = {
-  name: "", slug: "", categoryId: "", description: "", location: "",
-  latitude: "", longitude: "",
-  image: "", images: [], distanceKm: "0", duration: "", highlights: "", rating: "0",
-  reviewsCount: "0", radialZone: "",
+const blankAttraction: AdminDashboardAttractionForm = {
+  name: "",
+  slug: "",
+  categoryId: "",
+  description: "",
+  location: "",
+  latitude: "",
+  longitude: "",
+  image: "",
+  images: [],
+  distanceKm: "",
+  duration: "",
+  highlights: "",
+  rating: "",
+  reviewsCount: "",
+  radialZone: "",
 };
 
 async function requestJson(url: string, options?: RequestInit) {
@@ -69,46 +52,61 @@ async function requestJson(url: string, options?: RequestInit) {
   return body;
 }
 
-function toForm(attraction: Attraction): AttractionForm {
+function toForm(attraction: AdminDashboardAttraction): AdminDashboardAttractionForm {
   let highlights: string[] = [];
   if (Array.isArray(attraction.highlights)) highlights = attraction.highlights;
   else if (typeof attraction.highlights === "string") {
-    try { highlights = JSON.parse(attraction.highlights); } catch { highlights = []; }
+    try {
+      highlights = JSON.parse(attraction.highlights);
+    } catch {
+      highlights = [];
+    }
   }
   let images: string[] = [];
   if (Array.isArray(attraction.images)) images = attraction.images;
   else if (typeof attraction.images === "string") {
     try {
       const parsed = JSON.parse(attraction.images);
-      if (Array.isArray(parsed)) images = parsed.filter((item): item is string => typeof item === "string");
-    } catch { images = []; }
+      if (Array.isArray(parsed))
+        images = parsed.filter((item): item is string => typeof item === "string");
+    } catch {
+      images = [];
+    }
   }
   if (!images.length && attraction.image) images = [attraction.image];
   return {
-    name: attraction.name, slug: attraction.slug, categoryId: attraction.category_id,
-    description: attraction.description, location: attraction.location,
-    latitude: String(attraction.latitude ?? ""), longitude: String(attraction.longitude ?? ""),
-    image: attraction.image || "", images, distanceKm: String(attraction.distance_km),
-    duration: attraction.duration || "", highlights: highlights.join(", "),
-    rating: String(attraction.rating), reviewsCount: String(attraction.reviews_count),
+    name: attraction.name,
+    slug: attraction.slug,
+    categoryId: attraction.category_id,
+    description: attraction.description,
+    location: attraction.location,
+    latitude: String(attraction.latitude ?? ""),
+    longitude: String(attraction.longitude ?? ""),
+    image: attraction.image || "",
+    images,
+    distanceKm: String(attraction.distance_km),
+    duration: attraction.duration || "",
+    highlights: highlights.join(", "),
+    rating: String(attraction.rating),
+    reviewsCount: String(attraction.reviews_count),
     radialZone: attraction.radial_zone || "",
   };
 }
 
 export default function AdminDashboard() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [attractions, setAttractions] = useState<Attraction[]>([]);
+  const [categories, setCategories] = useState<AdminDashboardCategory[]>([]);
+  const [attractions, setAttractions] = useState<AdminDashboardAttraction[]>([]);
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [form, setForm] = useState<AttractionForm>(blankAttraction);
+  const [editingCategory, setEditingCategory] = useState<AdminDashboardCategory | null>(null);
+  const [form, setForm] = useState<AdminDashboardAttractionForm>(blankAttraction);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [imageUrls, setImageUrls] = useState("");
   const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [activeSection, setActiveSection] = useState<"dashboard" | "places" | "categories">("dashboard");
+  const [activeSection, setActiveSection] = useState<AdminSection>("dashboard");
   const [showPlaceForm, setShowPlaceForm] = useState(false);
 
   const loadData = async () => {
@@ -129,37 +127,59 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-    const timer = window.setTimeout(() => { void loadData(); }, 0);
+    const timer = window.setTimeout(() => {
+      void loadData();
+    }, 0);
     return () => window.clearTimeout(timer);
   }, []);
 
   const submitCategory = async (event: FormEvent) => {
     event.preventDefault();
-    setError(""); setMessage("");
+    setError("");
+    setMessage("");
     try {
-      const url = editingCategory ? `/api/admin/categories/${editingCategory.id}` : "/api/admin/categories";
+      const url = editingCategory
+        ? `/api/admin/categories/${editingCategory.id}`
+        : "/api/admin/categories";
       await requestJson(url, {
         method: editingCategory ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: categoryName, description: categoryDescription }),
       });
-      setCategoryName(""); setCategoryDescription(""); setEditingCategory(null);
-      setMessage("Category saved."); await loadData();
-    } catch (saveError) { setError(saveError instanceof Error ? saveError.message : "Unable to save category."); }
+      setCategoryName("");
+      setCategoryDescription("");
+      setEditingCategory(null);
+      setMessage("Category saved.");
+      await loadData();
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Unable to save category.");
+    }
   };
 
-  const deleteCategory = async (category: Category) => {
-    if (!window.confirm(`Delete "${category.name}"? Categories with attractions cannot be deleted.`)) return;
+  const deleteCategory = async (category: AdminDashboardCategory) => {
+    if (
+      !window.confirm(
+        `Delete "${category.name}"? Categories with attractions cannot be deleted.`
+      )
+    )
+      return;
     try {
       await requestJson(`/api/admin/categories/${category.id}`, { method: "DELETE" });
-      setMessage("Category deleted."); await loadData();
-    } catch (deleteError) { setError(deleteError instanceof Error ? deleteError.message : "Unable to delete category."); }
+      setMessage("Category deleted.");
+      await loadData();
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Unable to delete category.");
+    }
   };
 
   const submitAttraction = async (event: FormEvent) => {
     event.preventDefault();
-    setError(""); setMessage("");
-    const urlImages = imageUrls.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+    setError("");
+    setMessage("");
+    const urlImages = imageUrls
+      .split(/\r?\n/)
+      .map((item) => item.trim())
+      .filter(Boolean);
     if (urlImages.some((url) => !/^https?:\/\//i.test(url))) {
       setError("Image URLs must start with http:// or https://.");
       return;
@@ -172,40 +192,72 @@ export default function AdminDashboard() {
     if (imageFiles.length) {
       const uploadData = new FormData();
       imageFiles.forEach((file) => uploadData.append("images", file));
-      const uploadResult = await requestJson("/api/admin/attractions/upload", { method: "POST", body: uploadData });
+      const uploadResult = await requestJson("/api/admin/attractions/upload", {
+        method: "POST",
+        body: uploadData,
+      });
       uploadedImages = uploadResult.urls;
     }
     const images = [...form.images, ...uploadedImages, ...urlImages].slice(0, 5);
+    const sanitizedSlug = form.slug
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+
+    if (!sanitizedSlug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(sanitizedSlug)) {
+      setError("Slug must contain only lowercase letters, numbers, and hyphens without spaces (e.g. buddhangala-temple).");
+      return;
+    }
+
     const payload = {
       ...form,
+      slug: sanitizedSlug,
       image: images[0] || "",
       images,
-      distanceKm: Number(form.distanceKm),
-      rating: Number(form.rating),
-      reviewsCount: Number(form.reviewsCount),
-      latitude: Number(form.latitude),
-      longitude: Number(form.longitude),
-      highlights: form.highlights.split(",").map((item) => item.trim()).filter(Boolean),
+      distanceKm: Number(form.distanceKm || 0),
+      rating: Number(form.rating || 0),
+      reviewsCount: Number(form.reviewsCount || 0),
+      latitude: Number(form.latitude || 0),
+      longitude: Number(form.longitude || 0),
+      highlights: form.highlights
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean),
     };
     try {
-      await requestJson(editingId ? `/api/admin/attractions/${editingId}` : "/api/admin/attractions", {
-        method: editingId ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      setForm(blankAttraction); setImageUrls(""); setImageFiles([]); setEditingId(null); setShowPlaceForm(false); setMessage("Attraction saved."); await loadData();
-    } catch (saveError) { setError(saveError instanceof Error ? saveError.message : "Unable to save attraction."); }
+      await requestJson(
+        editingId ? `/api/admin/attractions/${editingId}` : "/api/admin/attractions",
+        {
+          method: editingId ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+      setForm(blankAttraction);
+      setImageUrls("");
+      setImageFiles([]);
+      setEditingId(null);
+      setShowPlaceForm(false);
+      setMessage("Attraction saved.");
+      await loadData();
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : "Unable to save attraction.");
+    }
   };
 
-  const deleteAttraction = async (attraction: Attraction) => {
+  const deleteAttraction = async (attraction: AdminDashboardAttraction) => {
     if (!window.confirm(`Delete "${attraction.name}"?`)) return;
     try {
       await requestJson(`/api/admin/attractions/${attraction.id}`, { method: "DELETE" });
-      setMessage("Attraction deleted."); await loadData();
-    } catch (deleteError) { setError(deleteError instanceof Error ? deleteError.message : "Unable to delete attraction."); }
+      setMessage("Attraction deleted.");
+      await loadData();
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Unable to delete attraction.");
+    }
   };
 
-  const updateForm = (key: keyof AttractionForm, value: string) =>
+  const updateForm = (key: keyof AdminDashboardAttractionForm, value: string) =>
     setForm((current) => ({ ...current, [key]: value }));
 
   const removeExistingImage = (index: number) => {
@@ -215,7 +267,7 @@ export default function AdminDashboard() {
     }));
   };
 
-  const startEditing = (attraction: Attraction) => {
+  const startEditing = (attraction: AdminDashboardAttraction) => {
     setEditingId(attraction.id);
     setActiveSection("places");
     setShowPlaceForm(true);
@@ -226,192 +278,108 @@ export default function AdminDashboard() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const averageRating = attractions.length
+    ? (
+        attractions.reduce((sum, item) => sum + Number(item.rating || 0), 0) /
+        attractions.length
+      ).toFixed(1)
+    : "0.0";
+
   return (
     <main className="min-h-screen bg-[#f5f8fc] text-slate-900">
       <div className="flex min-h-screen">
-        <aside className="hidden w-64 shrink-0 flex-col bg-[#082f49] px-4 py-6 text-white lg:flex">
-          <div className="mb-10 px-3">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">Ampara Explore</p>
-            <p className="mt-2 text-lg font-bold">Admin Portal</p>
-          </div>
-          <nav className="space-y-2">
-            {[
-              { id: "dashboard" as const, label: "Dashboard", icon: LayoutDashboard },
-              { id: "places" as const, label: "Places", icon: MapPinned },
-              { id: "categories" as const, label: "Categories", icon: Tags },
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
-                <button key={item.id} onClick={() => setActiveSection(item.id)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${activeSection === item.id ? "bg-cyan-400 text-[#082f49] shadow-lg shadow-cyan-950/20" : "text-sky-100/75 hover:bg-white/10 hover:text-white"}`}>
-                  <Icon className="h-5 w-5" /> {item.label}
-                </button>
-              );
-            })}
-          </nav>
-          <div className="mt-auto space-y-2">
-            <Link href="/" className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-slate-300 hover:bg-white/10 hover:text-white"><LogOut className="h-5 w-5" /> Back to website</Link>
-          </div>
-        </aside>
+        <AdminSidebar
+          activeSection={activeSection}
+          onSelectSection={setActiveSection}
+        />
 
         <div className="min-w-0 flex-1 px-4 py-6 sm:px-8">
           <div className="mx-auto max-w-7xl">
-            <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-600">Ampara Explore / ADMIN</p>
-            <h1 className="mt-1 text-3xl font-bold">
-              {activeSection === "dashboard" ? "Dashboard" : activeSection === "places" ? "Places" : "Categories"}
-            </h1>
-            <p className="mt-1 text-sm text-slate-500">Manage your tourism content from one place.</p>
-          </div>
-          {activeSection === "places" && <button onClick={() => { setEditingId(null); setForm(blankAttraction); setImageUrls(""); setImageFiles([]); setShowPlaceForm(true); }} className="inline-flex items-center gap-2 rounded-xl bg-[#0e7490] px-4 py-2.5 text-sm font-bold text-white shadow-sm shadow-cyan-900/10 transition hover:bg-[#155e75]"><Plus className="h-4 w-4" /> Add place</button>}
-        </header>
+            <AdminHeader
+              activeSection={activeSection}
+              onAddPlaceClick={() => {
+                setEditingId(null);
+                setForm(blankAttraction);
+                setImageUrls("");
+                setImageFiles([]);
+                setShowPlaceForm(true);
+              }}
+            />
 
-        {loading && <p className="rounded-xl border border-sky-100 bg-white p-4 text-sm text-slate-600 shadow-sm">Loading admin data...</p>}
-        {error && <p role="alert" className="mb-4 rounded-xl border border-rose-100 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
-        {message && <p role="status" className="mb-4 rounded-xl border border-emerald-100 bg-emerald-50 p-3 text-sm text-emerald-700">{message}</p>}
+            <AdminAlerts loading={loading} error={error} message={message} />
 
-        {activeSection === "dashboard" && (
-          <section className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"><p className="text-sm text-slate-500">Total places</p><p className="mt-2 text-3xl font-bold text-[#082f49]">{attractions.length}</p><p className="mt-1 text-xs text-slate-400">Published destinations</p></div>
-            <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"><p className="text-sm text-slate-500">Categories</p><p className="mt-2 text-3xl font-bold text-[#082f49]">{categories.length}</p><p className="mt-1 text-xs text-slate-400">Organized destination groups</p></div>
-            <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm"><p className="text-sm text-slate-500">Average rating</p><p className="mt-2 text-3xl font-bold text-[#082f49]">{attractions.length ? (attractions.reduce((sum, item) => sum + Number(item.rating || 0), 0) / attractions.length).toFixed(1) : "0.0"}</p><p className="mt-1 text-xs text-slate-400">Across all places</p></div>
-            <div className="rounded-2xl border border-sky-100 bg-white p-6 shadow-sm sm:col-span-3">
-              <h2 className="text-xl font-bold">Welcome to your admin dashboard</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Use the sidebar to manage places and categories. Add new destinations with photos, descriptions, location details, and visitor information.</p>
-              <button onClick={() => { setActiveSection("places"); setShowPlaceForm(true); }} className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#0e7490] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#155e75]"><Plus className="h-4 w-4" /> Add your first place</button>
-            </div>
-          </section>
-        )}
+            {activeSection === "dashboard" && (
+              <AdminOverview
+                attractionsCount={attractions.length}
+                categoriesCount={categories.length}
+                averageRating={averageRating}
+                onAddFirstPlace={() => {
+                  setActiveSection("places");
+                  setShowPlaceForm(true);
+                }}
+              />
+            )}
 
-        {activeSection === "categories" && <section className="mb-8 rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
-          <h2 className="mb-4 text-xl font-bold">Category management</h2>
-          <form onSubmit={submitCategory} className="grid gap-3 md:grid-cols-[1fr_2fr_auto]">
-            <Input required value={categoryName} onChange={(event) => setCategoryName(event.target.value)} placeholder="Category name" />
-            <Input value={categoryDescription} onChange={(event) => setCategoryDescription(event.target.value)} placeholder="Short description (optional)" />
-            <button className="rounded-xl bg-[#0e7490] px-5 py-2 text-sm font-semibold text-white hover:bg-[#155e75]">{editingCategory ? "Update" : "Add category"}</button>
-          </form>
-          {editingCategory && <button onClick={() => { setEditingCategory(null); setCategoryName(""); setCategoryDescription(""); }} className="mt-2 text-xs font-semibold text-slate-500 hover:text-slate-800">Cancel editing</button>}
-          <div className="mt-4 flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <div key={category.id} className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-sm">
-                <span>{category.name}</span>
-                <button onClick={() => { setEditingCategory(category); setCategoryName(category.name); setCategoryDescription(category.description || ""); }} className="font-semibold text-sky-600">Edit</button>
-                <button onClick={() => void deleteCategory(category)} className="font-semibold text-rose-600">Delete</button>
-              </div>
-            ))}
-          </div>
-        </section>}
+            {activeSection === "categories" && (
+              <CategoryManagement
+                categories={categories}
+                categoryName={categoryName}
+                categoryDescription={categoryDescription}
+                editingCategory={editingCategory}
+                onCategoryNameChange={setCategoryName}
+                onCategoryDescriptionChange={setCategoryDescription}
+                onSubmitCategory={submitCategory}
+                onEditCategory={(category) => {
+                  setEditingCategory(category);
+                  setCategoryName(category.name);
+                  setCategoryDescription(category.description || "");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                onCancelEdit={() => {
+                  setEditingCategory(null);
+                  setCategoryName("");
+                  setCategoryDescription("");
+                }}
+                onDeleteCategory={deleteCategory}
+              />
+            )}
 
-        {activeSection === "places" && showPlaceForm && <section className="mb-8 rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
-          <h2 className="mb-4 text-xl font-bold">{editingId ? "Edit attraction" : "Create attraction"}</h2>
-          <form onSubmit={submitAttraction} className="grid gap-3 md:grid-cols-2">
-            {(["name", "slug", "location", "latitude", "longitude", "distanceKm", "duration", "rating", "reviewsCount", "radialZone"] as const).map((key) => (
-              <Input key={key} type={["latitude", "longitude", "distanceKm", "rating", "reviewsCount"].includes(key) ? "number" : "text"} min={key === "latitude" ? -90 : key === "longitude" ? -180 : undefined} max={key === "latitude" ? 90 : key === "longitude" ? 180 : undefined} step={["latitude", "longitude"].includes(key) ? "any" : undefined} required={["name", "slug", "location", "latitude", "longitude", "distanceKm", "rating", "reviewsCount"].includes(key)} value={form[key]} onChange={(event) => updateForm(key, event.target.value)} placeholder={key === "slug" ? "slug (example: gal-oya-park)" : key === "latitude" ? "latitude (e.g. 7.291)" : key === "longitude" ? "longitude (e.g. 81.672)" : key} />
-            ))}
-            <select required value={form.categoryId} onChange={(event) => updateForm("categoryId", event.target.value)} className="rounded-lg border border-slate-200 px-3 py-2 text-sm">
-              <option value="">Select category</option>
-              {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
-            </select>
-            <Input value={form.highlights} onChange={(event) => updateForm("highlights", event.target.value)} placeholder="Highlights separated by commas" />
-            <div className="rounded-xl border-2 border-sky-100 bg-sky-50/40 p-4 md:col-span-2">
-              <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-[#0e7490] p-2 text-white">
-                  <ImagePlus className="h-5 w-5" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-slate-900">Place photos</h3>
-                  <p className="mt-0.5 text-xs text-slate-600">
-                    Add up to 5 photos. The first photo becomes the main card image.
-                  </p>
-                </div>
-                <span className="ml-auto rounded-full bg-white px-2.5 py-1 text-xs font-bold text-sky-700 shadow-sm">
-                  {form.images.length + imageFiles.length + imageUrls.split(/\r?\n/).filter((url) => url.trim()).length}/5
-                </span>
-              </div>
+            {activeSection === "places" && showPlaceForm && (
+              <AttractionForm
+                form={form}
+                editingId={editingId}
+                categories={categories}
+                imageUrls={imageUrls}
+                imageFiles={imageFiles}
+                onFormChange={updateForm}
+                onImageUrlsChange={setImageUrls}
+                onImageFilesChange={setImageFiles}
+                onRemoveExistingImage={removeExistingImage}
+                onRemoveImageFile={(index) =>
+                  setImageFiles((current) =>
+                    current.filter((_, fileIndex) => fileIndex !== index)
+                  )
+                }
+                onSubmit={submitAttraction}
+                onCancel={() => {
+                  setEditingId(null);
+                  setForm(blankAttraction);
+                  setImageUrls("");
+                  setImageFiles([]);
+                  setShowPlaceForm(false);
+                }}
+                onError={setError}
+              />
+            )}
 
-              <label className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-sky-300 bg-white px-4 py-6 text-center transition hover:border-sky-500 hover:bg-sky-50">
-                <Upload className="h-8 w-8 text-sky-600" />
-                <span className="mt-2 text-sm font-bold text-slate-800">Click to choose photos</span>
-                <span className="mt-1 text-xs text-slate-500">JPG, PNG, WEBP, or GIF · Maximum 5 MB each</span>
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/gif"
-                  multiple
-                  onChange={(event) => {
-                    const files = Array.from(event.target.files || []);
-                    const remaining = Math.max(0, 5 - form.images.length - imageUrls.split(/\r?\n/).filter((url) => url.trim()).length);
-                    setImageFiles(files.slice(0, remaining));
-                    if (files.length > remaining) setError(`You can add only ${remaining} more photo${remaining === 1 ? "" : "s"}.`);
-                    event.target.value = "";
-                  }}
-                  className="sr-only"
-                />
-              </label>
-
-              {form.images.length > 0 && (
-                <div className="mt-4">
-                  <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Saved photos</p>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-                    {form.images.map((image, index) => (
-                      <div key={`${image}-${index}`} className="group relative aspect-video overflow-hidden rounded-lg border border-slate-200 bg-white">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={image} alt={`Saved place photo ${index + 1}`} className="h-full w-full object-cover" />
-                        {index === 0 && <span className="absolute bottom-1 left-1 rounded bg-slate-900/75 px-1.5 py-0.5 text-[10px] font-bold text-white">Main photo</span>}
-                        <button type="button" onClick={() => removeExistingImage(index)} aria-label={`Remove saved photo ${index + 1}`} className="absolute right-1 top-1 rounded-full bg-white/90 p-1 text-rose-600 shadow-sm opacity-0 transition group-hover:opacity-100">
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {imageFiles.length > 0 && (
-                <div className="mt-4">
-                  <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Ready to upload</p>
-                  <div className="space-y-2">
-                    {imageFiles.map((file, index) => (
-                      <div key={`${file.name}-${file.lastModified}`} className="flex items-center justify-between rounded-lg bg-white px-3 py-2 text-xs">
-                        <span className="truncate font-medium text-slate-700">{index + 1}. {file.name}</span>
-                        <button type="button" onClick={() => setImageFiles((current) => current.filter((_, fileIndex) => fileIndex !== index))} className="ml-3 text-rose-600" aria-label={`Remove ${file.name}`}><Trash2 className="h-4 w-4" /></button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="mt-4 rounded-lg border border-slate-200 bg-white p-3">
-                <label className="flex items-center gap-2 text-sm font-bold text-slate-700"><Link2 className="h-4 w-4 text-sky-600" /> Add photo URLs</label>
-                <p className="mt-1 text-xs text-slate-500">Optional: paste one public image URL per line.</p>
-                <textarea value={imageUrls} onChange={(event) => setImageUrls(event.target.value)} placeholder={"https://example.com/photo-1.jpg\nhttps://example.com/photo-2.jpg"} className="mt-2 min-h-20 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" />
-              </div>
-            </div>
-            <textarea required value={form.description} onChange={(event) => updateForm("description", event.target.value)} placeholder="Description" className="min-h-24 rounded-lg border border-slate-200 px-3 py-2 text-sm md:col-span-2" />
-            <div className="flex gap-3 md:col-span-2">
-              <button className="rounded-xl bg-[#0e7490] px-5 py-2 text-sm font-semibold text-white hover:bg-[#155e75]">{editingId ? "Update attraction" : "Create attraction"}</button>
-              <button type="button" onClick={() => { setEditingId(null); setForm(blankAttraction); setImageUrls(""); setImageFiles([]); setShowPlaceForm(false); }} className="rounded-lg border border-slate-300 px-5 py-2 text-sm font-semibold">Cancel</button>
-            </div>
-          </form>
-        </section>}
-
-        {activeSection === "places" && <section className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <div><h2 className="text-xl font-bold">Places</h2><p className="mt-1 text-sm text-slate-500">All tourist attractions in your database ({attractions.length})</p></div>
-            <button onClick={() => setShowPlaceForm(true)} className="inline-flex items-center gap-2 rounded-lg border border-sky-200 px-3 py-2 text-sm font-bold text-sky-700 hover:bg-sky-50"><Plus className="h-4 w-4" /> Add place</button>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left text-sm">
-              <thead><tr className="border-b border-slate-200 text-xs uppercase text-slate-500"><th className="p-3">Name</th><th className="p-3">Category</th><th className="p-3">Location</th><th className="p-3">Rating</th><th className="p-3">Actions</th></tr></thead>
-              <tbody>
-                {attractions.map((attraction) => <tr key={attraction.id} className="border-b border-slate-100">
-                  <td className="p-3 font-semibold">{attraction.name}<div className="text-xs font-normal text-slate-400">{attraction.slug}</div></td>
-                  <td className="p-3">{attraction.category_name}</td><td className="p-3">{attraction.location}</td><td className="p-3">{attraction.rating}</td>
-                  <td className="p-3"><button onClick={() => startEditing(attraction)} className="mr-3 font-semibold text-sky-600">Edit</button><button onClick={() => void deleteAttraction(attraction)} className="font-semibold text-rose-600">Delete</button></td>
-                </tr>)}
-              </tbody>
-            </table>
-          </div>
-        </section>}
+            {activeSection === "places" && (
+              <PlacesTable
+                attractions={attractions}
+                onStartEditing={startEditing}
+                onDeleteAttraction={deleteAttraction}
+                onOpenAddPlace={() => setShowPlaceForm(true)}
+              />
+            )}
           </div>
         </div>
       </div>
