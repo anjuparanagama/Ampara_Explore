@@ -7,8 +7,6 @@ import {
   Star,
   MapPin,
   Clock,
-  Plus,
-  Check,
   ExternalLink,
   Compass,
 } from "lucide-react";
@@ -146,8 +144,6 @@ export default function FeaturedAttractions({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredAttractions.map((attraction) => {
-            const isAdded = visitPlan.some((p) => p.id === attraction.id);
-
             return (
               <div
                 key={attraction.id}
@@ -221,36 +217,13 @@ export default function FeaturedAttractions({
                         <span>{attraction.duration}</span>
                       </div>
 
-                      <div className="flex items-center gap-1.5">
-                        <Link
-                          href={`/attraction/${attraction.id}`}
-                          className="rounded-full p-2 text-white transition-colors hover:bg-white/20 focus:bg-white/20"
-                          title={t("viewDetails")}
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </Link>
-
-                        <button
-                          onClick={() => onTogglePlan(attraction)}
-                          className={`flex cursor-pointer items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
-                            isAdded
-                              ? "border border-emerald-300 bg-emerald-50 text-emerald-700"
-                              : "border border-white/50 bg-white text-[#0284c7] hover:bg-sky-50"
-                          }`}
-                        >
-                          {isAdded ? (
-                            <>
-                              <Check className="h-3.5 w-3.5" />
-                              <span>{t("addedBtn")}</span>
-                            </>
-                          ) : (
-                            <>
-                              <Plus className="h-3.5 w-3.5" />
-                              <span>{t("addBtn")}</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
+                      <Link
+                        href={`/attraction/${attraction.id}`}
+                        className="rounded-full p-2 text-white transition-colors hover:bg-white/20 focus:bg-white/20"
+                        title={t("viewDetails")}
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </Link>
                     </div>
                   </div>
                 </div>
