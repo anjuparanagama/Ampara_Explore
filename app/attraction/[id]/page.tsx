@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -12,770 +12,147 @@ import {
   Star,
   Heart,
   Share2,
-  Plus,
-  Check,
-  Navigation,
-  Sparkles,
   Info,
-  Calendar,
-  Building,
-  Car,
   Sunrise,
-  CheckCircle2,
-  Camera,
   Trees,
-  Phone,
+  Sun,
   ArrowRight,
   ShieldCheck,
-  ChevronRight,
-  Sun,
-  Shield,
-  HelpCircle,
 } from "lucide-react";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
-import { amparaAttractions, Attraction } from "@/data/amparaData";
-
-// Comprehensive rich profile data for Ampara destinations
-interface AttractionProfile {
-  tag: string;
-  tagColor: string;
-  subtitle: string;
-  aboutTitle: string;
-  aboutParagraphs: string[];
-  quote: string;
-  galleryImages: { url: string; caption: string }[];
-  hours: string;
-  hoursDetail: string;
-  tariff: string;
-  tariffDetail: string;
-  roadType: string;
-  roadDetail: string;
-  authority: string;
-  facilities: string;
-  routeDesc: string;
-  tips: { title: string; desc: string; icon: "sunrise" | "trees" | "sun" }[];
-}
-
-const ATTRACTION_PROFILES: Record<string, AttractionProfile> = {
-  "senanayake-samudraya": {
-    tag: "✓ ECOLOGICAL LANDMARK",
-    tagColor: "bg-emerald-500",
-    subtitle: "The monumental inland sea of independent Sri Lanka • Built 1949",
-    aboutTitle: "About the Inland Sea",
-    aboutParagraphs: [
-      "Engineered in 1949 as the crowning achievement of the Gal Oya Development Scheme spearheaded by independent Sri Lanka's first Prime Minister, Rt. Hon. D.S. Senanayake, this reservoir covers an astounding water spread of over 7,800 hectares (nearly 77 square kilometers). Far more than an irrigation masterwork, it endured essential civil engineering principles that transformed the parched scrub plains of the East into a flourishing sanctuary.",
-      "What makes Senanayake Samudraya globally singular is its status as Sri Lanka's premier open-water boat safari destination. Hemmed in by the jagged granite silhouette of Mount Inginiyagala and Dimbula, peaceful motorized dinghies navigate tranquil lake channels where wild Asian elephants swim between wooded islets. In the serene morning mist, rare White-bellied Sea Eagles dive into the mirrors of water, while Native cormorants dry their plumage atop petrified forest trunks that rise gracefully from the deep basin.",
-    ],
-    quote:
-      "Standing on the Inginiyagala bund as dusk gathers is akin to gazing over an ocean cradled in the arms of ancient mountains — absolute calm unbroken by modern noise.",
-    galleryImages: [
-      { url: "/images/hero-bg.jpg", caption: "🌅 Reservoir Sunset" },
-      { url: "/images/login-bg.jpg", caption: "🛶 Outrigger Lagoon Views" },
-      {
-        url: "/images/gal-oya-elephants.jpg",
-        caption: "🐘 Shoreline Wildlife",
-      },
-    ],
-    hours: "06:00 - 18:30",
-    hoursDetail: "Boat safaris operate 06:30 - 09:30 & 15:30 - 18:00",
-    tariff: "Free Bund Access",
-    tariffDetail: "Boat Safari from LKR 3,500+",
-    roadType: "Paved A25 Highway",
-    roadDetail: "Smooth asphalt all vehicles",
-    authority:
-      "Irrigation Department & Department of Wildlife Conservation (Gal Oya Sector)",
-    facilities:
-      "Paved parking lot, scenic viewing platforms, sanitary facilities, near-ring fresh coconut stalls",
-    routeDesc:
-      "Est. 15-20 min drive via Inginiyagala Road (B350 / A25) • Smooth asphalt",
-    tips: [
-      {
-        title: "Boat Safari Bookings",
-        desc: "Boats launch from the Inginiyagala Wildlife Jetty. Register early before 07:00 AM for birdlife or after 03:45 PM for swimming elephants.",
-        icon: "sunrise",
-      },
-      {
-        title: "Eco-Etiquette Buffer",
-        desc: "Zero plastic waste permitted along the bund. Boat operators are mandated to preserve a 50-meter buffer from swimming elephants.",
-        icon: "trees",
-      },
-      {
-        title: "Recommended Gear",
-        desc: "High SPF sunscreen, wide-brim hat, telephoto lens (200-500mm for wildlife), reusable canteen, and light rainproof windbreaker.",
-        icon: "sun",
-      },
-    ],
-  },
-  "gal-oya-national-park": {
-    tag: "✓ PROTECTED WILDLIFE SANCTUARY",
-    tagColor: "bg-emerald-600",
-    subtitle:
-      "Sri Lanka's only national park featuring boat safaris with swimming wild elephants",
-    aboutTitle: "About Gal Oya National Park",
-    aboutParagraphs: [
-      "Established in 1954 to safeguard the rich catchment basin of the Senanayake Samudraya, Gal Oya National Park encompasses over 25,900 hectares of dense evergreen and savannah forest. It is celebrated worldwide for its iconic swimming wild elephant herds, who migrate between islands in the reservoir.",
-      "The park also protects herds of axis deer, leopards, sloth bears, water buffalo, and 150 species of birds including the rare Lesser Adjutant and Brahminy Kite. Visitors can experience both motorized boat safaris and guided jungle treks led by indigenous Vedda guides.",
-    ],
-    quote:
-      "Witnessing a herd of wild elephants swimming serenely across mist-covered lake waters against the backdrop of untouched jungle is one of nature's greatest spectacles.",
-    galleryImages: [
-      {
-        url: "/images/gal-oya-elephants.jpg",
-        caption: "🐘 Swimming Elephant Herd",
-      },
-      { url: "/images/hero-bg.jpg", caption: "🌊 Lake Safari Channel" },
-      {
-        url: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
-        caption: "🌿 Evergreen Canopy",
-      },
-    ],
-    hours: "06:00 - 18:00",
-    hoursDetail: "Ranger permits required before entry",
-    tariff: "DWC Park Permit",
-    tariffDetail: "Safari boat fees apply",
-    roadType: "Jeep & Waterway Route",
-    roadDetail: "Access via Inginiyagala Jetty",
-    authority: "Department of Wildlife Conservation (DWC), Sri Lanka",
-    facilities:
-      "Wildlife Ranger Office, briefing room, life jackets, boat jetty, vehicle parking",
-    routeDesc:
-      "Est. 25 min drive from Ampara town to Inginiyagala Park Headquarters • Paved route",
-    tips: [
-      {
-        title: "Best Elephant Sightings",
-        desc: "Late afternoon boat safaris (15:30 - 17:45) offer the highest probability of spotting herds bathing and swimming between islands.",
-        icon: "sunrise",
-      },
-      {
-        title: "Strict Zero-Feeding Rule",
-        desc: "Never feed or provoke wild animals. Maintain silent observation and follow ranger directives at all times.",
-        icon: "trees",
-      },
-      {
-        title: "Safari Essentials",
-        desc: "Bring binoculars, zoom lenses, polarising sunglasses, drinking water, and insect repellent.",
-        icon: "sun",
-      },
-    ],
-  },
-  "deegawapi-stupa": {
-    tag: "✓ SOLOSMASTHANA SACRED SANCTUARY",
-    tagColor: "bg-sky-600",
-    subtitle:
-      "One of the 16 sacred Solosmasthana sites blessed by Lord Buddha • Built 3rd Century BC",
-    aboutTitle: "About Deegawapi Sacred Stupa",
-    aboutParagraphs: [
-      "Built by King Saddhatissa in the 3rd century BC, Dighavapi (Deegawapi) is venerated as one of the Solosmasthana—the sixteen holiest Buddhist sanctuaries in Sri Lanka. According to the ancient Mahavamsa chronicle, the Lord Buddha sat in serene meditation upon this exact consecrated ground during his third visit to Lanka.",
-      "With an immense ancient circumference that rivalled the great stupas of Anuradhapura, ongoing national archaeological excavations have unveiled gold reliquaries, historic stone inscriptions, and the original brick terraces of the ancient monastic kingdom of Digamadulla.",
-    ],
-    quote:
-      "A sacred sanctuary where centuries of royal devotion and spiritual silence converge under the eastern skies.",
-    galleryImages: [
-      {
-        url: "/images/deegawapi-stupa.jpg",
-        caption: "🛕 Historic Sacred Stupa",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
-        caption: "🍃 Sacred Sand Terrace",
-      },
-      { url: "/images/login-bg.jpg", caption: "🌅 Twilight Puja Atmosphere" },
-    ],
-    hours: "05:30 - 20:00",
-    hoursDetail: "Daily Morning & Evening Pujas",
-    tariff: "Free Admission",
-    tariffDetail: "Pilgrim donations welcome",
-    roadType: "Paved Ampara-Deegawapi Rd",
-    roadDetail: "Smooth highway all vehicles",
-    authority: "Department of Archaeology & Deegawapi Sacred Temple Trust",
-    facilities:
-      "Pilgrim rest hall (Vishrama Shala), lotus flower stalls, sand terrace, clean sanitation",
-    routeDesc:
-      "Est. 20 min drive from Ampara town center via Deegawapiya Road • Paved asphalt",
-    tips: [
-      {
-        title: "Temple Dress Code",
-        desc: "Wear white or light-colored attire covering shoulders and knees. Remove footwear and hats before entering the sand terrace (Malhuwa).",
-        icon: "trees",
-      },
-      {
-        title: "Puja Timing & Flowers",
-        desc: "Participate in the traditional morning (06:00 AM) or evening (06:00 PM) flower offering and chimes for a deeply peaceful experience.",
-        icon: "sunrise",
-      },
-      {
-        title: "Archaeological Museum",
-        desc: "Visit the nearby excavation museum to view ancient gold reliquaries, clay tiles, and stone inscriptions discovered on site.",
-        icon: "sun",
-      },
-    ],
-  },
-  "buddhangala-monastery": {
-    tag: "✓ ANCIENT FOREST HERMITAGE",
-    tagColor: "bg-amber-600",
-    subtitle:
-      "Ancient cave monastery perched atop monolithic boulders with 360° jungle vistas",
-    aboutTitle: "About Buddhangala Forest Hermitage",
-    aboutParagraphs: [
-      "Perched amidst massive granite outcrops surrounded by dense wilderness, Buddhangala dates back over 2,300 years to King Devanampiyatissa's era. Monks observe deep silent meditation in natural drip-ledge rock shelters, keeping alive ancient ascetic Buddhist traditions.",
-      "The rock summit stupa enshrines authentic relics of the Lord Buddha and his chief disciples, Venerable Sariputta and Moggallana. Wild spotted deer roam freely and calmly throughout the monastic grounds, creating an aura of harmony between man and wildlife.",
-    ],
-    quote:
-      "High above the canopy on the summit rock, only the wind whispers through the Bo leaves — a true refuge of pristine peace.",
-    galleryImages: [
-      { url: "/images/buddhangala.jpg", caption: "🛕 Sacred Summit Stupa" },
-      { url: "/images/deegawapi-stupa.jpg", caption: "🪨 Meditation Caves" },
-      { url: "/images/hero-bg.jpg", caption: "🦌 Roaming Spotted Deer" },
-    ],
-    hours: "06:00 - 18:30",
-    hoursDetail: "Daily quiet hours observed",
-    tariff: "Free Admission",
-    tariffDetail: "Respectful donation box on site",
-    roadType: "Buddhangala Forest Road",
-    roadDetail: "Paved & well-maintained",
-    authority: "Buddhangala Monastic Trust & Department of Archaeology",
-    facilities:
-      "Car park, stone staircase, quiet meditation walking paths, drinking water",
-    routeDesc:
-      "Est. 12 min drive from Ampara town center through scenic rural forest road",
-    tips: [
-      {
-        title: "Summit Climb at Sunrise",
-        desc: "Climb the stone steps early in the morning to enjoy cool stone underfoot and a 360-degree vista over the morning mist of Ampara.",
-        icon: "sunrise",
-      },
-      {
-        title: "Quiet Reverence",
-        desc: "Maintain absolute silence near meditation shelters. Do not feed or disturb the wild spotted deer that wander the grounds.",
-        icon: "trees",
-      },
-      {
-        title: "Sun Protection",
-        desc: "The rock summit warms rapidly by midday. Wear socks for walking on the sunlit rock terrace during noon hours.",
-        icon: "sun",
-      },
-    ],
-  },
-  "rajagala-archaeological-site": {
-    tag: "✓ 1,000-ACRE ARCHAEOLOGICAL MOUNTAIN",
-    tagColor: "bg-indigo-600",
-    subtitle:
-      "Epic forested mountain monastery featuring over 500 ancient ruins & Arhat Mahinda's Stupa",
-    aboutTitle: "About Rajagala (Rassahela) Heritage Mountain",
-    aboutParagraphs: [
-      "Rising over 1,000 feet above the forested valley of Bakkiella, Rajagala spans over 1,000 acres and preserves more than 500 ancient stone structures, drip-ledge caves, stone stupas, and ancient bridges. Inhabited by thousands of Buddhist monks between the 3rd century BC and 10th century AD, it was one of Asia's largest monastic universities.",
-      "Rock inscriptions discovered here by archaeologists provide rare, indisputable historical evidence verifying the passing and cremation of Arhat Mahinda Thero—the royal monk from India who introduced Buddhism to Sri Lanka in the 3rd century BC.",
-    ],
-    quote:
-      "Walking through Rajagala's shaded mountain canopy is like stepping straight into a lost monastic civilization frozen in time.",
-    galleryImages: [
-      {
-        url: "/images/rajagala.jpg",
-        caption: "🏛️ Ancient Stone Pillars & Summit Peak",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
-        caption: "🌿 Mountain Forest Trail",
-      },
-      {
-        url: "/images/deegawapi-stupa.jpg",
-        caption: "🛕 Arhat Mahinda Relic Stupa",
-      },
-    ],
-    hours: "07:00 - 16:30",
-    hoursDetail: "Ticket counter closes at 15:00",
-    tariff: "Archaeology Dept Ticket",
-    tariffDetail: "Local & foreign rates apply",
-    roadType: "Ampara-Maha Oya (A27)",
-    roadDetail: "Smooth paved road to Bakkiella",
-    authority: "Department of Archaeology, Sri Lanka",
-    facilities:
-      "Archaeological visitor reception, ticket counter, guided nature trails, parking",
-    routeDesc:
-      "Est. 30 min drive via A27 Highway to Bakkiella • Follow archaeological signboards",
-    tips: [
-      {
-        title: "Hiking Preparation",
-        desc: "Wear sturdy hiking or sports shoes with good grip. The mountain trail includes stone steps and natural forest inclines.",
-        icon: "trees",
-      },
-      {
-        title: "Hydration Essential",
-        desc: "Carry at least 1.5 liters of drinking water per person. There are no commercial stalls once you ascend the mountain.",
-        icon: "sun",
-      },
-      {
-        title: "Allow 3-4 Hours",
-        desc: "Start before 08:30 AM to comfortably explore the refectory, stone inscriptions, and Mahinda Stupa before afternoon heat.",
-        icon: "sunrise",
-      },
-    ],
-  },
-  "ampara-peace-pagoda": {
-    tag: "✓ TOWN PROMENADE & HARMONY SHRINE",
-    tagColor: "bg-sky-500",
-    subtitle:
-      "Gleaming white dome built by Nipponzan Myohoji monks overlooking tranquil Ampara Tank",
-    aboutTitle: "About Ampara Japanese Peace Pagoda",
-    aboutParagraphs: [
-      "Situated right on the rim of the town lake, this peaceful monument was built by the Japanese Buddhist monk Ven. Nichidatsu Fujii to radiate harmony and international goodwill. The surrounding park promenade offers tranquil sunset strolls, with views of birds nesting on the placid tank water.",
-      "The stupa features four exquisite golden reliefs depicting key episodes from the life of the Buddha, and its whitewashed terrace provides a breezy vantage point overlooking water lilies and fishermen's outrigger boats.",
-    ],
-    quote:
-      "Reflections of the gleaming stupa glistening across the tank water at twilight make it the town's most peaceful promenade.",
-    galleryImages: [
-      {
-        url: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
-        caption: "🕊️ Gleaming White Stupa",
-      },
-      { url: "/images/login-bg.jpg", caption: "🌅 Lake Tank Sunset" },
-      { url: "/images/hero-bg.jpg", caption: "🚶 Promenade Walking Track" },
-    ],
-    hours: "06:00 - 20:30",
-    hoursDetail: "Illuminated beautifully at dusk",
-    tariff: "Free Admission",
-    tariffDetail: "Public heritage park",
-    roadType: "Town Lake Promenade",
-    roadDetail: "5 mins from clock tower",
-    authority: "Nipponzan Myohoji Order & Ampara Urban Council",
-    facilities:
-      "Paved walking promenade, lake viewing benches, parking, evening lighting",
-    routeDesc:
-      "Est. 5 min drive or 15 min walk from Ampara Clock Tower along Lake Road",
-    tips: [
-      {
-        title: "Sunset Promenade",
-        desc: "Visit at 17:15 to watch the golden sunset over the lake water followed by the stupa's night illumination.",
-        icon: "sunrise",
-      },
-      {
-        title: "Lake Birdwatching",
-        desc: "Great egrets, spot-billed pelicans, and kingfishers frequently perch on the dead trees in the lake tank.",
-        icon: "trees",
-      },
-      {
-        title: "Accessible to All",
-        desc: "Level paved pathways make this site easily accessible for families, children, and elderly travelers.",
-        icon: "sun",
-      },
-    ],
-  },
-  "panama-kudumbigala": {
-    tag: "✓ MONOLITHIC MOUNTAIN SANCTUARY",
-    tagColor: "bg-amber-700",
-    subtitle:
-      "Towering granite boulder peaks rising above jungle canopy with unique cylindrical stupa",
-    aboutTitle: "About Kudumbigala Forest Sanctuary",
-    aboutParagraphs: [
-      "Rising majestically above the arid plains on the frontier of Yala East and Panama, Kudumbigala is an ancient monastic sanctuary surrounded by monolithic granite boulder peaks. It is famous for hosting Sri Lanka's only surviving ancient cylindrical stupa ('Belumgala Stupa') constructed atop a dizzying boulder peak.",
-      "Dating back to the 3rd century BC, more than 200 caves with ancient Brahmi inscriptions were used by forest-dwelling meditating monks. The summit affords awe-inspiring 360-degree panoramic views of pristine jungle stretching to the Indian Ocean.",
-    ],
-    quote:
-      "Standing atop Belumgala peak at dawn as the sun rises over the horizon is an unforgettable sight of wild Sri Lanka.",
-    galleryImages: [
-      {
-        url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",
-        caption: "⛰️ Monolithic Granite Peak",
-      },
-      {
-        url: "/images/gal-oya-elephants.jpg",
-        caption: "🌿 Dry-Zone Wilderness",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-        caption: "🛕 Belumgala Summit Stupa",
-      },
-    ],
-    hours: "06:00 - 17:00",
-    hoursDetail: "Daylight access only",
-    tariff: "Free Admission",
-    tariffDetail: "Sanctuary checkpost sign-in",
-    roadType: "Panama - Okanda Road",
-    roadDetail: "Gravel road, SUV or van advised",
-    authority: "Forest Department & Kudumbigala Hermitage Trust",
-    facilities:
-      "Natural rock staircase, rainwater ponds, hermitage reception, rustic parking",
-    routeDesc:
-      "Accessible via Panama towards Okanda • Scenic gravel route across wildlife territory",
-    tips: [
-      {
-        title: "Early Morning Ascent",
-        desc: "Ascend Belumgala before 09:00 AM to avoid extreme midday heat on the bare granite rocks.",
-        icon: "sunrise",
-      },
-      {
-        title: "Wildlife Caution",
-        desc: "Wild elephants and sloth bears inhabit the surrounding forest. Stay strictly on marked pilgrim footpaths.",
-        icon: "trees",
-      },
-      {
-        title: "Carry Hydration",
-        desc: "Bring sufficient drinking water and wear high-grip shoes for ascending the granite summit.",
-        icon: "sun",
-      },
-    ],
-  },
-  "muhudu-maha-viharaya": {
-    tag: "✓ COASTAL ARCHAEOLOGICAL HERITAGE",
-    tagColor: "bg-cyan-600",
-    subtitle:
-      "Historic beachside temple marking where Queen Viharamahadevi landed • 2nd Century BC",
-    aboutTitle: "About Muhudu Maha Viharaya & Dunes",
-    aboutParagraphs: [
-      "Standing proudly amid shifting sand dunes right on the shoreline of Pottuvil, Muhudu Maha Viharaya was built over 2,000 years ago by King Kavan Tissa to commemorate the legendary landing of Princess Viharamahadevi. The site features stone pillars, ancient foundations, and magnificent carved standing Buddha statues emerging dramatically against the backdrop of ocean surf.",
-      "The temple remains an active spiritual sanctuary where the chanting of monks mingles with the rhythm of the waves, offering travelers a striking combination of archaeological royalty and pristine coastal scenery.",
-    ],
-    quote:
-      "Ancient stone Buddha statues gazing calmly over the ocean waves with coastal breezes whistling through the sand dunes.",
-    galleryImages: [
-      {
-        url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
-        caption: "🏖️ Pottuvil Coastal Dunes",
-      },
-      {
-        url: "/images/login-bg.jpg",
-        caption: "🗿 Ancient Standing Buddha Statues",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
-        caption: "🌊 Oceanfront Temple Enclosure",
-      },
-    ],
-    hours: "06:00 - 18:30",
-    hoursDetail: "Open daily for visitors",
-    tariff: "Free Admission",
-    tariffDetail: "Pilgrim donations welcome",
-    roadType: "Pottuvil Beach Road",
-    roadDetail: "Smooth paved road all vehicles",
-    authority: "Department of Archaeology, Sri Lanka",
-    facilities:
-      "Dune walkways, stone enclosure, vehicle parking, nearby beach access",
-    routeDesc:
-      "Located on the Pottuvil coastal strip • Smooth asphalt drive via A4 Highway",
-    tips: [
-      {
-        title: "Dune Walking Shoes",
-        desc: "Sand can get hot in the midday sun. Remove footwear at the stone threshold of the stupa.",
-        icon: "trees",
-      },
-      {
-        title: "Sunset Photography",
-        desc: "Late afternoon light casts striking shadows of the stone Buddha statues across the golden dunes.",
-        icon: "sunrise",
-      },
-      {
-        title: "Respect Sacred Ruins",
-        desc: "Do not climb or sit on ancient stone columns or carved moonstones surrounding the shrine.",
-        icon: "sun",
-      },
-    ],
-  },
-  "arugam-bay-beach": {
-    tag: "✓ WORLD-RENOWNED SURF HAVEN",
-    tagColor: "bg-cyan-500",
-    subtitle:
-      "Crescent golden beach renowned for international point-break surf & lagoon sunsets",
-    aboutTitle: "About Arugam Bay Beach & Surf Point",
-    aboutParagraphs: [
-      "Arugam Bay is Sri Lanka's internationally acclaimed surfing capital, sitting on the southern rim of Ampara district's Indian Ocean coastline. Famed for its consistent right-hand point breaks, powdery golden sand, and vibrant coastal culture, it attracts ocean enthusiasts from across the globe between May and October.",
-      "Beyond the world-class swell, the area offers tranquil outrigger boat safaris in the adjacent Pottuvil and Kottukal lagoons, where visitors regularly observe sea eagles, monitor lizards, and wild elephants drinking at water's edge at sunset.",
-    ],
-    quote:
-      "Golden sands stretching into azure ocean swells — an unforgettable coastal haven in Sri Lanka's eastern frontier.",
-    galleryImages: [
-      {
-        url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
-        caption: "🏄 Main Point Surfing Break",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=800&q=80",
-        caption: "🌅 Golden Hour Ocean Sunset",
-      },
-      { url: "/images/login-bg.jpg", caption: "🛶 Lagoon Eco-Safari Waters" },
-    ],
-    hours: "05:00 - 22:00",
-    hoursDetail: "Surfing best early morning & late afternoon",
-    tariff: "Free Beach Access",
-    tariffDetail: "Surfboard rentals from LKR 1,500/day",
-    roadType: "A4 Coastal Highway",
-    roadDetail: "Smooth paved road all vehicles",
-    authority:
-      "Sri Lanka Tourism Development Authority (SLTDA) & Pottuvil Pradeshiya Sabha",
-    facilities:
-      "Surf rental shacks, beachfront cafes, lifeguard tower, showers, scooter rentals",
-    routeDesc:
-      "Accessible via A4 highway • Direct 40-50 min drive through scenic paddy landscapes",
-    tips: [
-      {
-        title: "Best Surf Swell Season",
-        desc: "Prime surfing season runs from May to October when offshore winds produce clean, consistent peelers.",
-        icon: "sunrise",
-      },
-      {
-        title: "Lagoon Safari at Twilight",
-        desc: "Book a local outrigger canoe ride in Pottuvil Lagoon at 16:30 for birdwatching and wild elephant sightings.",
-        icon: "trees",
-      },
-      {
-        title: "Ocean Safety Notice",
-        desc: "Respect local surfing etiquette and watch for coral reefs at Main Point during low tide.",
-        icon: "sun",
-      },
-    ],
-  },
-  "rambakan-oya-cascade": {
-    tag: "✓ HISTORIC CANOPY CASCADE & SLUICE",
-    tagColor: "bg-blue-600",
-    subtitle:
-      "Scenic rocky rapids & 2,000-year-old ancient stone slab engineering sluice",
-    aboutTitle: "About Rambakan Oya Forest Cascade",
-    aboutParagraphs: [
-      "Deep in the forested hinterlands of Maha Oya, Rambakan Oya features natural water cascades cascading over ancient granite bedrock. It is famed for its 2,000-year-old monolithic stone slab sluice—an astonishing feat of ancient hydraulic engineering with interlocking rock boulders built to withstand heavy monsoonal river flows.",
-      "Surrounded by virgin dry-zone forests, visitors can swim in naturally sculpted cool freshwater rock pools, explore archaeological excavations, and enjoy peaceful picnics under tall kumbuk and mee trees.",
-    ],
-    quote:
-      "The thunder of cool freshwater gushing through ancient rock sluices that have stood firm for two millennia.",
-    galleryImages: [
-      {
-        url: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=800&q=80",
-        caption: "💦 Rambakan Oya Rapids",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=800&q=80",
-        caption: "🌿 Forest Shaded Canopy",
-      },
-      { url: "/images/hero-bg.jpg", caption: "🏛️ Ancient Stone Slab Sluice" },
-    ],
-    hours: "06:30 - 18:00",
-    hoursDetail: "Daytime river bathing allowed in marked safe zones",
-    tariff: "Free Admission",
-    tariffDetail: "Archaeological heritage park",
-    roadType: "Ampara-Maha Oya Road (A27)",
-    roadDetail: "Paved highway followed by gravel access",
-    authority: "Department of Archaeology & Irrigation Department",
-    facilities:
-      "Rest huts, vehicle parking, stone steps down to the water, safety railings",
-    routeDesc: "Est. 30-35 min drive via A27 highway towards Maha Oya",
-    tips: [
-      {
-        title: "Safe Bathing Advice",
-        desc: "Bathe only in calm, designated natural pools. Exercise caution during monsoon periods when water volume rises.",
-        icon: "trees",
-      },
-      {
-        title: "Visit Ancient Sluice",
-        desc: "Do not miss the archaeological preserved stone sluice located 300m upstream of the modern dam.",
-        icon: "sunrise",
-      },
-      {
-        title: "Pack Water & Snacks",
-        desc: "No large supermarkets nearby; carry your drinking water and refreshments from town.",
-        icon: "sun",
-      },
-    ],
-  },
-  "magul-maha-viharaya": {
-    tag: "✓ 5TH CENTURY ROYAL MONASTERY",
-    tagColor: "bg-purple-600",
-    subtitle:
-      "Historic royal marriage pavilion of King Kavantissa & Queen Viharamahadevi",
-    aboutTitle: "About Magul Maha Viharaya",
-    aboutParagraphs: [
-      "Constructed in the 5th century BC, Magul Maha Viharaya is steeped in legendary romance: it is recorded as the consecrated royal site where King Kavan Tissa married Princess Viharamahadevi of Ruhuna.",
-      "The complex contains Sri Lanka's only moonstone depicting carved mahouts atop elephants, alongside an ancient Bodhigara, stone stupa, pond, and extensive stone pillar ruins set within peaceful dry-zone woodlands.",
-    ],
-    quote:
-      "A timeless royal sanctuary where the romance of ancient Ruhuna echoes through stone ruins and sacred Bo trees.",
-    galleryImages: [
-      {
-        url: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
-        caption: "🛕 Royal Stone Pavilion",
-      },
-      {
-        url: "/images/deegawapi-stupa.jpg",
-        caption: "🐘 Unique Elephant Moonstone",
-      },
-      { url: "/images/login-bg.jpg", caption: "🌿 Forest Monastery Grounds" },
-    ],
-    hours: "06:30 - 18:00",
-    hoursDetail: "Open daily for heritage pilgrims",
-    tariff: "Archaeological Department Ticket",
-    tariffDetail: "Local & foreign rates apply",
-    roadType: "A4 Highway towards Lahugala",
-    roadDetail: "Smooth paved road all vehicles",
-    authority: "Department of Archaeology, Sri Lanka",
-    facilities:
-      "Archaeological information kiosk, parking, shaded rest pavilions, water",
-    routeDesc:
-      "Est. 30 min drive along A4 Highway towards Lahugala National Park",
-    tips: [
-      {
-        title: "Admire the Moonstone",
-        desc: "Take time to study the moonstone at the main entrance, unique for portraying riders sitting atop carved elephants.",
-        icon: "trees",
-      },
-      {
-        title: "Combine with Lahugala",
-        desc: "Pair your morning visit to Magul Maha Viharaya with an afternoon elephant watch at adjacent Lahugala Kitulana.",
-        icon: "sunrise",
-      },
-      {
-        title: "Sacred Respect",
-        desc: "Dress respectfully with shoulders and knees covered when walking within the sacred stupa and Bodhigara perimeter.",
-        icon: "sun",
-      },
-    ],
-  },
-  "kumana-national-park": {
-    tag: "✓ PREMIER MIGRATORY BIRD WETLAND",
-    tagColor: "bg-emerald-700",
-    subtitle:
-      "200-hectare mangrove swamp sanctuary sheltering over 255 species of rare water birds",
-    aboutTitle: "About Kumana National Park (Yala East)",
-    aboutParagraphs: [
-      "Kumana National Park, historically known as Yala East, is celebrated as one of the most critical bird nesting grounds in South Asia. Its 200-hectare mangrove swamp (Kumana Villu) teems with thousands of migratory and resident aquatic birds between May and July.",
-      "Beyond its world-class avifauna, the park's dense thorn scrub and granite outcrops shelter wild Asian elephants, elusive leopards, sloth bears, marsh crocodiles, and wild boars.",
-    ],
-    quote:
-      "Where the sky comes alive with thousands of nesting waterbirds above emerald lagoons and pristine wild frontiers.",
-    galleryImages: [
-      {
-        url: "/images/gal-oya-elephants.jpg",
-        caption: "🦩 Kumana Villu Waterbirds",
-      },
-      { url: "/images/hero-bg.jpg", caption: "🌊 Coastal Mangrove Safari" },
-      {
-        url: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
-        caption: "🐆 Wilderness Tracks",
-      },
-    ],
-    hours: "06:00 - 18:00",
-    hoursDetail: "Safari jeeps enter 06:00 - 10:00 & 14:30 - 18:00",
-    tariff: "DWC Park Entrance Ticket",
-    tariffDetail: "Safari jeep hire available at Okanda gate",
-    roadType: "Okanda Gate Jeep Trail",
-    roadDetail: "4WD Safari Jeep recommended",
-    authority: "Department of Wildlife Conservation (DWC), Sri Lanka",
-    facilities:
-      "Wildlife ticket counter at Okanda, ranger briefings, safari track signboards",
-    routeDesc:
-      "Accessible via Panama towards Okanda Gate • 4WD Safari jeep recommended",
-    tips: [
-      {
-        title: "Prime Bird Nesting Season",
-        desc: "Visit between May and July to see immense colonies of Painted Storks, Spoonbills, and Herons nesting at Kumana Villu.",
-        icon: "sunrise",
-      },
-      {
-        title: "Safari Gear",
-        desc: "High-magnification binoculars and zoom telephoto lenses (300mm+) are essential for bird and wildlife viewing.",
-        icon: "sun",
-      },
-      {
-        title: "Ranger Instructions",
-        desc: "Always remain inside your safari jeep; wildlife tracks are active with wild elephants and sloth bears.",
-        icon: "trees",
-      },
-    ],
-  },
-};
+import type { Attraction } from "@/data/amparaData";
+import {
+  type AttractionDetail,
+  getCategoryBadgeColor,
+} from "@/lib/attractions";
 
 function AttractionDetailContent() {
   const params = useParams();
-  const id = (params?.id as string) || "senanayake-samudraya";
+  const id = (params?.id as string) || "";
 
-  // Match attraction or default to first
-  const attraction =
-    amparaAttractions.find((a) => a.id === id) || amparaAttractions[0];
-
-  // Match rich profile or construct fallback from attraction properties
-  const profile: AttractionProfile = ATTRACTION_PROFILES[attraction.id] || {
-    tag: `✓ ${attraction.category.toUpperCase()} LANDMARK`,
-    tagColor: "bg-[#0084d1]",
-    subtitle: `${attraction.description.slice(0, 80)}...`,
-    aboutTitle: `About ${attraction.name}`,
-    aboutParagraphs: [
-      attraction.description,
-      `Located at ${attraction.location}, this site is positioned within ${attraction.distanceKm} km of Ampara town center, making it an essential highlight of the 25km discovery zone.`,
-    ],
-    quote: `A serene highlight of the 25km Ampara discovery horizon, showcasing ${attraction.name} in its natural splendour.`,
-    galleryImages: [
-      { url: attraction.image, caption: `📍 ${attraction.name}` },
-      { url: "/images/login-bg.jpg", caption: "🌅 Scenic Regional View" },
-      { url: "/images/hero-bg.jpg", caption: "🍃 Surrounding Horizon" },
-    ],
-    hours: "06:00 - 18:30",
-    hoursDetail: "Open daily for visitors",
-    tariff: "Free / Local Entry",
-    tariffDetail: "Standard visitor tariff",
-    roadType: "Regional Road",
-    roadDetail: "Accessible by car or van",
-    authority: "Sri Lanka Tourism & Local Regional Administration",
-    facilities: "Vehicle parking, visitor access, scenic vantage points",
-    routeDesc: `Est. ${Math.round(attraction.distanceKm * 1.2)} min drive from Ampara town center`,
-    tips: [
-      {
-        title: "Optimal Visit Timing",
-        desc: "Early morning or late afternoon provides the most comfortable temperatures and best natural light.",
-        icon: "sunrise",
-      },
-      {
-        title: "Preserve Cleanliness",
-        desc: "Follow the 'Leave No Trace' eco guidelines by taking all waste and plastics back with you.",
-        icon: "trees",
-      },
-      {
-        title: "Recommended Duration",
-        desc: `Allow approximately ${attraction.duration} to fully explore the destination and surroundings.`,
-        icon: "sun",
-      },
-    ],
-  };
+  const [attraction, setAttraction] = useState<AttractionDetail | null>(null);
+  const [nearbyPlaces, setNearbyPlaces] = useState<Attraction[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState<"morning" | "afternoon">(
-    "morning",
-  );
-  const [isAddedToPlan, setIsAddedToPlan] = useState(true);
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [visitPlan, setVisitPlan] = useState<Attraction[]>([]);
 
-  const [visitPlan, setVisitPlan] = useState<Attraction[]>([
-    amparaAttractions[0],
-    amparaAttractions[3],
-  ]);
+  // Fetch attraction details from database
+  useEffect(() => {
+    if (!id) return;
+    let isMounted = true;
+    setIsLoading(true);
+    setError(null);
 
-  const handleTogglePlan = (attr: Attraction) => {
-    if (visitPlan.some((p) => p.id === attr.id)) {
-      setVisitPlan(visitPlan.filter((p) => p.id !== attr.id));
-      if (attr.id === attraction.id) setIsAddedToPlan(false);
-    } else {
-      setVisitPlan([...visitPlan, attr]);
-      if (attr.id === attraction.id) setIsAddedToPlan(true);
-    }
-  };
+    fetch(`/api/attractions/${encodeURIComponent(id)}`, { cache: "no-store" })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(
+            res.status === 404
+              ? "Destination not found"
+              : "Unable to load destination details",
+          );
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (isMounted) {
+          setAttraction(data.attraction);
+          setNearbyPlaces(data.nearby || []);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          setError(
+            err instanceof Error ? err.message : "Unable to load destination.",
+          );
+          setIsLoading(false);
+        }
+      });
 
-  // Nearby attractions: filter out current attraction and show other top 3
-  const nearbyPlaces = amparaAttractions
-    .filter((a) => a.id !== attraction.id)
-    .slice(0, 3)
-    .map((item) => ({
-      id: item.id,
-      tag: item.category.toUpperCase(),
-      tagColor: "bg-[#0084d1] text-white",
-      distance: `${item.distanceKm} km away`,
-      rating: item.rating,
-      reviews: `${item.reviewsCount}+ reviews`,
-      title: item.name,
-      desc: item.description,
-      image: item.image,
-    }));
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  // Load user's saved visit plan
+  useEffect(() => {
+    void fetch("/api/plans", { cache: "no-store" })
+      .then(async (response) => (response.ok ? response.json() : null))
+      .then((result) => {
+        if (!result?.plan?.stops) return;
+        setVisitPlan(
+          result.plan.stops.map((stop: Record<string, unknown>) => ({
+            ...stop,
+            category: String(
+              stop.category_name || "Nature",
+            ) as Attraction["category"],
+            distanceKm: Number(stop.distance_km || 0),
+            duration: String(stop.duration || ""),
+            rating: 0,
+            reviewsCount: 0,
+            description: "",
+            highlights: [],
+            image: String(stop.image || "/images/hero-bg.jpg"),
+            radialZone: "0-5km",
+            location: String(stop.location || ""),
+          })),
+        );
+      })
+      .catch(() => {});
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8">
+        <div className="text-center space-y-3">
+          <div className="w-10 h-10 border-4 border-[#0084d1] border-t-transparent rounded-full animate-spin mx-auto" />
+          <div className="text-sm font-bold text-slate-700">
+            Loading Destination Details...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !attraction) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8">
+        <div className="text-center max-w-md space-y-4">
+          <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto font-bold">
+            !
+          </div>
+          <h2 className="text-xl font-bold text-slate-900">
+            {error || "Destination Not Found"}
+          </h2>
+          <p className="text-sm text-slate-500">
+            The attraction you are looking for is unavailable or has been moved.
+          </p>
+          <Link
+            href="/#explore"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0084d1] text-white text-xs font-bold hover:bg-[#0070b3] transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Explore Directory</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const googleMapsUrl =
+    attraction.latitude && attraction.longitude
+      ? `https://maps.google.com/?q=${attraction.latitude},${attraction.longitude}`
+      : `https://maps.google.com/?q=${encodeURIComponent(attraction.name + " " + attraction.location)}`;
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
-      {/* 1. Header Bar */}
-      {/* 2. Top Breadcrumb Bar */}
+      {/* Top Breadcrumb Bar */}
       <div className="w-full px-4 sm:px-8 py-3">
         <div className="max-w-[1370px] mx-auto flex items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex min-w-0 items-center gap-2">
@@ -804,12 +181,11 @@ function AttractionDetailContent() {
 
       {/* Main Content Area */}
       <main className="!max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5 space-y-6 flex-1">
-        {/* 3. Hero Visual Gallery Stack */}
+        {/* Hero Visual Gallery Stack */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:items-start">
           <div className="lg:col-span-7 space-y-4">
-            {/* Main Large Hero Banner (Left 8 cols) */}
+            {/* Main Large Hero Banner */}
             <div className="relative rounded-3xl overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-between p-6 sm:p-8 border border-slate-200/80 shadow-md group">
-              {/* Background Image - Specific to attraction */}
               <Image
                 src={attraction.image}
                 alt={attraction.name}
@@ -877,9 +253,9 @@ function AttractionDetailContent() {
               <div className="relative z-10 space-y-2 mt-auto pt-16">
                 <div className="flex flex-wrap items-center gap-2">
                   <span
-                    className={`inline-flex items-center gap-1 ${profile.tagColor} text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-xs`}
+                    className={`inline-flex items-center gap-1 ${attraction.tagColor} text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-xs`}
                   >
-                    {profile.tag}
+                    {attraction.tag}
                   </span>
                   <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
                     <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
@@ -898,21 +274,21 @@ function AttractionDetailContent() {
                 </h1>
 
                 <p className="text-slate-200 text-xs sm:text-sm font-medium">
-                  {profile.subtitle}
+                  {attraction.subtitle}
                 </p>
               </div>
             </div>
 
-            {/* Supporting Gallery */}
+            {/* Supporting Gallery Thumbnails */}
             <div className="grid grid-cols-2 gap-3">
-              {profile.galleryImages.slice(0, 2).map((img, idx) => (
+              {attraction.galleryImages.slice(0, 2).map((img, idx) => (
                 <div
                   key={idx}
-                  className="relative h-28 sm:h-36 rounded-2xl overflow-hidden border border-slate-200/80 group"
+                  className="relative h-28 sm:h-36 rounded-2xl overflow-hidden border border-slate-200/80 group bg-slate-100"
                 >
                   <Image
                     src={img.url}
-                    alt={img.caption}
+                    alt={img.caption || attraction.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -929,81 +305,87 @@ function AttractionDetailContent() {
           <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center gap-2 text-lg font-black text-slate-900">
               <Info className="w-5 h-5 text-[#0084d1]" />
-              <h2>{profile.aboutTitle}</h2>
+              <h2>{attraction.aboutTitle}</h2>
             </div>
 
             <div className="text-xs sm:text-sm text-slate-600 leading-relaxed space-y-3">
-              {profile.aboutParagraphs.map((para, i) => (
+              {attraction.aboutParagraphs.map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
             </div>
 
-            <div className="bg-sky-50/70 border-l-4 border-[#0084d1] rounded-r-2xl p-4 text-xs italic text-slate-700 leading-relaxed font-medium">
-              &ldquo;{profile.quote}&rdquo;
-            </div>
+            {attraction.quote && (
+              <div className="bg-sky-50/70 border-l-4 border-[#0084d1] rounded-r-2xl p-4 text-xs italic text-slate-700 leading-relaxed font-medium">
+                &ldquo;{attraction.quote}&rdquo;
+              </div>
+            )}
 
-            <div className="pt-2">
-              <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
-                Featured Highlights
+            {attraction.highlights.length > 0 && (
+              <div className="pt-2">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                  Featured Highlights
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {attraction.highlights.map((hl, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 text-xs font-semibold text-slate-800 flex items-center gap-2"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-[#0084d1] shrink-0" />
+                      <span className="truncate">{hl}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {attraction.highlights.map((hl, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 text-xs font-semibold text-slate-800 flex items-center gap-2"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-[#0084d1] shrink-0" />
-                    <span className="truncate">{hl}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            )}
           </div>
         </section>
 
-        {/* 5. Visitor Guide & Field Tips Section */}
-        <section className="w-full space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-black text-slate-900">
-              Visitor Guide &amp; Field Tips
-            </h3>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded-full">
-              Updated Season 2024 / 2025
-            </span>
-          </div>
+        {/* Visitor Guide & Field Tips Section */}
+        {attraction.tips.length > 0 && (
+          <section className="w-full space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-black text-slate-900">
+                Visitor Guide &amp; Field Tips
+              </h3>
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-700 px-2.5 py-0.5 rounded-full">
+                Updated Season 2024 / 2025
+              </span>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
-            {profile.tips.map((tip, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-5 border border-slate-200 shadow-2xs space-y-3 flex flex-col justify-between hover:shadow-sm transition-shadow"
-              >
-                <div>
-                  <div className="w-9 h-9 rounded-xl bg-sky-100 text-[#0084d1] flex items-center justify-center mb-3">
-                    {tip.icon === "sunrise" ? (
-                      <Sunrise className="w-4 h-4" />
-                    ) : tip.icon === "trees" ? (
-                      <Trees className="w-4 h-4" />
-                    ) : (
-                      <Sun className="w-4 h-4" />
-                    )}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+              {attraction.tips.map((tip, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white rounded-2xl p-5 border border-slate-200 shadow-2xs space-y-3 flex flex-col justify-between hover:shadow-sm transition-shadow"
+                >
+                  <div>
+                    <div className="w-9 h-9 rounded-xl bg-sky-100 text-[#0084d1] flex items-center justify-center mb-3">
+                      {tip.icon === "sunrise" ? (
+                        <Sunrise className="w-4 h-4" />
+                      ) : tip.icon === "trees" ? (
+                        <Trees className="w-4 h-4" />
+                      ) : (
+                        <Sun className="w-4 h-4" />
+                      )}
+                    </div>
+                    <div className="text-sm font-bold text-slate-900 leading-snug">
+                      {tip.title}
+                    </div>
+                    <div className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                      {tip.desc}
+                    </div>
                   </div>
-                  <div className="text-sm font-bold text-slate-900 leading-snug">
-                    {tip.title}
-                  </div>
-                  <div className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-                    {tip.desc}
+                  <div className="text-[11px] font-bold text-[#0084d1] pt-2">
+                    Explorer Guideline →
                   </div>
                 </div>
-                <div className="text-[11px] font-bold text-[#0084d1] pt-2">
-                  Explorer Guideline →
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
-        {/* 6. Location & Access Map Section */}
+        {/* Location & Access Navigation Section */}
         <section
           id="location-map"
           className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5"
@@ -1104,17 +486,14 @@ function AttractionDetailContent() {
                   </span>
                 </div>
                 <div className="text-[10px] text-slate-500 mt-0.5">
-                  {profile.routeDesc}
+                  {attraction.routeDesc}
                 </div>
               </div>
 
               <button
                 type="button"
                 onClick={() => {
-                  window.open(
-                    `https://maps.google.com/?q=${encodeURIComponent(attraction.name + " " + attraction.location)}`,
-                    "_blank",
-                  );
+                  window.open(googleMapsUrl, "_blank");
                 }}
                 className="bg-[#0084d1] hover:bg-[#0070b3] text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-xs cursor-pointer shrink-0"
               >
@@ -1169,103 +548,105 @@ function AttractionDetailContent() {
           </div>
         </section>
 
-        {/* 7. More Places to Explore Nearby Section */}
-        <section className="space-y-4 pt-2">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div className="text-[10px] font-black uppercase tracking-wider text-[#0084d1]">
-                ⭐ 25KM RADIAL CIRCUIT
+        {/* More Places to Explore Nearby Section */}
+        {nearbyPlaces.length > 0 && (
+          <section className="space-y-4 pt-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <div className="text-[10px] font-black uppercase tracking-wider text-[#0084d1]">
+                  ⭐ 25KM RADIAL CIRCUIT
+                </div>
+                <h3 className="text-xl font-black text-slate-900">
+                  More Places to Explore Nearby
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Coordinate seamless, multi-stop itineraries reachable within a
+                  20-30 minute drive.
+                </p>
               </div>
-              <h3 className="text-xl font-black text-slate-900">
-                More Places to Explore Nearby
-              </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Coordinate seamless, multi-stop itineraries reachable within a
-                20-30 minute drive.
-              </p>
+
+              <Link
+                href="/#explore"
+                className="text-xs font-bold text-[#0084d1] hover:underline inline-flex items-center gap-1 shrink-0"
+              >
+                <span>Explore All 25km Destinations</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
-            <Link
-              href="/#explore"
-              className="text-xs font-bold text-[#0084d1] hover:underline inline-flex items-center gap-1 shrink-0"
-            >
-              <span>Explore All 25km Destinations</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          {/* 3 Specific Nearby Attraction Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {nearbyPlaces.map((place) => (
-              <div
-                key={place.id}
-                className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
-              >
-                {/* Image & Badges */}
-                <div className="relative h-44 w-full overflow-hidden bg-slate-100">
-                  <Image
-                    src={place.image}
-                    alt={place.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <span
-                      className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs ${place.tagColor}`}
-                    >
-                      {place.tag}
-                    </span>
-                  </div>
-                  <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md text-slate-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs">
-                    {place.distance}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                  <div>
-                    <div className="flex items-center gap-1 text-xs font-bold text-amber-500 mb-1.5">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span>{place.rating}</span>
-                      <span className="text-slate-400 font-normal">
-                        ({place.reviews})
+            {/* Nearby Attraction Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {nearbyPlaces.map((place) => (
+                <div
+                  key={place.id}
+                  className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
+                >
+                  {/* Image & Badges */}
+                  <div className="relative h-44 w-full overflow-hidden bg-slate-100">
+                    <Image
+                      src={place.image}
+                      alt={place.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <span
+                        className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs ${getCategoryBadgeColor(place.category)} text-white`}
+                      >
+                        {place.category.toUpperCase()}
                       </span>
                     </div>
-
-                    <Link
-                      href={`/attraction/${place.id}`}
-                      className="text-base font-black text-slate-900 group-hover:text-[#0084d1] transition-colors leading-snug block mb-1.5"
-                    >
-                      {place.title}
-                    </Link>
-
-                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
-                      {place.desc}
-                    </p>
+                    <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md text-slate-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs">
+                      {place.distanceKm} km away
+                    </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <Link
-                      href={`/attraction/${place.id}`}
-                      className="text-xs font-bold text-slate-700 group-hover:text-[#0084d1] transition-colors"
-                    >
-                      View Details
-                    </Link>
+                  {/* Content */}
+                  <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                    <div>
+                      <div className="flex items-center gap-1 text-xs font-bold text-amber-500 mb-1.5">
+                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        <span>{place.rating}</span>
+                        <span className="text-slate-400 font-normal">
+                          ({place.reviewsCount}+ reviews)
+                        </span>
+                      </div>
 
-                    <Link
-                      href={`/attraction/${place.id}`}
-                      className="w-7 h-7 rounded-full bg-sky-100 text-[#0084d1] group-hover:bg-[#0084d1] group-hover:text-white flex items-center justify-center transition-all"
-                    >
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                      <Link
+                        href={`/attraction/${place.id}`}
+                        className="text-base font-black text-slate-900 group-hover:text-[#0084d1] transition-colors leading-snug block mb-1.5"
+                      >
+                        {place.name}
+                      </Link>
+
+                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                        {place.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <Link
+                        href={`/attraction/${place.id}`}
+                        className="text-xs font-bold text-slate-700 group-hover:text-[#0084d1] transition-colors"
+                      >
+                        View Details
+                      </Link>
+
+                      <Link
+                        href={`/attraction/${place.id}`}
+                        className="w-7 h-7 rounded-full bg-sky-100 text-[#0084d1] group-hover:bg-[#0084d1] group-hover:text-white flex items-center justify-center transition-all"
+                      >
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
-        {/* 8. Regional Respect Banner */}
+        {/* Regional Respect Banner */}
         <section className="bg-emerald-50/80 border border-emerald-200/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
           <div className="flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
@@ -1291,7 +672,7 @@ function AttractionDetailContent() {
         </section>
       </main>
 
-      {/* 9. Slide-Over Plan Drawer */}
+      {/* Slide-Over Plan Drawer */}
       <VisitPlanDrawer
         isOpen={isPlanDrawerOpen}
         onClose={() => setIsPlanDrawerOpen(false)}
@@ -1302,7 +683,7 @@ function AttractionDetailContent() {
         onClear={() => setVisitPlan([])}
       />
 
-      {/* 10. Auth Modal */}
+      {/* Auth Modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}

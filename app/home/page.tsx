@@ -8,6 +8,7 @@ import AttractionModal from "./components/AttractionModal";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import type { Attraction } from "@/data/amparaData";
+import type { CategoryItem } from "@/interface/home.types";
 import { mapDatabaseAttraction } from "@/lib/attractions";
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedRadius, setSelectedRadius] = useState<number>(25);
   const [attractions, setAttractions] = useState<Attraction[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [selectedAttraction, setSelectedAttraction] =
     useState<Attraction | null>(null);
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
@@ -35,7 +37,21 @@ export default function Home() {
       );
     };
 
+    const loadCategories = async () => {
+      try {
+        const response = await fetch("/api/categories", { cache: "no-store" });
+        if (!response.ok) return;
+        const result = await response.json();
+        if (Array.isArray(result.categories)) {
+          setCategories(result.categories);
+        }
+      } catch (err) {
+        console.error("Failed to load categories:", err);
+      }
+    };
+
     void loadData().catch((error) => console.error(error));
+    void loadCategories();
     void fetch("/api/plans", { cache: "no-store" })
       .then(async (response) => (response.ok ? response.json() : null))
       .then((result) => {
@@ -154,6 +170,7 @@ export default function Home() {
       {/* Browse by Interest Navigation Section */}
       <BrowseByInterest
         attractions={attractions}
+        categories={categories}
         selectedCategory={selectedCategory}
         onSelectCategory={handleCategorySelect}
       />

@@ -175,6 +175,26 @@ export const translations: Translations = {
     si: "දිය පිහිනන වන අලි ඇතුන්, විදේශීය පක්ෂීන් සහ ජාතික වනෝද්‍යාන සෆාරි.",
     ta: "நீந்தும் யானைகள், அரிய பறவைகள் மற்றும் வனவிலங்கு சரணාලயங்கள்.",
   },
+  catWaterfallsDesc: {
+    en: "Explore refreshing cascades, hidden jungle waterfalls, and river bathing spots.",
+    si: "ප්‍රබෝධමත් සුන්දර දියඇලි හා ගංගා දියඇලි නැරඹීමේ මනරම් අත්දැකීම්.",
+    ta: "மகிழூட்டும் நீர்வீழ்ச்சிகள் மற்றும் நதி சாகசங்களை கண்டறியுங்கள்.",
+  },
+  catCulturalDesc: {
+    en: "Experience rich eastern heritage, authentic traditions, and local lifestyles.",
+    si: "නැගෙනහිර සාම්ප්‍රදායික උරුමයන්, සංස්කෘතික අනන්‍යතාව හා ගැමි දිවිපෙවෙත.",
+    ta: "பாரம்பரிய கலாச்சாரம் மற்றும் கிழக்கின் வாழ்க்கை முறையை அனுபவியுங்கள்.",
+  },
+  catHistoricalDesc: {
+    en: "Discover ancient ruins, historic stone inscriptions, and centuries-old landmarks.",
+    si: "ශතවර්ෂ ගණනාවක් පැරණි නටබුන්, සෙල්ලිපි හා ඓතිහාසික ස්ථාන.",
+    ta: "பண்டைய சிதைவுகள் மற்றும் நூற்றாண்டு பழமையான வரலாற்று சின்னங்கள்.",
+  },
+  catReligiousDesc: {
+    en: "Pay homage to sacred temples, spiritual hermitages, and peaceful shrines.",
+    si: "පූජනීය බෞද්ධ සිද්ධස්ථාන, සන්සුන් ආරණ්‍ය සේනාසන හා වන්දනීය ස්ථාන.",
+    ta: "புனித தலங்கள், அமைதியான ஆசிரமங்கள் மற்றும் ஆன்மீக தளங்கள்.",
+  },
 
   // Destinations Grid
   destinationsTitle: {

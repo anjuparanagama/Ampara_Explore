@@ -1,26 +1,113 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import {
+  Droplets,
+  Landmark,
+  Compass,
+  Mountain,
+  Utensils,
+  Camera,
+  Sparkles,
+} from "lucide-react";
 import { interestCategories } from "@/data/amparaData";
 import { useLanguage } from "@/context/LanguageContext";
-import type { BrowseByInterestProps } from "@/interface/home.types";
+import type { BrowseByInterestProps, CategoryItem } from "@/interface/home.types";
+
+interface CategoryStyles {
+  accentGradient: string;
+  glowColor: string;
+  lightBg: string;
+  badgeBg: string;
+  hoverBorder: string;
+  bracketColor: string;
+}
+
+type CategoryIcon =
+  | { type: "image"; src: string }
+  | {
+      type: "lucide";
+      icon: React.ComponentType<{
+        className?: string;
+        style?: React.CSSProperties;
+      }>;
+    };
 
 export default function BrowseByInterest({
   attractions,
+  categories: propCategories,
   selectedCategory,
   onSelectCategory,
 }: BrowseByInterestProps) {
   const { t } = useLanguage();
+  const [fetchedCategories, setFetchedCategories] = useState<CategoryItem[]>([]);
 
-  const getCategoryCount = (title: string) => {
+  useEffect(() => {
+    if (propCategories && propCategories.length > 0) return;
+    let isMounted = true;
+    void fetch("/api/categories", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (isMounted && data?.categories && Array.isArray(data.categories)) {
+          setFetchedCategories(data.categories);
+        }
+      })
+      .catch((err) => console.error("Failed to load categories in BrowseByInterest:", err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [propCategories]);
+
+  const activeCategoriesList =
+    propCategories && propCategories.length > 0
+      ? propCategories
+      : fetchedCategories;
+
+  const displayCategories = useMemo(() => {
+    if (!activeCategoriesList || activeCategoriesList.length === 0) {
+      return interestCategories.map((cat) => ({
+        id: cat.id,
+        name: cat.title,
+        description: cat.description || "",
+        attraction_count: cat.count,
+      }));
+    }
+
+    const priorityOrder = [
+      "nature",
+      "religious and historical",
+      "beaches",
+      "wildlife",
+    ];
+
+    return [...activeCategoriesList].sort((a, b) => {
+      const aName = a.name.toLowerCase().trim();
+      const bName = b.name.toLowerCase().trim();
+      const aIdx = priorityOrder.indexOf(aName);
+      const bIdx = priorityOrder.indexOf(bName);
+
+      if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+      if (aIdx !== -1) return -1;
+      if (bIdx !== -1) return 1;
+
+      const aCount = Number(a.attraction_count || 0);
+      const bCount = Number(b.attraction_count || 0);
+      if (aCount !== bCount) return bCount - aCount;
+      return a.name.localeCompare(b.name);
+    });
+  }, [activeCategoriesList]);
+
+  const getCategoryCount = (title: string, dbCount?: number) => {
     const titleLower = title.toLowerCase().trim();
     if (
       titleLower === "religious and historical" ||
       titleLower === "religious & historical"
     ) {
-      return attractions.filter((a) => {
-        const cat = typeof a.category === "string" ? a.category.toLowerCase().trim() : "";
+      const count = attractions.filter((a) => {
+        const cat =
+          typeof a.category === "string" ? a.category.toLowerCase().trim() : "";
         return (
           cat === "religious" ||
           cat === "historical" ||
@@ -28,12 +115,17 @@ export default function BrowseByInterest({
           cat === "religious & historical"
         );
       }).length;
+      return count > 0 || attractions.length > 0 ? count : (dbCount ?? 0);
     }
-    return attractions.filter(
+
+    const count = attractions.filter(
       (a) =>
         typeof a.category === "string" &&
         a.category.toLowerCase().trim() === titleLower,
     ).length;
+
+    if (count > 0 || attractions.length > 0) return count;
+    return typeof dbCount === "number" ? dbCount : 0;
   };
 
   const getCategoryTranslation = (title: string) => {
@@ -44,36 +136,99 @@ export default function BrowseByInterest({
       Wildlife: "catWildlife",
       Historical: "catHistorical",
       Religious: "catReligious",
+      Waterfalls: "catWaterfalls",
+      Cultural: "catCultural",
     };
     return keyMap[title] ? t(keyMap[title]) : title;
   };
 
-  const getCategoryDescription = (catTitle: string, defaultDesc?: string) => {
+  const getCategoryDescription = (catTitle: string, defaultDesc?: string | null) => {
     const descKeyMap: Record<string, string> = {
       Nature: "catNatureDesc",
       "Religious and Historical": "catReligiousHistoricalDesc",
       Beaches: "catBeachesDesc",
       Wildlife: "catWildlifeDesc",
+      Waterfalls: "catWaterfallsDesc",
+      Cultural: "catCulturalDesc",
+      Historical: "catHistoricalDesc",
+      Religious: "catReligiousDesc",
     };
     const key = descKeyMap[catTitle];
     if (key) {
       const translated = t(key);
       if (translated && translated !== key) return translated;
     }
-    return defaultDesc || "";
+    if (defaultDesc && defaultDesc.trim().length > 0) {
+      return defaultDesc;
+    }
+    return `Explore memorable ${catTitle.toLowerCase()} attractions and destinations in Ampara.`;
   };
 
-  const getCategoryIconSrc = (idOrTitle: string) => {
-    const val = idOrTitle.toLowerCase();
-    if (val === "nature") return "/Nature.png";
-    if (val.includes("religious") || val.includes("historical")) return "/religious.png";
-    if (val.includes("beach")) return "/beach.png";
-    if (val.includes("wildlife")) return "/wildlife.png";
-    return "/Nature.png";
+  const getCategoryIcon = (idOrTitle: string): CategoryIcon => {
+    const val = idOrTitle.toLowerCase().trim();
+    if (val === "nature") return { type: "image", src: "/Nature.png" };
+    if (
+      val.includes("religious") ||
+      val.includes("historical") ||
+      val.includes("sacred")
+    ) {
+      return { type: "image", src: "/religious.png" };
+    }
+    if (val.includes("beach") || val.includes("coast") || val.includes("surf")) {
+      return { type: "image", src: "/beach.png" };
+    }
+    if (
+      val.includes("wildlife") ||
+      val.includes("safari") ||
+      val.includes("animal")
+    ) {
+      return { type: "image", src: "/wildlife.png" };
+    }
+    if (
+      val.includes("waterfall") ||
+      val.includes("falls") ||
+      val.includes("river") ||
+      val.includes("lake")
+    ) {
+      return { type: "lucide", icon: Droplets };
+    }
+    if (
+      val.includes("culture") ||
+      val.includes("cultural") ||
+      val.includes("heritage") ||
+      val.includes("art")
+    ) {
+      return { type: "lucide", icon: Landmark };
+    }
+    if (
+      val.includes("hike") ||
+      val.includes("hiking") ||
+      val.includes("mountain") ||
+      val.includes("adventure") ||
+      val.includes("trail")
+    ) {
+      return { type: "lucide", icon: Mountain };
+    }
+    if (
+      val.includes("food") ||
+      val.includes("restaurant") ||
+      val.includes("culinary") ||
+      val.includes("dining")
+    ) {
+      return { type: "lucide", icon: Utensils };
+    }
+    if (
+      val.includes("photo") ||
+      val.includes("view") ||
+      val.includes("sunset")
+    ) {
+      return { type: "lucide", icon: Camera };
+    }
+    return { type: "lucide", icon: Sparkles };
   };
 
-  const getCategoryStyles = (idOrTitle: string) => {
-    const val = idOrTitle.toLowerCase();
+  const getCategoryStyles = (idOrTitle: string): CategoryStyles => {
+    const val = idOrTitle.toLowerCase().trim();
     if (val === "nature") {
       return {
         accentGradient: "from-emerald-400 via-teal-400 to-emerald-500",
@@ -84,7 +239,7 @@ export default function BrowseByInterest({
         bracketColor: "#10b981",
       };
     }
-    if (val.includes("religious") || val.includes("historical")) {
+    if (val.includes("religious") || val.includes("historical") || val.includes("sacred")) {
       return {
         accentGradient: "from-amber-400 via-yellow-400 to-amber-600",
         glowColor: "#f59e0b",
@@ -94,7 +249,7 @@ export default function BrowseByInterest({
         bracketColor: "#f59e0b",
       };
     }
-    if (val.includes("beach")) {
+    if (val.includes("beach") || val.includes("coast") || val.includes("surf")) {
       return {
         accentGradient: "from-sky-400 via-cyan-400 to-blue-500",
         glowColor: "#06b6d4",
@@ -104,7 +259,7 @@ export default function BrowseByInterest({
         bracketColor: "#06b6d4",
       };
     }
-    if (val.includes("wildlife")) {
+    if (val.includes("wildlife") || val.includes("safari") || val.includes("animal")) {
       return {
         accentGradient: "from-emerald-500 via-green-400 to-teal-600",
         glowColor: "#059669",
@@ -114,15 +269,81 @@ export default function BrowseByInterest({
         bracketColor: "#059669",
       };
     }
-    return {
-      accentGradient: "from-sky-400 via-blue-400 to-indigo-500",
-      glowColor: "#0284c7",
-      lightBg: "#e0f2fe",
-      badgeBg: "bg-sky-50 text-sky-700 border-sky-200/80",
-      hoverBorder: "hover:border-sky-300 hover:ring-2 hover:ring-sky-100",
-      bracketColor: "#0284c7",
-    };
+    if (val.includes("waterfall") || val.includes("falls") || val.includes("river") || val.includes("lake")) {
+      return {
+        accentGradient: "from-blue-400 via-indigo-400 to-cyan-500",
+        glowColor: "#2563eb",
+        lightBg: "#eff6ff",
+        badgeBg: "bg-blue-50 text-blue-700 border-blue-200/80",
+        hoverBorder: "hover:border-blue-300 hover:ring-2 hover:ring-blue-100",
+        bracketColor: "#2563eb",
+      };
+    }
+    if (val.includes("culture") || val.includes("cultural") || val.includes("heritage")) {
+      return {
+        accentGradient: "from-purple-400 via-fuchsia-400 to-indigo-500",
+        glowColor: "#9333ea",
+        lightBg: "#faf5ff",
+        badgeBg: "bg-purple-50 text-purple-700 border-purple-200/80",
+        hoverBorder: "hover:border-purple-300 hover:ring-2 hover:ring-purple-100",
+        bracketColor: "#9333ea",
+      };
+    }
+    if (val.includes("hike") || val.includes("hiking") || val.includes("adventure") || val.includes("mountain")) {
+      return {
+        accentGradient: "from-orange-400 via-rose-400 to-red-500",
+        glowColor: "#ea580c",
+        lightBg: "#fff7ed",
+        badgeBg: "bg-orange-50 text-orange-700 border-orange-200/80",
+        hoverBorder: "hover:border-orange-300 hover:ring-2 hover:ring-orange-100",
+        bracketColor: "#ea580c",
+      };
+    }
+
+    // Dynamic fallback palette for any new custom categories added in admin
+    const palettes: CategoryStyles[] = [
+      {
+        accentGradient: "from-teal-400 via-emerald-400 to-cyan-500",
+        glowColor: "#0d9488",
+        lightBg: "#f0fdfa",
+        badgeBg: "bg-teal-50 text-teal-700 border-teal-200/80",
+        hoverBorder: "hover:border-teal-300 hover:ring-2 hover:ring-teal-100",
+        bracketColor: "#0d9488",
+      },
+      {
+        accentGradient: "from-rose-400 via-pink-400 to-red-500",
+        glowColor: "#e11d48",
+        lightBg: "#fff1f2",
+        badgeBg: "bg-rose-50 text-rose-700 border-rose-200/80",
+        hoverBorder: "hover:border-rose-300 hover:ring-2 hover:ring-rose-100",
+        bracketColor: "#e11d48",
+      },
+      {
+        accentGradient: "from-violet-400 via-purple-400 to-indigo-500",
+        glowColor: "#7c3aed",
+        lightBg: "#f5f3ff",
+        badgeBg: "bg-violet-50 text-violet-700 border-violet-200/80",
+        hoverBorder: "hover:border-violet-300 hover:ring-2 hover:ring-violet-100",
+        bracketColor: "#7c3aed",
+      },
+      {
+        accentGradient: "from-sky-400 via-blue-400 to-indigo-500",
+        glowColor: "#0284c7",
+        lightBg: "#e0f2fe",
+        badgeBg: "bg-sky-50 text-sky-700 border-sky-200/80",
+        hoverBorder: "hover:border-sky-300 hover:ring-2 hover:ring-sky-100",
+        bracketColor: "#0284c7",
+      },
+    ];
+
+    let hash = 0;
+    for (let i = 0; i < val.length; i++) {
+      hash = (hash + val.charCodeAt(i)) % palettes.length;
+    }
+    return palettes[hash];
   };
+
+  const selectedCategoryIcon = selectedCategory ? getCategoryIcon(selectedCategory) : null;
 
   return (
     <section
@@ -144,20 +365,21 @@ export default function BrowseByInterest({
         </p>
       </div>
 
-      {/* 4 Category Feature Cards with Artistic Corner Designs (2 cols on mobile, 4 cols on desktop) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
-        {interestCategories.map((cat) => {
-          const isSelected = selectedCategory === cat.title;
-          const translatedTitle = getCategoryTranslation(cat.title);
-          const translatedDesc = getCategoryDescription(cat.title, cat.description);
-          const placeCount = getCategoryCount(cat.title);
-          const iconSrc = getCategoryIconSrc(cat.id);
-          const styles = getCategoryStyles(cat.id);
+      {/* Dynamic Category Feature Cards (2 cols on mobile, 3 on tablet, 4 on desktop) */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-6">
+        {displayCategories.map((cat) => {
+          const isSelected =
+            selectedCategory?.toLowerCase().trim() === cat.name.toLowerCase().trim();
+          const translatedTitle = getCategoryTranslation(cat.name);
+          const translatedDesc = getCategoryDescription(cat.name, cat.description);
+          const placeCount = getCategoryCount(cat.name, cat.attraction_count);
+          const iconInfo = getCategoryIcon(cat.name);
+          const styles = getCategoryStyles(cat.name);
 
           return (
             <button
-              key={cat.id}
-              onClick={() => onSelectCategory(isSelected ? null : cat.title)}
+              key={cat.id || cat.name}
+              onClick={() => onSelectCategory(isSelected ? null : cat.name)}
               className={`group relative flex flex-col justify-between text-left p-3.5 sm:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white via-white to-slate-50/80 border transition-all duration-300 cursor-pointer overflow-hidden ${
                 isSelected
                   ? "border-[#0284c7] ring-2 ring-sky-300 shadow-xl scale-[1.02] bg-gradient-to-b from-sky-50/60 via-white to-white"
@@ -167,7 +389,9 @@ export default function BrowseByInterest({
               {/* Top Accent Gradient Line */}
               <div
                 className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${styles.accentGradient} transition-all duration-300 ${
-                  isSelected ? "h-2 opacity-100" : "opacity-80 group-hover:opacity-100 group-hover:h-2"
+                  isSelected
+                    ? "h-2 opacity-100"
+                    : "opacity-80 group-hover:opacity-100 group-hover:h-2"
                 }`}
               />
 
@@ -229,13 +453,20 @@ export default function BrowseByInterest({
                   className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-xs border border-white/90 ring-1 ring-slate-100 p-1.5 sm:p-2.5"
                   style={{ backgroundColor: styles.lightBg }}
                 >
-                  <Image
-                    src={iconSrc}
-                    alt={translatedTitle}
-                    width={40}
-                    height={40}
-                    className="w-full h-full object-contain drop-shadow-xs"
-                  />
+                  {iconInfo.type === "image" ? (
+                    <Image
+                      src={iconInfo.src}
+                      alt={translatedTitle}
+                      width={40}
+                      height={40}
+                      className="w-full h-full object-contain drop-shadow-xs"
+                    />
+                  ) : (
+                    <iconInfo.icon
+                      className="w-5 h-5 sm:w-7 sm:h-7 transition-transform group-hover:scale-110"
+                      style={{ color: styles.glowColor }}
+                    />
+                  )}
                 </div>
 
                 {/* Count Pill with Category Accent Dot */}
@@ -279,7 +510,10 @@ export default function BrowseByInterest({
                       : "text-slate-400 group-hover:text-[#0284c7] transition-colors"
                   }
                 >
-                  {isSelected ? "Active" : "Explore"} <span className="hidden sm:inline">{isSelected ? "Filter" : "Category"}</span>
+                  {isSelected ? "Active" : "Explore"}{" "}
+                  <span className="hidden sm:inline">
+                    {isSelected ? "Filter" : "Category"}
+                  </span>
                 </span>
 
                 <div
@@ -302,13 +536,23 @@ export default function BrowseByInterest({
         <div className="mt-5 flex flex-wrap items-center justify-between bg-sky-50 border border-sky-200 rounded-xl px-4 py-3 text-xs text-sky-800 font-medium animate-fadeIn gap-2">
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-lg bg-white border border-sky-200 flex items-center justify-center p-1 shadow-2xs">
-              <Image
-                src={getCategoryIconSrc(selectedCategory)}
-                alt={selectedCategory}
-                width={20}
-                height={20}
-                className="w-full h-full object-contain"
-              />
+              {selectedCategoryIcon ? (
+                selectedCategoryIcon.type === "image" ? (
+                  <Image
+                    src={selectedCategoryIcon.src}
+                    alt={selectedCategory}
+                    width={20}
+                    height={20}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <selectedCategoryIcon.icon
+                    className="w-4 h-4 text-[#0284c7]"
+                  />
+                )
+              ) : (
+                <Compass className="w-4 h-4 text-[#0284c7]" />
+              )}
             </div>
             <span>
               Filtering attractions by:{" "}
