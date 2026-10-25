@@ -36,6 +36,7 @@ export interface MapSidebarProps {
   selectedZone: number;
   setSelectedZone: (zone: number) => void;
   filteredPlaces: MapPlace[];
+  allPlaces?: MapPlace[];
   selectedPlace: MapPlace | null;
   onSelectPlace: (place: MapPlace) => void;
   visitPlan: Attraction[];
@@ -148,25 +149,6 @@ export const initialMapDestinations: MapPlace[] = [
     zone: "5-15km",
     latitude: 7.234,
     longitude: 81.699,
-  },
-  {
-    id: "panama-kudumbigala",
-    name: "Kudumbigala Sanctuary",
-    category: "Nature",
-    ringTag: "Nature • 24.5 km Ring",
-    distanceKm: 24.5,
-    duration: "3.0h Hike",
-    description:
-      "Granite mountain wilderness with 2,000-year-old rock hermitages, cylindrical stupa, and panoramic vistas over Eastern forest canopy.",
-    image:
-      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80",
-    x: 88,
-    y: 42,
-    openHours: "Sunrise to Sunset",
-    roadInfo: "32 min coastal highway",
-    zone: "15-25km",
-    latitude: 6.844,
-    longitude: 81.382,
   },
   {
     id: "ampara-peace-pagoda",

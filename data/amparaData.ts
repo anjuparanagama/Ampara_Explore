@@ -86,18 +86,6 @@ export const amparaAttractions: Attraction[] = [
     location: 'Kondawattuwan, Ampara',
   },
   {
-    id: 'panama-kudumbigala',
-    name: 'Kudumbigala Forest Sanctuary',
-    category: 'Nature',
-    distanceKm: 25,
-    duration: '3 Hours',
-    description: 'Sprawling granite wilderness where monolithic peaks rise above dense dry-zone forest, home to ancient meditation caves and wildlife.',
-    highlights: ['Cylindrical stupa', 'Epic sunrise vistas', 'Pristine biodiversity'],
-    image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80',
-    radialZone: '15-25km',
-    location: 'Kudumbigala, Eastern Frontier',
-  },
-  {
     id: 'gal-oya-national-park',
     name: 'Gal Oya National Park Safari',
     category: 'Wildlife',

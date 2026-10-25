@@ -86,29 +86,60 @@ export default function MapPage() {
         return [existingPlace ? { ...existingPlace, ...place } : place];
       });
 
-      const databasePlaceIds = new Set(databasePlaces.map((place) => place.id));
-      setMapDestinations([
-        ...initialMapDestinations.filter(
-          (place) => !databasePlaceIds.has(place.id),
-        ),
-        ...databasePlaces,
-      ]);
+      if (databasePlaces.length > 0) {
+        setMapDestinations(databasePlaces);
+        setSelectedPlace((current) => {
+          if (!current) return databasePlaces[0];
+          const found = databasePlaces.find((p) => p.id === current.id);
+          return found || databasePlaces[0];
+        });
+      }
     };
 
     void loadDatabasePlaces().catch((error) => {
       console.error("Failed to load database map destinations", error);
     });
+
+    void fetch("/api/plans", { cache: "no-store" })
+      .then(async (response) => (response.ok ? response.json() : null))
+      .then((result) => {
+        if (!result?.plan?.stops) return;
+        setVisitPlan(
+          result.plan.stops.map((stop: Record<string, unknown>) => ({
+            ...stop,
+            category: String(
+              stop.category_name || "Nature",
+            ) as Attraction["category"],
+            distanceKm: Number(stop.distance_km || 0),
+            duration: String(stop.duration || ""),
+            description: "",
+            highlights: [],
+            image: String(stop.image || "/images/hero-bg.jpg"),
+            radialZone: "0-5km",
+            location: String(stop.location || ""),
+          })),
+        );
+      })
+      .catch(() => undefined);
   }, []);
 
-  const [visitPlan, setVisitPlan] = useState<Attraction[]>([
-    amparaAttractions[0],
-    amparaAttractions[3],
-    amparaAttractions[2],
-  ]);
+  const [visitPlan, setVisitPlan] = useState<Attraction[]>([]);
 
   const handleTogglePlan = (place: MapPlace) => {
-    const matched =
-      amparaAttractions.find((a) => a.id === place.id) || amparaAttractions[0];
+    const matched: Attraction = amparaAttractions.find(
+      (a) => a.id === place.id,
+    ) || {
+      id: place.id,
+      name: place.name,
+      category: place.category,
+      distanceKm: place.distanceKm,
+      duration: place.duration,
+      description: place.description,
+      highlights: [],
+      image: place.image,
+      radialZone: place.zone,
+      location: place.roadInfo,
+    };
     if (visitPlan.some((p) => p.id === matched.id)) {
       setVisitPlan(visitPlan.filter((p) => p.id !== matched.id));
     } else {
@@ -153,6 +184,7 @@ export default function MapPage() {
           selectedZone={selectedZone}
           setSelectedZone={setSelectedZone}
           filteredPlaces={filteredPlaces}
+          allPlaces={mapDestinations}
           selectedPlace={selectedPlace}
           onSelectPlace={setSelectedPlace}
           visitPlan={visitPlan}

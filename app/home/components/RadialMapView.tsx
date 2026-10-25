@@ -28,7 +28,6 @@ export default function RadialMapView({
   const angleMapping: Record<string, number> = {
     "senanayake-samudraya": 235,
     "kondawattuwan-lake": 340,
-    "panama-kudumbigala": 150,
     "gal-oya-national-park": 255,
     "lahugala-kitulana-national-park": 205,
     "kumana-national-park": 175,

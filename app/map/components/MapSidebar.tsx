@@ -14,11 +14,20 @@ export default function MapSidebar({
   selectedZone,
   setSelectedZone,
   filteredPlaces,
+  allPlaces = [],
   selectedPlace,
   onSelectPlace,
   visitPlan,
   onTogglePlan,
 }: MapSidebarProps) {
+  const sourceList = allPlaces.length > 0 ? allPlaces : filteredPlaces;
+  const totalCount = sourceList.length;
+  const natureCount = sourceList.filter((p) => p.category === "Nature").length;
+  const wildlifeCount = sourceList.filter((p) => p.category === "Wildlife").length;
+  const sacredCount = sourceList.filter(
+    (p) => p.category === "Sacred" || p.category === "Historical",
+  ).length;
+
   return (
     <div className="w-full lg:w-[360px] xl:w-[380px] shrink-0 bg-white rounded-3xl border border-slate-200/90 shadow-[0_10px_30px_rgba(15,23,42,0.06)] flex flex-col justify-between overflow-hidden">
       <div className="p-4 sm:p-5 space-y-4">
@@ -30,7 +39,7 @@ export default function MapSidebar({
                 Explore Places
               </h1>
               <span className="bg-sky-100 text-[#0084d1] text-[11px] font-extrabold px-2 py-0.5 rounded-full">
-                24 SITES
+                {totalCount} SITES
               </span>
             </div>
             <p className="text-[11px] text-slate-500 font-medium mt-0.5">
@@ -71,10 +80,10 @@ export default function MapSidebar({
         {/* Category Filter Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
           {[
-            { id: "All", label: "All (24)" },
-            { id: "Nature", label: "Nature (9)" },
-            { id: "Wildlife", label: "Wildlife (6)" },
-            { id: "Sacred", label: "Sacred (7)" },
+            { id: "All", label: `All (${totalCount})` },
+            { id: "Nature", label: `Nature (${natureCount})` },
+            { id: "Wildlife", label: `Wildlife (${wildlifeCount})` },
+            { id: "Sacred", label: `Sacred (${sacredCount})` },
           ].map((cat) => (
             <button
               key={cat.id}
