@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { X, Star, MapPin, Clock, Plus, Check, ExternalLink } from "lucide-react";
+import { X, MapPin, Clock, Plus, Check, ExternalLink } from "lucide-react";
 import type { AttractionModalProps } from "@/interface/home.types";
 
 export default function AttractionModal({
@@ -67,10 +67,6 @@ export default function AttractionModal({
             <span className="flex items-center gap-1 font-semibold text-slate-700">
               <Clock className="w-4 h-4 text-slate-400 shrink-0" />
               <span>{attraction.duration}</span>
-            </span>
-            <span className="flex items-center gap-1 font-bold text-amber-500">
-              <Star className="w-4 h-4 fill-amber-400 shrink-0" />
-              <span>{attraction.rating} ({attraction.reviewsCount} reviews)</span>
             </span>
           </div>
 

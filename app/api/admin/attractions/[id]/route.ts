@@ -68,8 +68,6 @@ export async function PUT(request: Request, context: RouteContext) {
     const latitude = Number(body.latitude);
     const longitude = Number(body.longitude);
     const distanceKm = Number(body.distanceKm);
-    const rating = Number(body.rating ?? 0);
-    const reviewsCount = Number(body.reviewsCount ?? 0);
     const highlights = Array.isArray(body.highlights) ? body.highlights.filter((item: unknown): item is string => typeof item === "string").map((item: string) => item.trim()).filter(Boolean) : [];
     const subtitle = typeof body.subtitle === "string" && body.subtitle.trim()
       ? body.subtitle.trim()
@@ -87,8 +85,8 @@ export async function PUT(request: Request, context: RouteContext) {
     if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90 || !Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
       return NextResponse.json({ message: "Latitude must be between -90 and 90, and longitude must be between -180 and 180." }, { status: 400 });
     }
-    if (!Number.isFinite(distanceKm) || distanceKm < 0 || !Number.isFinite(rating) || rating < 0 || rating > 5 || !Number.isInteger(reviewsCount) || reviewsCount < 0) {
-      return NextResponse.json({ message: "Distance, rating, and review count must be valid positive values." }, { status: 400 });
+    if (!Number.isFinite(distanceKm) || distanceKm < 0) {
+      return NextResponse.json({ message: "Distance must be a valid positive value." }, { status: 400 });
     }
 
     const [existingRows] = await db.execute("SELECT image, images FROM attractions WHERE id = ?", [id]);
@@ -100,7 +98,7 @@ export async function PUT(request: Request, context: RouteContext) {
       : [];
 
     const [result] = await db.execute(
-      `UPDATE attractions SET category_id = ?, name = ?, slug = ?, description = ?, location = ?, latitude = ?, longitude = ?, image = ?, images = ?, distance_km = ?, duration = ?, highlights = ?, rating = ?, reviews_count = ?, radial_zone = ?, subtitle = ?, about_title = ?, about_paragraphs = ?, quote = ?
+      `UPDATE attractions SET category_id = ?, name = ?, slug = ?, description = ?, location = ?, latitude = ?, longitude = ?, image = ?, images = ?, distance_km = ?, duration = ?, highlights = ?, radial_zone = ?, subtitle = ?, about_title = ?, about_paragraphs = ?, quote = ?
        WHERE id = ?`,
       [
         categoryId,
@@ -115,8 +113,6 @@ export async function PUT(request: Request, context: RouteContext) {
         distanceKm,
         typeof body.duration === "string" ? body.duration.trim() || null : null,
         JSON.stringify(highlights),
-        rating,
-        reviewsCount,
         typeof body.radialZone === "string" ? body.radialZone.trim() || null : null,
         subtitle,
         aboutTitle,

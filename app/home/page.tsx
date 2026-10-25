@@ -64,8 +64,6 @@ export default function Home() {
             ) as Attraction["category"],
             distanceKm: Number(stop.distance_km || 0),
             duration: String(stop.duration || ""),
-            rating: 0,
-            reviewsCount: 0,
             description: "",
             highlights: [],
             image: String(stop.image || "/images/hero-bg.jpg"),

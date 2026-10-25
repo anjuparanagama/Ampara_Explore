@@ -40,8 +40,6 @@ const blankAttraction: AdminDashboardAttractionForm = {
   distanceKm: "",
   duration: "",
   highlights: "",
-  rating: "",
-  reviewsCount: "",
   radialZone: "",
   subtitle: "",
   aboutTitle: "",
@@ -108,8 +106,6 @@ function toForm(attraction: AdminDashboardAttraction): AdminDashboardAttractionF
     distanceKm: String(attraction.distance_km),
     duration: attraction.duration || "",
     highlights: highlights.join(", "),
-    rating: String(attraction.rating),
-    reviewsCount: String(attraction.reviews_count),
     radialZone: attraction.radial_zone || "",
     subtitle: attraction.subtitle || "",
     aboutTitle: attraction.about_title || "",
@@ -275,8 +271,6 @@ export default function AdminDashboard() {
         image: images[0] || "",
         images,
         distanceKm: Number(form.distanceKm || 0),
-        rating: Number(form.rating || 0),
-        reviewsCount: Number(form.reviewsCount || 0),
         latitude: Number(form.latitude || 0),
         longitude: Number(form.longitude || 0),
         highlights: form.highlights
@@ -343,12 +337,6 @@ export default function AdminDashboard() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const averageRating = attractions.length
-    ? (
-        attractions.reduce((sum, item) => sum + Number(item.rating || 0), 0) /
-        attractions.length
-      ).toFixed(1)
-    : "0.0";
 
   return (
     <main className="min-h-screen bg-[#f5f8fc] text-slate-900">
@@ -377,7 +365,6 @@ export default function AdminDashboard() {
               <AdminOverview
                 attractionsCount={attractions.length}
                 categoriesCount={categories.length}
-                averageRating={averageRating}
                 onAddFirstPlace={() => {
                   setActiveSection("places");
                   setShowPlaceForm(true);

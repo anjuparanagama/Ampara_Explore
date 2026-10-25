@@ -6,11 +6,10 @@ import { AdminOverviewProps } from "@/interface";
 export default function AdminOverview({
   attractionsCount,
   categoriesCount,
-  averageRating,
   onAddFirstPlace,
 }: AdminOverviewProps) {
   return (
-    <section className="grid gap-4 sm:grid-cols-3">
+    <section className="grid gap-4 sm:grid-cols-2">
       <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
         <p className="text-sm text-slate-500">Total places</p>
         <p className="mt-2 text-3xl font-bold text-[#082f49]">{attractionsCount}</p>
@@ -23,13 +22,7 @@ export default function AdminOverview({
         <p className="mt-1 text-xs text-slate-400">Organized destination groups</p>
       </div>
 
-      <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm">
-        <p className="text-sm text-slate-500">Average rating</p>
-        <p className="mt-2 text-3xl font-bold text-[#082f49]">{averageRating}</p>
-        <p className="mt-1 text-xs text-slate-400">Across all places</p>
-      </div>
-
-      <div className="rounded-2xl border border-sky-100 bg-white p-6 shadow-sm sm:col-span-3">
+      <div className="rounded-2xl border border-sky-100 bg-white p-6 shadow-sm sm:col-span-2">
         <h2 className="text-xl font-bold">Welcome to your admin dashboard</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
           Use the sidebar to manage places and categories. Add new destinations with

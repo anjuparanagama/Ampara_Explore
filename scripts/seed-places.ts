@@ -567,9 +567,9 @@ async function seedPlaces() {
       await pool.execute(
         `INSERT INTO attractions
          (id, category_id, name, slug, description, location, image, images, distance_km,
-          duration, highlights, rating, reviews_count, radial_zone,
+          duration, highlights, radial_zone,
           subtitle, about_title, about_paragraphs, quote, tips, route_desc)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
          ON DUPLICATE KEY UPDATE
           category_id = VALUES(category_id),
           name = VALUES(name),
@@ -580,8 +580,6 @@ async function seedPlaces() {
           distance_km = VALUES(distance_km),
           duration = VALUES(duration),
           highlights = VALUES(highlights),
-          rating = VALUES(rating),
-          reviews_count = VALUES(reviews_count),
           radial_zone = VALUES(radial_zone),
           subtitle = VALUES(subtitle),
           about_title = VALUES(about_title),
@@ -601,8 +599,6 @@ async function seedPlaces() {
           attraction.distanceKm,
           attraction.duration,
           JSON.stringify(attraction.highlights),
-          attraction.rating,
-          attraction.reviewsCount,
           attraction.radialZone,
           richData.subtitle,
           richData.aboutTitle,

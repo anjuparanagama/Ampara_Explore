@@ -151,37 +151,6 @@ export default function AttractionForm({
 
         <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700">
           <span>
-            Rating (0 - 5) <span className="text-rose-500">*</span>
-          </span>
-          <Input
-            type="number"
-            min={0}
-            max={5}
-            step="0.1"
-            required
-            value={form.rating}
-            onChange={(event) => onFormChange("rating", event.target.value)}
-            placeholder="e.g. 4.5"
-          />
-        </label>
-
-        <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700">
-          <span>
-            Reviews Count <span className="text-rose-500">*</span>
-          </span>
-          <Input
-            type="number"
-            min={0}
-            step="1"
-            required
-            value={form.reviewsCount}
-            onChange={(event) => onFormChange("reviewsCount", event.target.value)}
-            placeholder="e.g. 120"
-          />
-        </label>
-
-        <label className="flex flex-col gap-1.5 text-xs font-semibold text-slate-700">
-          <span>
             Radial Zone <span className="font-normal text-slate-400">(optional)</span>
           </span>
           <Input

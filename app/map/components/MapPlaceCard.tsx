@@ -2,7 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import { Star } from "lucide-react";
 import { MapPlaceCardProps } from "@/interface";
 
 export default function MapPlaceCard({
@@ -37,10 +36,6 @@ export default function MapPlaceCard({
           <span className="text-[10px] font-extrabold uppercase text-[#0084d1] tracking-wider truncate">
             {place.ringTag}
           </span>
-          <div className="flex items-center gap-0.5 text-amber-500 text-[11px] font-bold shrink-0">
-            <Star className="w-3 h-3 fill-amber-400" />
-            <span>{place.rating}</span>
-          </div>
         </div>
 
         <h4 className="text-xs font-black text-slate-900 truncate">

@@ -7,8 +7,6 @@ export interface MapPlace {
   ringTag: string;
   distanceKm: number;
   duration: string;
-  rating: number;
-  reviewsCount: number;
   description: string;
   image: string;
   x: number; // Percentage coordinate on map canvas (0-100)
@@ -85,8 +83,6 @@ export const initialMapDestinations: MapPlace[] = [
     ringTag: "Nature • 18.2 km Ring",
     distanceKm: 18.2,
     duration: "2.5-3.5h Visit",
-    rating: 4.9,
-    reviewsCount: 540,
     description:
       "Sri Lanka's monumental inland ocean surrounded by lush jungle peaks, water fishing safaris, and swimming wild elephants across islets.",
     image: "/images/hero-bg.jpg",
@@ -105,8 +101,6 @@ export const initialMapDestinations: MapPlace[] = [
     ringTag: "Wildlife • 18.2 km",
     distanceKm: 18.2,
     duration: "3-4h Safari",
-    rating: 4.9,
-    reviewsCount: 380,
     description:
       "Swimming elephant packs across tranquil lake channels, pristine rainforest canopy, and protected bird breeding grounds.",
     image: "/images/gal-oya-elephants.jpg",
@@ -125,8 +119,6 @@ export const initialMapDestinations: MapPlace[] = [
     ringTag: "Sacred • 16.8 km",
     distanceKm: 16.8,
     duration: "1.5-2.0h Visit",
-    rating: 4.8,
-    reviewsCount: 420,
     description:
       "Solosmasthana ancient pilgrimage sanctuary with historic archaeological relic chambers and majestic white stupa restoration.",
     image: "/images/deegawapi-stupa.jpg",
@@ -145,8 +137,6 @@ export const initialMapDestinations: MapPlace[] = [
     ringTag: "Sacred • 8.5 km Ring",
     distanceKm: 8.5,
     duration: "2.0h Visit",
-    rating: 4.9,
-    reviewsCount: 290,
     description:
       "Ancient rock monastery with secluded meditation caves, towering summit stupa, and free-roaming wild deer herds in the woods.",
     image:
@@ -166,8 +156,6 @@ export const initialMapDestinations: MapPlace[] = [
     ringTag: "Nature • 24.5 km Ring",
     distanceKm: 24.5,
     duration: "3.0h Hike",
-    rating: 4.9,
-    reviewsCount: 180,
     description:
       "Granite mountain wilderness with 2,000-year-old rock hermitages, cylindrical stupa, and panoramic vistas over Eastern forest canopy.",
     image:
@@ -187,8 +175,6 @@ export const initialMapDestinations: MapPlace[] = [
     ringTag: "Sacred • 2.8 km Core",
     distanceKm: 2.8,
     duration: "1.0h Visit",
-    rating: 4.7,
-    reviewsCount: 220,
     description:
       "Gleaming white dome built overlooking the serene Ampara lake promenade, radiant during golden hour sunsets.",
     image:

@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Clock, Star, Check, Car, Plus } from "lucide-react";
+import { X, Clock, Check, Car, Plus } from "lucide-react";
 import { MapPlacePopupProps } from "@/interface";
 
 export default function MapPlacePopup({
@@ -44,20 +44,11 @@ export default function MapPlacePopup({
         </div>
       </div>
 
-      {/* Card Title & Rating */}
+      {/* Card Title */}
       <div className="space-y-1.5">
-        <div className="flex items-center justify-between gap-1">
-          <h3 className="text-base font-black text-slate-900 leading-snug">
-            {place.name}
-          </h3>
-          <div className="flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full text-xs font-black shrink-0">
-            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-            <span>{place.rating}</span>
-            <span className="text-slate-400 font-normal text-[10px]">
-              ({place.reviewsCount}+)
-            </span>
-          </div>
-        </div>
+        <h3 className="text-base font-black text-slate-900 leading-snug">
+          {place.name}
+        </h3>
 
         <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
           {place.description}

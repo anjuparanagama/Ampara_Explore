@@ -68,8 +68,6 @@ export default function MapPage() {
           ringTag: `${category} • ${distanceKm} km`,
           distanceKm,
           duration: String(row.duration || "Visit details available"),
-          rating: Number(row.rating || 0),
-          reviewsCount: Number(row.reviews_count || 0),
           description: String(row.description || ""),
           image:
             typeof row.image === "string" && row.image.startsWith("/")

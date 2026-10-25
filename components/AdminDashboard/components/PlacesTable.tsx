@@ -33,14 +33,13 @@ export default function PlacesTable({
               <th className="p-3">Name</th>
               <th className="p-3">Category</th>
               <th className="p-3">Location</th>
-              <th className="p-3">Rating</th>
               <th className="p-3">Actions</th>
             </tr>
           </thead>
           <tbody>
             {attractions.length === 0 ? (
               <tr>
-                <td colSpan={5} className="p-4 text-center text-slate-400">
+                <td colSpan={4} className="p-4 text-center text-slate-400">
                   No places found.
                 </td>
               </tr>
@@ -55,7 +54,6 @@ export default function PlacesTable({
                   </td>
                   <td className="p-3">{attraction.category_name}</td>
                   <td className="p-3">{attraction.location}</td>
-                  <td className="p-3">{attraction.rating}</td>
                   <td className="p-3">
                     <button
                       onClick={() => onStartEditing(attraction)}

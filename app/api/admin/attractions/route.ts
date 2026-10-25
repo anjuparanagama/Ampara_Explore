@@ -10,7 +10,7 @@ function isAdminError(error: unknown) {
 const selectAttractions = `
   SELECT a.id, a.category_id, c.name AS category_name, a.name, a.slug,
     a.description, a.location, a.latitude, a.longitude, a.image, a.images, a.distance_km, a.duration,
-    a.highlights, a.rating, a.reviews_count, a.radial_zone,
+    a.highlights, a.radial_zone,
     a.subtitle, a.about_title, a.about_paragraphs, a.quote,
     a.created_at, a.updated_at
   FROM attractions a
@@ -47,8 +47,6 @@ function parseAttraction(body: Record<string, unknown>) {
   const latitude = Number(body.latitude);
   const longitude = Number(body.longitude);
   const distanceKm = Number(body.distanceKm);
-  const rating = Number(body.rating ?? 0);
-  const reviewsCount = Number(body.reviewsCount ?? 0);
   const highlights = Array.isArray(body.highlights)
     ? body.highlights.filter((item): item is string => typeof item === "string").map((item) => item.trim()).filter(Boolean)
     : [];
@@ -68,8 +66,8 @@ function parseAttraction(body: Record<string, unknown>) {
   if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90 || !Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
     return { error: "Latitude must be between -90 and 90, and longitude must be between -180 and 180." };
   }
-  if (!Number.isFinite(distanceKm) || distanceKm < 0 || !Number.isFinite(rating) || rating < 0 || rating > 5 || !Number.isInteger(reviewsCount) || reviewsCount < 0) {
-    return { error: "Distance, rating, and review count must be valid positive values." };
+  if (!Number.isFinite(distanceKm) || distanceKm < 0) {
+    return { error: "Distance must be a valid positive value." };
   }
   return {
     value: {
@@ -79,7 +77,7 @@ function parseAttraction(body: Record<string, unknown>) {
         ? body.images.filter((item): item is string => typeof item === "string" && /^(https?:\/\/|\/uploads\/)/i.test(item)).map((item) => item.trim()).filter(Boolean).slice(0, 5)
         : [],
       distanceKm, duration: typeof body.duration === "string" ? body.duration.trim() || null : null,
-      highlights, rating, reviewsCount,
+      highlights,
       radialZone: typeof body.radialZone === "string" ? body.radialZone.trim() || null : null,
       subtitle,
       aboutTitle,
@@ -110,8 +108,8 @@ export async function POST(request: Request) {
     const id = randomUUID();
     await db.execute(
       `INSERT INTO attractions
-       (id, category_id, name, slug, description, location, latitude, longitude, image, images, distance_km, duration, highlights, rating, reviews_count, radial_zone, subtitle, about_title, about_paragraphs, quote)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (id, category_id, name, slug, description, location, latitude, longitude, image, images, distance_km, duration, highlights, radial_zone, subtitle, about_title, about_paragraphs, quote)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id,
         value.categoryId,
@@ -126,8 +124,6 @@ export async function POST(request: Request) {
         value.distanceKm,
         value.duration,
         JSON.stringify(value.highlights),
-        value.rating,
-        value.reviewsCount,
         value.radialZone,
         value.subtitle,
         value.aboutTitle,

@@ -23,8 +23,6 @@ export interface AdminDashboardAttraction {
   distance_km: number;
   duration: string | null;
   highlights: string[] | string | null;
-  rating: number;
-  reviews_count: number;
   radial_zone: string | null;
   subtitle?: string | null;
   about_title?: string | null;
@@ -47,8 +45,6 @@ export interface AdminDashboardAttractionForm {
   distanceKm: string;
   duration: string;
   highlights: string;
-  rating: string;
-  reviewsCount: string;
   radialZone: string;
   subtitle: string;
   aboutTitle: string;
@@ -79,7 +75,6 @@ export interface AdminAlertsProps {
 export interface AdminOverviewProps {
   attractionsCount: number;
   categoriesCount: number;
-  averageRating: string;
   onAddFirstPlace: () => void;
 }
 

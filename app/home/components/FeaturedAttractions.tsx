@@ -4,7 +4,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  Star,
   MapPin,
   Clock,
   ExternalLink,
@@ -171,12 +170,6 @@ export default function FeaturedAttractions({
                     <span className="rounded-full bg-[#0284c7]/90 px-2 py-1 text-[11px] font-bold text-white shadow-xs backdrop-blur-md">
                       {attraction.distanceKm} km
                     </span>
-                  </div>
-
-                  {/* Rating Pill */}
-                  <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-md">
-                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    <span>{attraction.rating}</span>
                   </div>
                 </div>
 

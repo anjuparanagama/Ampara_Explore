@@ -9,7 +9,6 @@ import {
   ArrowLeft,
   MapPin,
   Clock,
-  Star,
   Heart,
   Share2,
   Info,
@@ -160,8 +159,6 @@ function AttractionDetailContent() {
             ) as Attraction["category"],
             distanceKm: Number(stop.distance_km || 0),
             duration: String(stop.duration || ""),
-            rating: 0,
-            reviewsCount: 0,
             description: "",
             highlights: [],
             image: String(stop.image || "/images/hero-bg.jpg"),
@@ -342,12 +339,6 @@ function AttractionDetailContent() {
                       className={`inline-flex items-center gap-1 ${attraction.tagColor} text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-xs`}
                     >
                       {attraction.tag}
-                    </span>
-                    <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span>
-                        {attraction.rating} ({attraction.reviewsCount}+ Reviews)
-                      </span>
                     </span>
                     <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
                       <Clock className="w-3 h-3 text-sky-400" />
@@ -750,13 +741,6 @@ function AttractionDetailContent() {
                   {/* Content */}
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                     <div>
-                      <div className="flex items-center gap-1 text-xs font-bold text-amber-500 mb-1.5">
-                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                        <span>{place.rating}</span>
-                        <span className="text-slate-400 font-normal">
-                          ({place.reviewsCount}+ reviews)
-                        </span>
-                      </div>
 
                       <Link
                         href={`/attraction/${place.id}`}

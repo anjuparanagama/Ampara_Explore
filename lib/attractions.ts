@@ -75,8 +75,6 @@ export function mapDatabaseAttraction(row: Record<string, unknown>): Attraction 
     category: String(row.category_name || "Nature") as Attraction["category"],
     distanceKm: Number(row.distance_km || 0),
     duration: String(row.duration || "1 - 2 Hours"),
-    rating: Number(row.rating || 4.8),
-    reviewsCount: Number(row.reviews_count || 120),
     description: String(row.description || ""),
     highlights,
     image: primaryImage,
