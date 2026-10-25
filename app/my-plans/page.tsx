@@ -37,7 +37,20 @@ export default function MyVisitPlansPage() {
     null,
   );
 
-  // Load persisted plans from localStorage
+  // Helper to update plans in state and persist to localStorage
+  const persistPlans = (updater: (prev: SavedPlan[]) => SavedPlan[]) => {
+    setPlans((prev) => {
+      const updated = updater(prev);
+      try {
+        localStorage.setItem("ampara_saved_plans", JSON.stringify(updated));
+      } catch (err) {
+        console.error("Failed to save plans to localStorage:", err);
+      }
+      return updated;
+    });
+  };
+
+  // Load persisted plans from localStorage on mount
   useEffect(() => {
     try {
       const saved = localStorage.getItem("ampara_saved_plans");
@@ -45,16 +58,31 @@ export default function MyVisitPlansPage() {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
           setPlans(parsed);
+          return;
         }
       }
+      // If nothing in localStorage yet, initialize localStorage with initialPlans
+      localStorage.setItem("ampara_saved_plans", JSON.stringify(initialPlans));
     } catch {}
   }, []);
 
+  // Fetch logged-in user and synchronize plans with Backend API
   useEffect(() => {
     fetch("/api/auth/me", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
-        if (data?.user) setCurrentUser(data.user);
+        if (data?.user) {
+          setCurrentUser(data.user);
+          // User is authenticated: load plans from backend API
+          fetch("/api/plans", { cache: "no-store" })
+            .then((res) => (res.ok ? res.json() : null))
+            .then((result) => {
+              if (result?.plans && Array.isArray(result.plans) && result.plans.length > 0) {
+                persistPlans(() => result.plans);
+              }
+            })
+            .catch(() => {});
+        }
       })
       .catch(() => {});
   }, []);
@@ -72,16 +100,25 @@ export default function MyVisitPlansPage() {
 
   const toggleBookmark = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setPlans((prev) =>
+    let nextVal = false;
+    persistPlans((prev) =>
       prev.map((plan) => {
         if (plan.id === id) {
           const next = !plan.isBookmarked;
+          nextVal = next;
           showToast(next ? "Plan bookmarked" : "Removed from bookmarks");
           return { ...plan, isBookmarked: next };
         }
         return plan;
       }),
     );
+
+    // Call Backend API
+    fetch(`/api/plans/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isBookmarked: nextVal }),
+    }).catch(() => {});
   };
 
   const duplicatePlan = (plan: SavedPlan, e: React.MouseEvent) => {
@@ -95,22 +132,34 @@ export default function MyVisitPlansPage() {
       isBookmarked: false,
       stops: plan.stops.map((s) => ({ ...s, visited: false })),
     };
-    setPlans((prev) => [newPlan, ...prev]);
+    persistPlans((prev) => [newPlan, ...prev]);
     showToast("Itinerary duplicated as draft");
+
+    // Call Backend API
+    fetch("/api/plans", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plan: newPlan }),
+    }).catch(() => {});
   };
 
   const deletePlan = (id: string, title: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (confirm(`Are you sure you want to delete "${title}"?`)) {
-      setPlans((prev) => prev.filter((p) => p.id !== id));
+      persistPlans((prev) => prev.filter((p) => p.id !== id));
       if (selectedPlanId === id) setSelectedPlanId(null);
       showToast("Plan deleted");
+
+      // Call Backend API
+      fetch(`/api/plans/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      }).catch(() => {});
     }
   };
 
   // Modal actions: Start Trip, Mark Stop as Visited, Finish Trip, Restart
   const handleStartTrip = (planId: string) => {
-    setPlans((prev) =>
+    persistPlans((prev) =>
       prev.map((p) => {
         if (p.id === planId) {
           return { ...p, status: "in-progress" };
@@ -119,32 +168,43 @@ export default function MyVisitPlansPage() {
       }),
     );
     showToast("Trip started! Enjoy your expedition in Ampara.");
+
+    // Call Backend API
+    fetch(`/api/plans/${encodeURIComponent(planId)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "in-progress" }),
+    }).catch(() => {});
   };
 
   const handleToggleStopVisited = (planId: string, stopId: string) => {
-    setPlans((prev) =>
+    let toastTxt = "";
+    persistPlans((prev) =>
       prev.map((p) => {
         if (p.id === planId) {
           const updatedStops = p.stops.map((s) => {
             if (s.id === stopId) {
               const nextVisited = !s.visited;
-              showToast(
-                nextVisited
-                  ? `Marked "${s.name}" as Visited!`
-                  : `Unmarked "${s.name}"`,
-              );
+              toastTxt = nextVisited
+                ? `Marked "${s.name}" as Visited!`
+                : `Unmarked "${s.name}"`;
               return { ...s, visited: nextVisited };
             }
             return s;
           });
 
           // Check if all stops are now visited
-          const allVisited = updatedStops.every((s) => s.visited);
-          const nextStatus =
-            allVisited && p.status === "in-progress" ? "completed" : p.status;
+          const allVisited = updatedStops.length > 0 && updatedStops.every((s) => s.visited);
+          const anyVisited = updatedStops.some((s) => s.visited);
 
-          if (allVisited && p.status === "in-progress") {
-            showToast("All stops visited! Tour marked as Completed 🎉");
+          let nextStatus = p.status;
+          if (allVisited) {
+            nextStatus = "completed";
+            toastTxt = "All stops visited! Tour marked as Completed 🎉";
+          } else if (anyVisited && p.status === "upcoming") {
+            nextStatus = "in-progress";
+          } else if (!anyVisited && p.status === "completed") {
+            nextStatus = "in-progress";
           }
 
           return { ...p, stops: updatedStops, status: nextStatus };
@@ -152,10 +212,19 @@ export default function MyVisitPlansPage() {
         return p;
       }),
     );
+
+    if (toastTxt) showToast(toastTxt);
+
+    // Call Backend API
+    fetch(`/api/plans/${encodeURIComponent(planId)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ stopId }),
+    }).catch(() => {});
   };
 
   const handleFinishTrip = (planId: string) => {
-    setPlans((prev) =>
+    persistPlans((prev) =>
       prev.map((p) => {
         if (p.id === planId) {
           const completedStops = p.stops.map((s) => ({ ...s, visited: true }));
@@ -170,10 +239,17 @@ export default function MyVisitPlansPage() {
       }),
     );
     showToast("Congratulations! Tour marked as Completed 🎉");
+
+    // Call Backend API
+    fetch(`/api/plans/${encodeURIComponent(planId)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "completed" }),
+    }).catch(() => {});
   };
 
   const handleRestartTrip = (planId: string) => {
-    setPlans((prev) =>
+    persistPlans((prev) =>
       prev.map((p) => {
         if (p.id === planId) {
           const resetStops = p.stops.map((s) => ({ ...s, visited: false }));
@@ -187,7 +263,15 @@ export default function MyVisitPlansPage() {
       }),
     );
     showToast("Trip restarted in progress.");
+
+    // Call Backend API
+    fetch(`/api/plans/${encodeURIComponent(planId)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "in-progress" }),
+    }).catch(() => {});
   };
+
 
   // Filtered and searched plans
   const filteredPlans = useMemo(() => {
@@ -292,9 +376,15 @@ export default function MyVisitPlansPage() {
           isOpen={isCreatePlanOpen}
           onClose={() => setIsCreatePlanOpen(false)}
           onCreatePlan={(newPlan) => {
-            setPlans((prev) => [newPlan, ...prev]);
+            persistPlans((prev) => [newPlan, ...prev]);
             showToast(`Itinerary "${newPlan.title}" created successfully!`);
+            fetch("/api/plans", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ plan: newPlan }),
+            }).catch(() => {});
           }}
+
         />
       )}
 

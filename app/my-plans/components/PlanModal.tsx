@@ -131,16 +131,16 @@ export default function PlanModal({
 
           {/* Status Action Buttons */}
           <div className="flex items-center gap-2">
-            {plan.status === "upcoming" || plan.status === "draft" ? (
+            {plan.status === "completed" ? (
               <button
                 type="button"
-                onClick={() => onStartTrip(plan.id)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer"
+                onClick={() => onRestartTrip(plan.id)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 hover:bg-white text-slate-700 text-xs font-semibold transition-all cursor-pointer"
               >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>Start This Trip</span>
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Restart Tour</span>
               </button>
-            ) : plan.status === "in-progress" ? (
+            ) : plan.status === "in-progress" || progressPct === 100 ? (
               <button
                 type="button"
                 onClick={() => onFinishTrip(plan.id)}
@@ -152,14 +152,15 @@ export default function PlanModal({
             ) : (
               <button
                 type="button"
-                onClick={() => onRestartTrip(plan.id)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 hover:bg-white text-slate-700 text-xs font-semibold transition-all cursor-pointer"
+                onClick={() => onStartTrip(plan.id)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Restart Tour</span>
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Start This Trip</span>
               </button>
             )}
           </div>
+
         </div>
 
         {/* Scrollable Places / Stops List */}
@@ -313,7 +314,7 @@ export default function PlanModal({
               Done
             </button>
 
-            {plan.status === "in-progress" && (
+            {(plan.status === "in-progress" || (progressPct === 100 && plan.status !== "completed")) && (
               <button
                 type="button"
                 onClick={() => onFinishTrip(plan.id)}
@@ -323,6 +324,7 @@ export default function PlanModal({
                 <span>Finish Trip</span>
               </button>
             )}
+
           </div>
         </div>
       </div>
