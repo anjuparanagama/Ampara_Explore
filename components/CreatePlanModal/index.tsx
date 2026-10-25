@@ -253,15 +253,6 @@ export default function CreatePlanModal({
           }),
         );
 
-        // Also update saved plans in localStorage
-        const existingPlansRaw = localStorage.getItem("ampara_saved_plans");
-        const existingPlans = existingPlansRaw
-          ? JSON.parse(existingPlansRaw)
-          : [];
-        localStorage.setItem(
-          "ampara_saved_plans",
-          JSON.stringify([newSavedPlan, ...existingPlans]),
-        );
       } catch (err) {
         console.error("Failed to save plan to localStorage:", err);
       }

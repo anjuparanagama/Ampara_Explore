@@ -1,13 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Input from "@/components/Input";
-import {
-  ArrowRight,
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  Mail,
-} from "lucide-react";
+import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 import { LoginFormProps } from "@/interface";
 
 export default function LoginForm({
@@ -109,12 +103,12 @@ export default function LoginForm({
             />
             Remember me
           </label>
-          <Link
+          {/*           <Link
             href="/forgot-password"
             className="font-semibold text-sky-600 hover:text-sky-700"
           >
             Forgot password?
-          </Link>
+          </Link> */}
         </div>
 
         <button

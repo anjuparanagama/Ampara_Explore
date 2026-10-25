@@ -32,7 +32,11 @@ export default function MyVisitPlanPage() {
       const activeRaw = localStorage.getItem("ampara_active_plan");
       if (activeRaw) {
         const active = JSON.parse(activeRaw);
-        if (active?.stops && Array.isArray(active.stops) && active.stops.length > 0) {
+        if (
+          active?.stops &&
+          Array.isArray(active.stops) &&
+          active.stops.length > 0
+        ) {
           setStops(active.stops);
           setViewState("active");
           if (active.pace) setPace(active.pace);
@@ -76,7 +80,7 @@ export default function MyVisitPlanPage() {
   const handleOptimizeRoute = () => {
     setIsOptimized(true);
     alert(
-      "✨ Route Optimized! Waypoints sequenced for minimum travel time within the 25km radius."
+      "✨ Route Optimized! Waypoints sequenced for minimum travel time within the 25km radius.",
     );
   };
 
@@ -150,7 +154,8 @@ export default function MyVisitPlanPage() {
         onClose={() => setIsPlanDrawerOpen(false)}
         visitPlan={stops.map(
           (s) =>
-            amparaAttractions.find((a) => a.id === s.id) || amparaAttractions[0]
+            amparaAttractions.find((a) => a.id === s.id) ||
+            amparaAttractions[0],
         )}
         onRemove={(id) => handleDeleteStop(id)}
         onClear={() => {

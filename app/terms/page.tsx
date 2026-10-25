@@ -20,7 +20,7 @@ import {
 } from "./components";
 
 export default function TermsPage() {
-  const lastUpdated = "October 2024 (Version 1.8)";
+  const lastUpdated = "October 2026 (Version 1.8)";
 
   const sections: TermsSection[] = [
     {
@@ -171,12 +171,9 @@ export default function TermsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
-      {/* 1. Header Bar */}
-      <TermsHeader />
-
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-between font-sans text-slate-800 antialiased selection:bg-[#0284c7] selection:text-white">
       {/* 2. Main Body Container */}
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <main className="flex-1 max-w-360 w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Breadcrumb */}
         <TermsBreadcrumbs />
 
@@ -189,9 +186,6 @@ export default function TermsPage() {
             <TermsSectionCard key={section.id} section={section} />
           ))}
         </div>
-
-        {/* Quick Link Footer Navigator */}
-        <TermsFooterNavigator />
       </main>
     </div>
   );

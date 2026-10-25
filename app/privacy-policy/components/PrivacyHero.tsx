@@ -22,11 +22,6 @@ export default function PrivacyHero({
             Horizon portal.
           </p>
         </div>
-
-        <div className="text-left sm:text-right text-xs text-slate-500 shrink-0">
-          <span className="font-bold text-slate-700 block">Status: Verified</span>
-          <span>Last Updated: {lastUpdated}</span>
-        </div>
       </div>
 
       {/* Table of Contents Pill Bar */}

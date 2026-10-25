@@ -534,9 +534,6 @@ function AttractionDetailContent() {
                       {tip.desc}
                     </div>
                   </div>
-                  <div className="text-[11px] font-bold text-[#0084d1] pt-2">
-                    Explorer Guideline →
-                  </div>
                 </div>
               ))}
             </div>
@@ -812,13 +809,6 @@ function AttractionDetailContent() {
               </div>
             </div>
           </div>
-
-          <Link
-            href="/cultural-guidelines"
-            className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition-all shrink-0 text-center"
-          >
-            Read Cultural Guidelines
-          </Link>
         </section>
       </main>
 

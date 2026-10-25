@@ -9,7 +9,6 @@ import { amparaAttractions } from "@/data/amparaData";
 import {
   SavedPlan,
   FilterTabType,
-  initialPlans,
 } from "@/interface/myPlans.types";
 import {
   PlanHeader,
@@ -21,7 +20,8 @@ import {
 } from "./components";
 
 export default function MyVisitPlansPage() {
-  const [plans, setPlans] = useState<SavedPlan[]>(initialPlans);
+  const [plans, setPlans] = useState<SavedPlan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<FilterTabType>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -33,16 +33,18 @@ export default function MyVisitPlansPage() {
   // App UI state
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<{ name?: string } | null>(
+  const [currentUser, setCurrentUser] = useState<{ id?: string; name?: string } | null>(
     null,
   );
 
-  // Helper to update plans in state and persist to localStorage
+  // Helper to update plans in state and persist to user-scoped localStorage
   const persistPlans = (updater: (prev: SavedPlan[]) => SavedPlan[]) => {
     setPlans((prev) => {
       const updated = updater(prev);
       try {
-        localStorage.setItem("ampara_saved_plans", JSON.stringify(updated));
+        if (currentUser?.id) {
+          localStorage.setItem(`ampara_saved_plans_${currentUser.id}`, JSON.stringify(updated));
+        }
       } catch (err) {
         console.error("Failed to save plans to localStorage:", err);
       }
@@ -50,41 +52,56 @@ export default function MyVisitPlansPage() {
     });
   };
 
-  // Load persisted plans from localStorage on mount
+  // Synchronize user and unique visit plans
   useEffect(() => {
+    // Clear legacy un-scoped storage if present
     try {
-      const saved = localStorage.getItem("ampara_saved_plans");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setPlans(parsed);
-          return;
-        }
-      }
-      // If nothing in localStorage yet, initialize localStorage with initialPlans
-      localStorage.setItem("ampara_saved_plans", JSON.stringify(initialPlans));
+      localStorage.removeItem("ampara_saved_plans");
     } catch {}
-  }, []);
 
-  // Fetch logged-in user and synchronize plans with Backend API
-  useEffect(() => {
     fetch("/api/auth/me", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.user) {
-          setCurrentUser(data.user);
-          // User is authenticated: load plans from backend API
+          const user = data.user;
+          setCurrentUser(user);
+
+          // User-specific cached plans
+          const userKey = `ampara_saved_plans_${user.id}`;
+          try {
+            const cached = localStorage.getItem(userKey);
+            if (cached) {
+              const parsed = JSON.parse(cached);
+              if (Array.isArray(parsed)) {
+                setPlans(parsed);
+              }
+            }
+          } catch {}
+
+          // Fetch fresh plans from Backend API for this specific user
           fetch("/api/plans", { cache: "no-store" })
             .then((res) => (res.ok ? res.json() : null))
             .then((result) => {
-              if (result?.plans && Array.isArray(result.plans) && result.plans.length > 0) {
-                persistPlans(() => result.plans);
+              if (result && Array.isArray(result.plans)) {
+                setPlans(result.plans);
+                try {
+                  localStorage.setItem(userKey, JSON.stringify(result.plans));
+                } catch {}
               }
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+              setIsLoading(false);
+            });
+        } else {
+          setCurrentUser(null);
+          setPlans([]);
+          setIsLoading(false);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const showToast = (msg: string) => {
@@ -324,7 +341,13 @@ export default function MyVisitPlansPage() {
         {/* Header Component */}
         <PlanHeader
           userName={currentUser?.name}
-          onCreatePlan={() => setIsCreatePlanOpen(true)}
+          onCreatePlan={() => {
+            if (!currentUser) {
+              setIsAuthModalOpen(true);
+              return;
+            }
+            setIsCreatePlanOpen(true);
+          }}
         />
 
         {/* Filters and Search Component */}
@@ -336,13 +359,24 @@ export default function MyVisitPlansPage() {
           setSearchQuery={setSearchQuery}
         />
 
-        {/* Plans Grid or Empty State */}
-        {filteredPlans.length === 0 ? (
+        {/* Plans Grid, Loading or Empty State */}
+        {isLoading ? (
+          <div className="py-24 flex flex-col items-center justify-center space-y-3">
+            <div className="w-8 h-8 border-3 border-sky-600 border-t-transparent rounded-full animate-spin" />
+            <p className="text-xs font-medium text-slate-400">Loading your itineraries...</p>
+          </div>
+        ) : filteredPlans.length === 0 ? (
           <PlanEmptyState
             searchQuery={searchQuery}
             activeFilter={activeFilter}
             onClearSearch={() => setSearchQuery("")}
-            onCreatePlan={() => setIsCreatePlanOpen(true)}
+            onCreatePlan={() => {
+              if (!currentUser) {
+                setIsAuthModalOpen(true);
+                return;
+              }
+              setIsCreatePlanOpen(true);
+            }}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

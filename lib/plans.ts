@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { db } from "@/lib/db";
-import { initialPlans, PlanStatus, PlanStopItem, SavedPlan } from "@/interface/myPlans.types";
+import { PlanStatus, PlanStopItem, SavedPlan } from "@/interface/myPlans.types";
 
 export async function getOrCreateDraftPlan(userId: string) {
   const [rows] = await db.execute(
@@ -59,28 +59,14 @@ function rowToSavedPlan(row: any): SavedPlan {
   };
 }
 
-// Get all saved plans for a user. If none exist in DB, seeds the initialPlans for this user.
+// Get all saved plans for a user
 export async function getAllPlansForUser(userId: string): Promise<SavedPlan[]> {
   const [rows] = await db.execute(
     "SELECT * FROM visit_plans WHERE user_id = ? AND status != 'draft' ORDER BY updated_at DESC",
     [userId],
   );
 
-  const existingList = (rows as any[]).map(rowToSavedPlan);
-  if (existingList.length > 0) {
-    return existingList;
-  }
-
-  // Seed default plans for this user so they have a persistent starting itinerary in DB
-  const seeded: SavedPlan[] = [];
-  for (const p of initialPlans) {
-    const planId = `${p.id}-${userId.substring(0, 8)}`;
-    const newPlan: SavedPlan = { ...p, id: planId };
-    await saveUserPlan(userId, newPlan);
-    seeded.push(newPlan);
-  }
-
-  return seeded;
+  return (rows as any[]).map(rowToSavedPlan);
 }
 
 export async function getUserPlanById(userId: string, planId: string): Promise<SavedPlan | null> {
@@ -90,14 +76,6 @@ export async function getUserPlanById(userId: string, planId: string): Promise<S
   );
   const found = (rows as any[])[0];
   if (found) return rowToSavedPlan(found);
-
-  // If not found in DB directly, maybe it's one of the initialPlans (e.g. "plan-3")
-  const initial = initialPlans.find((p) => p.id === planId || planId.startsWith(p.id));
-  if (initial) {
-    const toSave: SavedPlan = { ...initial, id: planId };
-    await saveUserPlan(userId, toSave);
-    return toSave;
-  }
 
   return null;
 }
