@@ -1,6 +1,6 @@
 import nextEnv from "@next/env";
 import mysql from "mysql2/promise";
-import { readdir, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 nextEnv.loadEnvConfig(process.cwd());
@@ -17,19 +17,12 @@ const pool = mysql.createPool({
   ssl: { rejectUnauthorized: true },
 });
 try {
-  const migrationDirectory = resolve("database", "migrations");
-  const migrationFiles = (await readdir(migrationDirectory))
-    .filter((file) => file.endsWith(".sql"))
-    .sort();
-
-  for (const file of migrationFiles) {
-    const sql = await readFile(resolve(migrationDirectory, file), "utf8");
-    for (const statement of sql.split(";").map((part) => part.trim()).filter(Boolean)) {
-      await pool.query(statement);
-    }
-    console.log(`Applied ${file}.`);
+  const schemaPath = resolve("database", "schema.sql");
+  const sql = await readFile(schemaPath, "utf8");
+  for (const statement of sql.split(";").map((part) => part.trim()).filter(Boolean)) {
+    await pool.query(statement);
   }
-  console.log("Auth tables are ready in TiDB.");
+  console.log("Database schema applied successfully from database/schema.sql.");
 } finally {
   await pool.end();
 }

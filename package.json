@@ -9,7 +9,6 @@
     "lint": "eslint",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed": "node scripts/seed.mjs",
-    "db:seed:places": "tsx scripts/seed-places.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",

@@ -1,2 +1,0 @@
-ALTER TABLE attractions
-  ADD COLUMN IF NOT EXISTS images JSON NULL AFTER image;

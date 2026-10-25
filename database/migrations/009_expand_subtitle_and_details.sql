@@ -1,2 +1,0 @@
-ALTER TABLE attractions MODIFY COLUMN subtitle TEXT NULL;
-ALTER TABLE attractions MODIFY COLUMN route_desc TEXT NULL;
