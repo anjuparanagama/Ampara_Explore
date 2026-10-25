@@ -1,13 +1,40 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
-import { amparaAttractions, Attraction } from "@/data/amparaData";
+import { Attraction } from "@/data/amparaData";
 import { MapPlace, MapLayerType, initialMapDestinations } from "@/interface";
+import { RoutePoint } from "@/components/LeafletMap";
 import { MapSidebar, MapCanvas } from "./components";
+import { MapPin, Route, X } from "lucide-react";
 
-export default function MapPage() {
+function MapPageInner() {
+  const searchParams = useSearchParams();
+  const planStopsParam = searchParams.get("planStops");
+  const planStopNamesParam = searchParams.get("planStopNames");
+  const planTitleParam = searchParams.get("planTitle");
+
+  // Parsed stop IDs and names from query params (order preserved)
+  const planStopIds = useMemo<string[]>(() => {
+    if (!planStopsParam) return [];
+    return planStopsParam
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }, [planStopsParam]);
+
+  const planStopNames = useMemo<string[]>(() => {
+    if (!planStopNamesParam) return [];
+    return planStopNamesParam
+      .split("|")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }, [planStopNamesParam]);
+
+  const isRouteMode = planStopIds.length > 0 || planStopNames.length > 0;
+
   const [mapDestinations, setMapDestinations] = useState<MapPlace[]>(
     initialMapDestinations,
   );
@@ -21,6 +48,7 @@ export default function MapPage() {
   );
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [routeBannerDismissed, setRouteBannerDismissed] = useState(false);
 
   useEffect(() => {
     const loadDatabasePlaces = async () => {
@@ -125,10 +153,62 @@ export default function MapPage() {
 
   const [visitPlan, setVisitPlan] = useState<Attraction[]>([]);
 
+  // Build routePoints from the loaded attractions matched by planStopIds / planStopNames (order preserved)
+  const routePoints = useMemo<RoutePoint[]>(() => {
+    if (!isRouteMode || mapDestinations.length === 0) return [];
+    const points: RoutePoint[] = [];
+    const matchedPlaceIds = new Set<string>();
+
+    const normalize = (str: string) =>
+      str.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+    const count = Math.max(planStopIds.length, planStopNames.length);
+    for (let index = 0; index < count; index++) {
+      const stopId = planStopIds[index] || "";
+      const stopName = planStopNames[index] || "";
+      const normId = normalize(stopId);
+      const normName = stopName ? normalize(stopName) : "";
+
+      const place = mapDestinations.find((p) => {
+        const pNormId = normalize(p.id);
+        const pNormName = normalize(p.name);
+        return (
+          (stopId && (p.id === stopId || pNormId === normId)) ||
+          (stopId &&
+            (stopId.startsWith(`stop-${p.id}-`) ||
+              stopId === `stop-${p.id}`)) ||
+          (normName &&
+            (pNormName === normName ||
+              pNormName.includes(normName) ||
+              normName.includes(pNormName))) ||
+          (normId.length > 3 &&
+            (normId.includes(pNormId) || pNormName.includes(normId)))
+        );
+      });
+
+      if (place && !matchedPlaceIds.has(place.id)) {
+        matchedPlaceIds.add(place.id);
+        points.push({
+          id: place.id,
+          name: place.name,
+          latitude: place.latitude,
+          longitude: place.longitude,
+          order: points.length + 1,
+        });
+      }
+    }
+    return points;
+  }, [isRouteMode, planStopIds, planStopNames, mapDestinations]);
+
+  // In route mode, only show the route's stops in the map/sidebar
+  const routeFilteredPlaces = useMemo(() => {
+    if (!isRouteMode) return [];
+    const matchedIds = new Set(routePoints.map((rp) => rp.id));
+    return mapDestinations.filter((p) => matchedIds.has(p.id));
+  }, [isRouteMode, routePoints, mapDestinations]);
+
   const handleTogglePlan = (place: MapPlace) => {
-    const matched: Attraction = amparaAttractions.find(
-      (a) => a.id === place.id,
-    ) || {
+    const matched: Attraction = {
       id: place.id,
       name: place.name,
       category: place.category,
@@ -152,7 +232,7 @@ export default function MapPage() {
     setSelectedPlace(mapDestinations[0] || null);
   };
 
-  // Filter list
+  // Filter list (only used in explore mode)
   const filteredPlaces = mapDestinations.filter((p) => {
     const matchesSearch =
       !searchQuery ||
@@ -171,8 +251,54 @@ export default function MapPage() {
     return matchesSearch && matchesCategory && matchesZone;
   });
 
+  const displayPlaces = isRouteMode ? routeFilteredPlaces : filteredPlaces;
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-[#0284c7] selection:text-white flex flex-col justify-between">
+
+      {/* Plan Route Mode Banner */}
+      {isRouteMode && !routeBannerDismissed && (
+        <div className="max-w-[1600px] w-full mx-auto px-3 sm:px-5 lg:px-8 pt-3">
+          <div className="flex items-center gap-3 px-4 py-2.5 bg-amber-50 border border-amber-200 rounded-2xl text-sm shadow-sm">
+            <Route className="w-4 h-4 text-amber-600 shrink-0" />
+            <div className="flex-1 min-w-0">
+              <span className="font-bold text-amber-800">Route Mode: </span>
+              <span className="text-amber-700 font-medium">
+                {planTitleParam
+                  ? `Showing route for "${planTitleParam}"`
+                  : "Showing your plan route"}
+              </span>
+              <span className="text-amber-600 ml-2 text-xs">
+                — {routePoints.length} stop{routePoints.length !== 1 ? "s" : ""} mapped
+                {routePoints.length <
+                Math.max(planStopIds.length, planStopNames.length)
+                  ? ` (${Math.max(planStopIds.length, planStopNames.length) - routePoints.length} stop(s) not found in map)`
+                  : ""}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              {routePoints.map((rp) => (
+                <span
+                  key={rp.id}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 border border-amber-300 rounded-full text-[10px] font-bold text-amber-800"
+                >
+                  <MapPin className="w-2.5 h-2.5" />
+                  {rp.order}. {rp.name}
+                </span>
+              ))}
+              <button
+                type="button"
+                onClick={() => setRouteBannerDismissed(true)}
+                className="p-1 rounded-lg hover:bg-amber-100 text-amber-500 hover:text-amber-700 transition-colors cursor-pointer"
+                title="Dismiss"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Map Dashboard (Split Layout) */}
       <main className="max-w-[1600px] w-full mx-auto px-3 sm:px-5 lg:px-8 pt-4 sm:pt-5 pb-6 sm:pb-8 flex-1 flex flex-col lg:flex-row gap-4 lg:gap-5 items-stretch">
         {/* LEFT PANEL: Explore Places Directory */}
@@ -183,8 +309,8 @@ export default function MapPage() {
           setSelectedCategory={setSelectedCategory}
           selectedZone={selectedZone}
           setSelectedZone={setSelectedZone}
-          filteredPlaces={filteredPlaces}
-          allPlaces={mapDestinations}
+          filteredPlaces={displayPlaces}
+          allPlaces={isRouteMode ? routeFilteredPlaces : mapDestinations}
           selectedPlace={selectedPlace}
           onSelectPlace={setSelectedPlace}
           visitPlan={visitPlan}
@@ -193,8 +319,8 @@ export default function MapPage() {
 
         {/* RIGHT MAIN: Interactive 25KM Radar Map Canvas */}
         <MapCanvas
-          filteredPlaces={filteredPlaces}
-          allPlaces={mapDestinations}
+          filteredPlaces={displayPlaces}
+          allPlaces={isRouteMode ? routeFilteredPlaces : mapDestinations}
           selectedPlace={selectedPlace}
           onSelectPlace={setSelectedPlace}
           selectedZone={selectedZone}
@@ -205,6 +331,7 @@ export default function MapPage() {
           onRecenter={handleRecenter}
           visitPlan={visitPlan}
           onTogglePlan={handleTogglePlan}
+          routePoints={routePoints}
         />
       </main>
 
@@ -224,5 +351,19 @@ export default function MapPage() {
         onClose={() => setIsAuthModalOpen(false)}
       />
     </div>
+  );
+}
+
+export default function MapPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+          <div className="w-8 h-8 border-3 border-sky-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <MapPageInner />
+    </Suspense>
   );
 }

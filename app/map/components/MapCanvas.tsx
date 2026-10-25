@@ -25,6 +25,7 @@ export default function MapCanvas({
   onRecenter,
   visitPlan,
   onTogglePlan,
+  routePoints = [],
 }: MapCanvasProps) {
   return (
     <div className="flex-1 bg-white rounded-3xl border border-slate-200/90 shadow-[0_10px_30px_rgba(15,23,42,0.06)] relative overflow-hidden flex flex-col min-h-[620px] lg:min-h-[720px]">
@@ -42,11 +43,16 @@ export default function MapCanvas({
           selectedZone={selectedZone}
           mapLayer={mapLayer}
           zoomLevel={zoomLevel}
+          routePoints={routePoints}
           onSelectPlace={(place) => {
             const matchingPlace = allPlaces.find(
               (destination) => destination.id === place.id,
             );
-            if (matchingPlace) onSelectPlace(matchingPlace);
+            if (matchingPlace) {
+              onSelectPlace(matchingPlace);
+            } else {
+              onSelectPlace(place as unknown as (typeof allPlaces)[number]);
+            }
           }}
         />
 
@@ -55,6 +61,8 @@ export default function MapCanvas({
           <MapPlacePopup
             place={selectedPlace}
             onClose={() => onSelectPlace(null)}
+            isInPlan={visitPlan?.some((p) => p.id === selectedPlace.id) ?? false}
+            onTogglePlan={onTogglePlan}
           />
         )}
       </div>

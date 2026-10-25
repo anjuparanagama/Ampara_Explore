@@ -1,4 +1,5 @@
 import { Attraction } from "@/data/amparaData";
+import { RoutePoint } from "@/components/LeafletMap";
 
 export interface MapPlace {
   id: string;
@@ -23,9 +24,9 @@ export type MapLayerType = "terrain" | "satellite" | "topo";
 export interface MapPlaceCardProps {
   place: MapPlace;
   isSelected: boolean;
-  isAdded: boolean;
+  isAdded?: boolean;
   onSelect: () => void;
-  onTogglePlan: (e: React.MouseEvent) => void;
+  onTogglePlan?: (e: React.MouseEvent) => void;
 }
 
 export interface MapSidebarProps {
@@ -51,8 +52,8 @@ export interface MapControlBarProps {
 export interface MapPlacePopupProps {
   place: MapPlace;
   onClose: () => void;
-  isInPlan: boolean;
-  onTogglePlan: (place: MapPlace) => void;
+  isInPlan?: boolean;
+  onTogglePlan?: (place: MapPlace) => void;
 }
 
 export interface MapLegendBarProps {
@@ -74,6 +75,7 @@ export interface MapCanvasProps {
   onRecenter: () => void;
   visitPlan: Attraction[];
   onTogglePlan: (place: MapPlace) => void;
+  routePoints?: RoutePoint[];
 }
 
 export const initialMapDestinations: MapPlace[] = [

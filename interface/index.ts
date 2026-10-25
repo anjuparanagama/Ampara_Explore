@@ -11,8 +11,3 @@ export * from "./resetpassword.types";
 export * from "./forgetpassword.types";
 export * from "./terms.types";
 export * from "./adminDashboard.types";
-
-
-
-
-

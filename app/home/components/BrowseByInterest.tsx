@@ -11,7 +11,6 @@ import {
   Camera,
   Sparkles,
 } from "lucide-react";
-import { interestCategories } from "@/data/amparaData";
 import { useLanguage } from "@/context/LanguageContext";
 import type { BrowseByInterestProps, CategoryItem } from "@/interface/home.types";
 
@@ -67,12 +66,7 @@ export default function BrowseByInterest({
 
   const displayCategories = useMemo(() => {
     if (!activeCategoriesList || activeCategoriesList.length === 0) {
-      return interestCategories.map((cat) => ({
-        id: cat.id,
-        name: cat.title,
-        description: cat.description || "",
-        attraction_count: cat.count,
-      }));
+      return [];
     }
 
     const priorityOrder = [

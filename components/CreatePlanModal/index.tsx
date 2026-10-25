@@ -18,7 +18,7 @@ import {
   AlertCircle,
   Sparkles,
 } from "lucide-react";
-import { amparaAttractions, Attraction } from "@/data/amparaData";
+import { Attraction } from "@/data/amparaData";
 import { SavedPlan } from "@/interface/myPlans.types";
 import { PlanStop } from "@/interface/plan.types";
 import { useLanguage } from "@/context/LanguageContext";
@@ -47,6 +47,39 @@ export default function CreatePlanModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
+  // Attractions catalog loaded from API
+  const [allAttractions, setAllAttractions] = useState<Attraction[]>([]);
+  const [isLoadingAttractions, setIsLoadingAttractions] = useState(false);
+
+  // Load attractions from the database when the modal opens
+  useEffect(() => {
+    if (!isOpen) return;
+    setIsLoadingAttractions(true);
+    fetch("/api/attractions?radius=25", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.attractions && Array.isArray(data.attractions)) {
+          const mapped: Attraction[] = data.attractions
+            .filter((row: Record<string, unknown>) => row.latitude && row.longitude)
+            .map((row: Record<string, unknown>) => ({
+              id: String(row.id || row.attraction_id || ""),
+              name: String(row.name || ""),
+              category: String(row.category_name || row.category || ""),
+              distanceKm: Number(row.distance_km ?? row.distanceKm ?? 0),
+              duration: String(row.duration || "2 Hours"),
+              description: String(row.description || ""),
+              highlights: Array.isArray(row.highlights) ? (row.highlights as string[]) : [],
+              image: String(row.image_url || row.image || "/images/hero-bg.jpg"),
+              radialZone: (String(row.radial_zone || row.radialZone || "15-25km")) as Attraction["radialZone"],
+              location: String(row.location || ""),
+            }));
+          setAllAttractions(mapped);
+        }
+      })
+      .catch((err) => console.error("Failed to load attractions in CreatePlanModal:", err))
+      .finally(() => setIsLoadingAttractions(false));
+  }, [isOpen]);
+
   // Initialize date client-side only to avoid SSR/prerender date instability
   useEffect(() => {
     const tomorrow = new Date();
@@ -65,7 +98,7 @@ export default function CreatePlanModal({
   ];
 
   // Filtered attractions catalog
-  const filteredAttractions = amparaAttractions.filter((attr) => {
+  const filteredAttractions = allAttractions.filter((attr) => {
     const matchesSearch =
       attr.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       attr.location.toLowerCase().includes(searchQuery.toLowerCase());
@@ -78,9 +111,9 @@ export default function CreatePlanModal({
   // Selected attractions in order of selection
   const selectedAttractions = useMemo(() => {
     return selectedIds
-      .map((id) => amparaAttractions.find((a) => a.id === id))
+      .map((id) => allAttractions.find((a) => a.id === id))
       .filter((a): a is Attraction => Boolean(a));
-  }, [selectedIds]);
+  }, [selectedIds, allAttractions]);
 
   // Toggle selection
   const handleTogglePlace = (id: string) => {
@@ -252,7 +285,6 @@ export default function CreatePlanModal({
             pace: pace,
           }),
         );
-
       } catch (err) {
         console.error("Failed to save plan to localStorage:", err);
       }
@@ -264,7 +296,7 @@ export default function CreatePlanModal({
 
     onClose();
     // Navigate to the plan view with the user's newly selected places
-    router.push("/plan");
+    router.push("/my-plans");
   };
 
   if (!isOpen) return null;
@@ -420,7 +452,16 @@ export default function CreatePlanModal({
 
             {/* Places Grid: Image & Name Only */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 max-h-[380px] overflow-y-auto p-1">
-              {filteredAttractions.map((attr) => {
+              {isLoadingAttractions ? (
+                <div className="col-span-full py-10 text-center text-xs text-slate-400 font-medium">
+                  Loading attractions…
+                </div>
+              ) : filteredAttractions.length === 0 ? (
+                <div className="col-span-full py-10 text-center text-xs text-slate-400 font-medium">
+                  No attractions found.
+                </div>
+              ) : (
+              filteredAttractions.map((attr) => {
                 const isSelected = selectedIds.includes(attr.id);
                 const orderIndex = selectedIds.indexOf(attr.id);
 
@@ -474,7 +515,8 @@ export default function CreatePlanModal({
                     </div>
                   </button>
                 );
-              })}
+              })
+              )}
             </div>
           </div>
 

@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Sparkles } from "lucide-react";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
-import { amparaAttractions } from "@/data/amparaData";
 
 import {
   SavedPlan,
@@ -426,7 +425,7 @@ export default function MyVisitPlansPage() {
       <VisitPlanDrawer
         isOpen={isPlanDrawerOpen}
         onClose={() => setIsPlanDrawerOpen(false)}
-        visitPlan={plans.map(() => amparaAttractions[0])}
+        visitPlan={[]}
         onRemove={() => {}}
         onClear={() => {}}
       />

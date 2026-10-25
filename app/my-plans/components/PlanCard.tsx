@@ -185,14 +185,6 @@ export default function PlanCard({
         <div className="flex items-center gap-1">
           <button
             type="button"
-            onClick={(e) => onDuplicate(plan, e)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
-            title="Duplicate as draft"
-          >
-            <Copy className="w-3.5 h-3.5" />
-          </button>
-          <button
-            type="button"
             onClick={(e) => onDelete(plan.id, plan.title, e)}
             className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
             title="Delete itinerary"
@@ -203,11 +195,16 @@ export default function PlanCard({
 
         <div className="flex items-center gap-2">
           <Link
-            href="/map"
+            href={`/map?planStops=${encodeURIComponent(
+              plan.stops.map((s) => s.id).join(","),
+            )}&planStopNames=${encodeURIComponent(
+              plan.stops.map((s) => s.name).join("|"),
+            )}&planTitle=${encodeURIComponent(plan.title)}`}
             onClick={(e) => e.stopPropagation()}
             className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors flex items-center gap-1"
           >
-            <span>Map</span>
+            <Route className="w-3 h-3" />
+            <span>Map Route</span>
           </Link>
           <button
             type="button"

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import CreatePlanModal from "@/components/CreatePlanModal";
-import { amparaAttractions } from "@/data/amparaData";
+import type { Attraction } from "@/data/amparaData";
 import { PlanStop, PlanViewState, initialPlanStops } from "@/interface";
 import {
   PlanBreadcrumbs,
@@ -153,9 +153,18 @@ export default function MyVisitPlanPage() {
         isOpen={isPlanDrawerOpen}
         onClose={() => setIsPlanDrawerOpen(false)}
         visitPlan={stops.map(
-          (s) =>
-            amparaAttractions.find((a) => a.id === s.id) ||
-            amparaAttractions[0],
+          (s): Attraction => ({
+            id: s.id,
+            name: s.name,
+            category: s.categoryTag,
+            distanceKm: parseFloat(s.distanceFromTown) || 0,
+            duration: s.duration,
+            description: s.description,
+            highlights: [],
+            image: s.image,
+            radialZone: '15-25km',
+            location: s.location,
+          }),
         )}
         onRemove={(id) => handleDeleteStop(id)}
         onClear={() => {
