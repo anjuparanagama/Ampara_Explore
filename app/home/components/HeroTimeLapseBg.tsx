@@ -345,7 +345,9 @@ export default function HeroTimeLapseBg() {
         {!isLoaded && (
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700"
-            style={{ backgroundImage: "url('/images-new/ezgif-frame-001.jpg')" }}
+            style={{
+              backgroundImage: "url('/images-new/ezgif-frame-001.jpg')",
+            }}
           />
         )}
 
@@ -355,7 +357,7 @@ export default function HeroTimeLapseBg() {
       </div>
 
       {/* Floating Interactive Time-of-Day Widget Pill */}
-      <div className="absolute top-16 right-3 sm:top-auto sm:bottom-4 sm:right-10 z-30 pointer-events-auto">
+      <div className="hidden md:block absolute top-16 right-3 sm:top-auto sm:bottom-4 sm:right-10 z-30 pointer-events-auto">
         {/* Time Controller Drawer Popover (Opens Downward on Mobile, Upward on Desktop) */}
         {showControls && (
           <div className="absolute right-0 top-full mt-2 sm:top-auto sm:bottom-full sm:mb-3 bg-slate-900/95 backdrop-blur-xl border border-white/15 p-3.5 rounded-2xl shadow-2xl text-white w-[min(calc(100vw-24px),288px)] text-xs flex flex-col gap-3 animate-fadeIn z-40">

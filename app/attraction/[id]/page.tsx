@@ -25,6 +25,7 @@ import {
 import VisitPlanDrawer from "@/components/VisitPlanDrawer";
 import AuthModal from "@/components/AuthModal";
 import type { Attraction } from "@/data/amparaData";
+import { useLanguage } from "@/context/LanguageContext";
 import {
   type AttractionDetail,
   type GalleryImage,
@@ -32,6 +33,7 @@ import {
 } from "@/lib/attractions";
 
 function AttractionDetailContent() {
+  const { t, getCategoryName, getZoneName } = useLanguage();
   const params = useParams();
   const id = (params?.id as string) || "";
 
@@ -55,7 +57,9 @@ function AttractionDetailContent() {
     const primaryImg =
       typeof attraction.image === "string"
         ? attraction.image
-        : attraction.image && typeof attraction.image === "object" && "url" in attraction.image
+        : attraction.image &&
+            typeof attraction.image === "object" &&
+            "url" in attraction.image
           ? String((attraction.image as { url: string }).url)
           : "";
 
@@ -183,7 +187,7 @@ function AttractionDetailContent() {
         <div className="text-center space-y-3">
           <div className="w-10 h-10 border-4 border-[#0084d1] border-t-transparent rounded-full animate-spin mx-auto" />
           <div className="text-sm font-bold text-slate-700">
-            Loading Destination Details...
+            {t("loadingAttraction")}
           </div>
         </div>
       </div>
@@ -198,17 +202,17 @@ function AttractionDetailContent() {
             !
           </div>
           <h2 className="text-xl font-bold text-slate-900">
-            {error || "Destination Not Found"}
+            {error || t("attractionNotFound")}
           </h2>
           <p className="text-sm text-slate-500">
-            The attraction you are looking for is unavailable or has been moved.
+            {t("attractionNotFoundDesc")}
           </p>
           <Link
             href="/#explore"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0084d1] text-white text-xs font-bold hover:bg-[#0070b3] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to Explore Directory</span>
+            <span>{t("backToExplore")}</span>
           </Link>
         </div>
       </div>
@@ -227,11 +231,11 @@ function AttractionDetailContent() {
         <div className="max-w-[1370px] mx-auto flex items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex min-w-0 items-center gap-2">
             <Link href="/" className="hover:text-[#0084d1]">
-              Home
+              {t("navHome")}
             </Link>
             <span>/</span>
             <Link href="/#explore" className="hover:text-[#0084d1]">
-              Explore
+              {t("navExplore")}
             </Link>
             <span>/</span>
             <span className="text-slate-900 font-bold truncate max-w-[180px] sm:max-w-none">
@@ -244,7 +248,7 @@ function AttractionDetailContent() {
             className="inline-flex items-center gap-1 text-slate-600 hover:text-[#0084d1] font-bold transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Back to Explore Directory</span>
+            <span className="hidden sm:inline">{t("backToExplore")}</span>
           </Link>
         </div>
       </div>
@@ -260,7 +264,13 @@ function AttractionDetailContent() {
               className="relative rounded-3xl overflow-hidden min-h-[380px] sm:min-h-[460px] flex flex-col justify-between p-6 sm:p-8 border border-slate-200/80 shadow-md group cursor-pointer"
             >
               <Image
-                src={allImages[0]?.url || (typeof attraction.image === "string" && !attraction.image.includes("[object") ? attraction.image : "/images/hero-bg.jpg")}
+                src={
+                  allImages[0]?.url ||
+                  (typeof attraction.image === "string" &&
+                  !attraction.image.includes("[object")
+                    ? attraction.image
+                    : "/images/hero-bg.jpg")
+                }
                 alt={attraction.name}
                 fill
                 priority
@@ -277,12 +287,14 @@ function AttractionDetailContent() {
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/20 text-white text-xs font-bold">
                     <Compass className="w-3.5 h-3.5 text-sky-400" />
                     <span className="uppercase">
-                      {attraction.radialZone} RING
+                      {attraction.radialZone} {t("ringBadge")}
                     </span>
                   </span>
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/20 text-sky-300 text-xs font-semibold">
                     <MapPin className="w-3.5 h-3.5" />
-                    <span>{attraction.distanceKm} km from Ampara Town</span>
+                    <span>
+                      {attraction.distanceKm} {t("kmFromAmpara")}
+                    </span>
                   </span>
                 </div>
 
@@ -295,7 +307,7 @@ function AttractionDetailContent() {
                       setLightboxIndex(0);
                     }}
                     className="w-9 h-9 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer"
-                    title="View full screen"
+                    title={t("viewFullScreen")}
                   >
                     <Maximize2 className="w-4 h-4" />
                   </button>
@@ -311,7 +323,7 @@ function AttractionDetailContent() {
                         ? "bg-red-500/90 border-red-400 text-white"
                         : "bg-slate-900/50 border-white/20 text-white hover:bg-white hover:text-red-500"
                     }`}
-                    title="Favorite"
+                    title={t("favorite")}
                   >
                     <Heart
                       className={`w-4 h-4 ${isFavorite ? "fill-white" : ""}`}
@@ -327,11 +339,11 @@ function AttractionDetailContent() {
                         navigator.clipboard
                       ) {
                         navigator.clipboard.writeText(window.location.href);
-                        alert("Destination link copied to clipboard!");
+                        alert(t("linkCopied"));
                       }
                     }}
                     className="w-9 h-9 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer"
-                    title="Share destination"
+                    title={t("shareDestination")}
                   >
                     <Share2 className="w-4 h-4" />
                   </button>
@@ -345,7 +357,7 @@ function AttractionDetailContent() {
                     <span
                       className={`inline-flex items-center gap-1 ${attraction.tagColor} text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-xs`}
                     >
-                      {attraction.tag}
+                      {getCategoryName(attraction.category || attraction.tag)}
                     </span>
                     <span className="inline-flex items-center gap-1 bg-black/60 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
                       <Clock className="w-3 h-3 text-sky-400" />
@@ -363,7 +375,9 @@ function AttractionDetailContent() {
                       className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold transition-all shadow-sm hover:scale-105 cursor-pointer"
                     >
                       <Maximize2 className="w-3 h-3 text-sky-400" />
-                      <span>View All ({allImages.length} Photos)</span>
+                      <span>
+                        {t("viewAllPhotos")} ({allImages.length})
+                      </span>
                     </button>
                   )}
                 </div>
@@ -748,7 +762,6 @@ function AttractionDetailContent() {
                   {/* Content */}
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                     <div>
-
                       <Link
                         href={`/attraction/${place.id}`}
                         className="text-base font-black text-slate-900 group-hover:text-[#0084d1] transition-colors leading-snug block mb-1.5"

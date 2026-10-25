@@ -21,6 +21,7 @@ import {
 import { amparaAttractions, Attraction } from "@/data/amparaData";
 import { SavedPlan } from "@/interface/myPlans.types";
 import { PlanStop } from "@/interface/plan.types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface CreatePlanModalProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ export default function CreatePlanModal({
   onCreatePlan,
 }: CreatePlanModalProps) {
   const router = useRouter();
+  const { t, getCategoryName } = useLanguage();
 
   // Form State
   const [title, setTitle] = useState("My Ampara Expedition");
@@ -83,7 +85,7 @@ export default function CreatePlanModal({
   // Toggle selection
   const handleTogglePlace = (id: string) => {
     setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 
@@ -108,9 +110,12 @@ export default function CreatePlanModal({
       stopsCount === 1
         ? selectedAttractions[0].distanceKm * 2
         : Math.round(
-            selectedAttractions.reduce((acc, curr) => acc + curr.distanceKm, 0) *
+            selectedAttractions.reduce(
+              (acc, curr) => acc + curr.distanceKm,
+              0,
+            ) *
               0.8 +
-              10
+              10,
           );
 
     // Duration calculation
@@ -153,7 +158,7 @@ export default function CreatePlanModal({
         const d = new Date(
           parseInt(parts[0]),
           parseInt(parts[1]) - 1,
-          parseInt(parts[2])
+          parseInt(parts[2]),
         );
         return d.toLocaleDateString("en-US", {
           month: "short",
@@ -245,7 +250,7 @@ export default function CreatePlanModal({
             title: newSavedPlan.title,
             date: newSavedPlan.date,
             pace: pace,
-          })
+          }),
         );
 
         // Also update saved plans in localStorage
@@ -255,7 +260,7 @@ export default function CreatePlanModal({
           : [];
         localStorage.setItem(
           "ampara_saved_plans",
-          JSON.stringify([newSavedPlan, ...existingPlans])
+          JSON.stringify([newSavedPlan, ...existingPlans]),
         );
       } catch (err) {
         console.error("Failed to save plan to localStorage:", err);
@@ -290,11 +295,11 @@ export default function CreatePlanModal({
                 <Sparkles className="w-4 h-4" />
               </span>
               <h2 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
-                Create New Visit Plan
+                {t("createPlanTitle")}
               </h2>
             </div>
             <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1">
-              Select destinations, preview journey feasibility, and generate your plan.
+              {t("createPlanSubtitle")}
             </p>
           </div>
 
@@ -313,14 +318,14 @@ export default function CreatePlanModal({
           <div className="space-y-4">
             <h3 className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#0084d1]" />
-              <span>Step 1: Itinerary Information</span>
+              <span>{t("planTitleLabel")} &amp; Details</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Plan Title */}
               <div className="space-y-1.5 sm:col-span-1">
                 <label className="text-xs font-bold text-slate-700">
-                  Plan Name
+                  {t("planTitleLabel")}
                 </label>
                 <input
                   type="text"
@@ -335,7 +340,7 @@ export default function CreatePlanModal({
               <div className="space-y-1.5 sm:col-span-1">
                 <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-sky-600" />
-                  <span>Travel Date</span>
+                  <span>{t("dateLabel")}</span>
                 </label>
                 <input
                   type="date"
@@ -349,16 +354,22 @@ export default function CreatePlanModal({
               <div className="space-y-1.5 sm:col-span-1">
                 <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                   <Compass className="w-3.5 h-3.5 text-sky-600" />
-                  <span>Travel Pace</span>
+                  <span>{t("paceLabel")}</span>
                 </label>
                 <select
                   value={pace}
                   onChange={(e) => setPace(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all bg-white cursor-pointer"
                 >
-                  <option value="Relaxed (1–2 stops)">Relaxed (1–2 stops)</option>
-                  <option value="Balanced (3–4 stops)">Balanced (3–4 stops)</option>
-                  <option value="Intensive (5+ stops)">Intensive (5+ stops)</option>
+                  <option value="Relaxed (1–2 stops)">
+                    {t("relaxedPace", "Relaxed (1–2 stops)")}
+                  </option>
+                  <option value="Balanced (3–4 stops)">
+                    {t("balancedPace", "Balanced (3–4 stops)")}
+                  </option>
+                  <option value="Intensive (5+ stops)">
+                    {t("fastPace", "Intensive (5+ stops)")}
+                  </option>
                 </select>
               </div>
             </div>
@@ -373,7 +384,8 @@ export default function CreatePlanModal({
                   <span>Step 2: Select Destinations to Visit</span>
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Click to select the attractions you want to add. Cards display image and name only.
+                  Click to select the attractions you want to add. Cards display
+                  image and name only.
                 </p>
               </div>
 
@@ -390,7 +402,7 @@ export default function CreatePlanModal({
                 <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  placeholder="Search destinations by name or location..."
+                  placeholder={t("searchAttractionsPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 bg-slate-50/50"
@@ -409,7 +421,7 @@ export default function CreatePlanModal({
                         : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                     }`}
                   >
-                    {cat}
+                    {getCategoryName(cat)}
                   </button>
                 ))}
               </div>
@@ -507,8 +519,8 @@ export default function CreatePlanModal({
                     {journeyMetrics.stopsCount === 0
                       ? "Select Destinations"
                       : journeyMetrics.stopsCount <= 4
-                      ? "Feasible & Optimal"
-                      : "Active & Dense"}
+                        ? "Feasible & Optimal"
+                        : "Active & Dense"}
                   </span>
                 </span>
               </div>
@@ -582,7 +594,8 @@ export default function CreatePlanModal({
 
                 {selectedAttractions.length === 0 ? (
                   <div className="py-4 text-center text-xs text-slate-400 font-medium">
-                    No destinations selected yet. Select destinations above to preview the route sequence.
+                    No destinations selected yet. Select destinations above to
+                    preview the route sequence.
                   </div>
                 ) : (
                   <div className="flex items-center justify-between text-center gap-1 overflow-x-auto py-2">
@@ -638,7 +651,8 @@ export default function CreatePlanModal({
                   </span>
                 </div>
                 <p className="text-[11px] text-amber-800/90 leading-relaxed">
-                  Gentle eastern breezes. High UV between 11:30 AM and 01:30 PM. Carry at least 1.5L drinking water for your excursions.
+                  Gentle eastern breezes. High UV between 11:30 AM and 01:30 PM.
+                  Carry at least 1.5L drinking water for your excursions.
                 </p>
               </div>
             </div>
@@ -656,7 +670,9 @@ export default function CreatePlanModal({
             ) : (
               <span className="text-emerald-700 font-semibold flex items-center justify-center sm:justify-start gap-1.5">
                 <Check className="w-3.5 h-3.5 shrink-0" />
-                <span>Ready to create itinerary with {selectedIds.length} stops</span>
+                <span>
+                  Ready to create itinerary with {selectedIds.length} stops
+                </span>
               </span>
             )}
           </div>
@@ -667,7 +683,7 @@ export default function CreatePlanModal({
               onClick={onClose}
               className="px-4 sm:px-5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs transition-colors cursor-pointer shrink-0"
             >
-              Cancel
+              {t("cancelBtn")}
             </button>
             <button
               type="button"
@@ -680,7 +696,7 @@ export default function CreatePlanModal({
               }`}
             >
               <Plus className="w-4 h-4 stroke-[2.5] shrink-0" />
-              <span>Create Visit Plan</span>
+              <span>{t("savePlanBtn")}</span>
             </button>
           </div>
         </div>

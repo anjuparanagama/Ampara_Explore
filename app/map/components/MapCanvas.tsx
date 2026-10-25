@@ -55,8 +55,6 @@ export default function MapCanvas({
           <MapPlacePopup
             place={selectedPlace}
             onClose={() => onSelectPlace(null)}
-            isInPlan={visitPlan.some((p) => p.id === selectedPlace.id)}
-            onTogglePlan={onTogglePlan}
           />
         )}
       </div>

@@ -26,7 +26,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-2 text-xs text-sky-300">
               <MapPin className="w-4 h-4 text-sky-400 shrink-0" />
-              <span>Ampara District Secretariat Zone • Eastern Province</span>
+              <span>{t("footerLocation")}</span>
             </div>
           </div>
 
@@ -37,17 +37,17 @@ export default function Footer() {
             <ul className="space-y-2 text-xs text-slate-400">
               <li>
                 <Link href="/map" className="hover:text-sky-300 transition-colors">
-                  0 - 5 km Town Hub & Lake Promenade
+                  {t("footerLink1")}
                 </Link>
               </li>
               <li>
                 <Link href="/map" className="hover:text-sky-300 transition-colors">
-                  5 - 15 km Mid Forest Sanctuaries
+                  {t("footerLink2")}
                 </Link>
               </li>
               <li>
                 <Link href="/map" className="hover:text-sky-300 transition-colors">
-                  15 - 25 km Gal Oya Safari Frontier
+                  {t("footerLink3")}
                 </Link>
               </li>
               <li>
@@ -55,7 +55,7 @@ export default function Footer() {
                   href="/#explore"
                   className="hover:text-sky-300 transition-colors"
                 >
-                  Archaeological Heritage Sites
+                  {t("footerLink4")}
                 </Link>
               </li>
             </ul>
@@ -68,7 +68,7 @@ export default function Footer() {
             <ul className="space-y-2 text-xs text-slate-400">
               <li className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-sky-400 shrink-0" />
-                <span>Tourist Police: +94 63 222 2222</span>
+                <span>{t("touristPolice")}</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-sky-400 shrink-0" />
@@ -76,7 +76,7 @@ export default function Footer() {
               </li>
               <li className="pt-2">
                 <span className="inline-block bg-sky-950 text-sky-300 text-[11px] font-bold px-3 py-1 rounded-full border border-sky-800">
-                  Safe &amp; Verified Travel Zone
+                  {t("safeTravelZone")}
                 </span>
               </li>
             </ul>
@@ -90,19 +90,19 @@ export default function Footer() {
               href="/privacy-policy"
               className="hover:text-sky-300 transition-colors"
             >
-              Privacy Policy
+              {t("privacyPolicy")}
             </Link>
             <Link
               href="/terms"
               className="hover:text-sky-300 transition-colors"
             >
-              Terms of Service
+              {t("termsOfService")}
             </Link>
             <Link
               href="/cultural-guidelines"
               className="hover:text-sky-300 transition-colors"
             >
-              Cultural Guidelines
+              {t("culturalGuidelines")}
             </Link>
           </div>
         </div>

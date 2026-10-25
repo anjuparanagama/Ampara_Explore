@@ -1,14 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Car,
-  Clock,
-  MapPin,
-  ArrowUp,
-  ArrowDown,
-  Trash2,
-} from "lucide-react";
+import { Car, Clock, MapPin, ArrowUp, ArrowDown, Trash2 } from "lucide-react";
 import { PlanStopCardProps } from "@/interface";
 
 export default function PlanStopCard({

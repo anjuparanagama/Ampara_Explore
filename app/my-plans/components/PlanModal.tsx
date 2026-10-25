@@ -160,7 +160,6 @@ export default function PlanModal({
               </button>
             )}
           </div>
-
         </div>
 
         {/* Scrollable Places / Stops List */}
@@ -314,7 +313,8 @@ export default function PlanModal({
               Done
             </button>
 
-            {(plan.status === "in-progress" || (progressPct === 100 && plan.status !== "completed")) && (
+            {(plan.status === "in-progress" ||
+              (progressPct === 100 && plan.status !== "completed")) && (
               <button
                 type="button"
                 onClick={() => onFinishTrip(plan.id)}
@@ -324,7 +324,6 @@ export default function PlanModal({
                 <span>Finish Trip</span>
               </button>
             )}
-
           </div>
         </div>
       </div>

@@ -3,14 +3,15 @@
 import React from "react";
 import Image from "next/image";
 import { MapPlaceCardProps } from "@/interface";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function MapPlaceCard({
   place,
   isSelected,
-  isAdded,
   onSelect,
-  onTogglePlan,
 }: MapPlaceCardProps) {
+  const { getCategoryName } = useLanguage();
+
   return (
     <div
       onClick={onSelect}
@@ -34,7 +35,8 @@ export default function MapPlaceCard({
       <div className="flex-1 min-w-0 space-y-1">
         <div className="flex items-center justify-between gap-1">
           <span className="text-[10px] font-extrabold uppercase text-[#0084d1] tracking-wider truncate">
-            {place.ringTag}
+            {place.category ? getCategoryName(place.category) : place.ringTag} •{" "}
+            {place.distanceKm} km
           </span>
         </div>
 
@@ -45,20 +47,6 @@ export default function MapPlaceCard({
         <p className="text-[11px] text-slate-500 line-clamp-1 leading-snug">
           {place.description}
         </p>
-
-        <div className="pt-1 flex items-center justify-between text-[10px]">
-          <span className="text-slate-400 font-medium">{place.roadInfo}</span>
-
-          <button
-            type="button"
-            onClick={onTogglePlan}
-            className={`font-bold hover:underline cursor-pointer ${
-              isAdded ? "text-emerald-600" : "text-[#0084d1]"
-            }`}
-          >
-            {isAdded ? "✓ Added" : "+ Add to Plan"}
-          </button>
-        </div>
       </div>
     </div>
   );

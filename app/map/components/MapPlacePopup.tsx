@@ -3,15 +3,13 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Clock, Check, Car, Plus } from "lucide-react";
+import { X, Clock, Check, Car } from "lucide-react";
 import { MapPlacePopupProps } from "@/interface";
+import { useLanguage } from "@/context/LanguageContext";
 
-export default function MapPlacePopup({
-  place,
-  onClose,
-  isInPlan,
-  onTogglePlan,
-}: MapPlacePopupProps) {
+export default function MapPlacePopup({ place, onClose }: MapPlacePopupProps) {
+  const { t, getCategoryName } = useLanguage();
+
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-full max-w-sm bg-white rounded-3xl p-4 shadow-2xl border border-slate-200/90 animate-scaleUp">
       {/* Close Button */}
@@ -34,8 +32,10 @@ export default function MapPlacePopup({
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         <div className="absolute bottom-2 left-2 flex items-center gap-1.5">
-          <span className="bg-sky-500/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">
-            SANCTUARY &amp; WILDLIFE RING
+          <span className="bg-sky-500/90 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase">
+            {place.category
+              ? getCategoryName(place.category)
+              : t("sanctuaryWildlifeRing")}
           </span>
           <span className="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
             <Clock className="w-3 h-3 text-sky-400" />
@@ -72,30 +72,8 @@ export default function MapPlacePopup({
             href={`/attraction/${place.id}`}
             className="flex-1 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-center text-xs font-bold text-slate-800 transition-colors"
           >
-            View Guide
+            {t("viewGuide")}
           </Link>
-
-          <button
-            type="button"
-            onClick={() => onTogglePlan(place)}
-            className={`flex-1 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer ${
-              isInPlan
-                ? "bg-emerald-600 text-white"
-                : "bg-[#0084d1] hover:bg-[#0070b3] text-white"
-            }`}
-          >
-            {isInPlan ? (
-              <>
-                <Check className="w-3.5 h-3.5" />
-                <span>In Plan</span>
-              </>
-            ) : (
-              <>
-                <Plus className="w-3.5 h-3.5" />
-                <span>Add to Plan</span>
-              </>
-            )}
-          </button>
         </div>
       </div>
     </div>

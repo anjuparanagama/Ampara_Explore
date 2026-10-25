@@ -21,6 +21,8 @@ interface PlanFiltersProps {
   setSearchQuery: (query: string) => void;
 }
 
+import { useLanguage } from "@/context/LanguageContext";
+
 export default function PlanFilters({
   activeFilter,
   setActiveFilter,
@@ -28,8 +30,9 @@ export default function PlanFilters({
   searchQuery,
   setSearchQuery,
 }: PlanFiltersProps) {
+  const { t } = useLanguage();
   const tabs: { id: FilterTabType; label: string; count: number }[] = [
-    { id: "all", label: "All Plans", count: counts.all },
+    { id: "all", label: t("allPlansTab"), count: counts.all },
     ...(counts.inProgress > 0
       ? [
           {
@@ -39,9 +42,9 @@ export default function PlanFilters({
           },
         ]
       : []),
-    { id: "upcoming", label: "Upcoming", count: counts.upcoming },
-    { id: "draft", label: "Drafts", count: counts.draft },
-    { id: "completed", label: "Completed", count: counts.completed },
+    { id: "upcoming", label: t("upcomingTab"), count: counts.upcoming },
+    { id: "draft", label: t("draftTab"), count: counts.draft },
+    { id: "completed", label: t("completedTab"), count: counts.completed },
     { id: "bookmarked", label: "Bookmarked", count: counts.bookmarked },
   ];
 

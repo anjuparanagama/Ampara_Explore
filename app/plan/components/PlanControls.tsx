@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Calendar,
@@ -10,6 +12,7 @@ import {
   Plus,
 } from "lucide-react";
 import { PlanControlsProps } from "@/interface";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function PlanControls({
   pace,
@@ -19,16 +22,18 @@ export default function PlanControls({
   onOptimizeRoute,
   onCreatePlan,
 }: PlanControlsProps) {
+  const { t } = useLanguage();
+
   const paceOptions = [
-    "Relaxed (1–2 stops)",
-    "Balanced (3–4 stops)",
-    "Intensive (5+ stops)",
+    t("relaxedPace", "Relaxed (1–2 stops)"),
+    t("balancedPace", "Balanced (3–4 stops)"),
+    t("fastPace", "Intensive (5+ stops)"),
   ];
 
   const handleShare = () => {
     if (typeof window !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(window.location.href);
-      alert("Itinerary link copied to clipboard!");
+      alert(t("linkCopied"));
     }
   };
 
@@ -44,7 +49,7 @@ export default function PlanControls({
         {/* Date Picker Pill */}
         <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200/90 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-800">
           <Calendar className="w-4 h-4 text-[#0084d1]" />
-          <span>Today, 24 Oct 2025</span>
+          <span>{t("dateLabel")}: Active</span>
         </div>
 
         {/* Pace Selector Pill */}
@@ -55,7 +60,7 @@ export default function PlanControls({
             className="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200/90 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-800 transition-all cursor-pointer"
           >
             <Compass className="w-4 h-4 text-[#0084d1]" />
-            <span>Pace: {pace}</span>
+            <span>{t("paceLabel")}: {pace}</span>
             <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           </button>
 
@@ -93,7 +98,7 @@ export default function PlanControls({
             className="bg-sky-600 hover:bg-sky-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span>New Plan</span>
+            <span>{t("createNewPlan")}</span>
           </button>
         )}
 
@@ -103,7 +108,7 @@ export default function PlanControls({
           className="bg-[#0084d1] hover:bg-[#0070b3] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
         >
           <Zap className="w-3.5 h-3.5 fill-white text-white" />
-          <span>Optimize Route</span>
+          <span>{t("optimizeRoute")}</span>
         </button>
 
         <button
@@ -119,7 +124,7 @@ export default function PlanControls({
           type="button"
           onClick={handleShare}
           className="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 transition-all cursor-pointer shadow-2xs"
-          title="Share Itinerary"
+          title={t("shareDestination")}
         >
           <Share2 className="w-4 h-4" />
         </button>

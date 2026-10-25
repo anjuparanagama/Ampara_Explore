@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Attraction } from "@/data/amparaData";
 import { X, Trash2, Calendar, ArrowRight, Compass } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface VisitPlanDrawerProps {
   isOpen: boolean;
@@ -20,14 +21,18 @@ export default function VisitPlanDrawer({
   onRemove,
   onClear,
 }: VisitPlanDrawerProps) {
+  const { t } = useLanguage();
+
   if (!isOpen) return null;
 
-  const totalDistance = visitPlan.reduce((sum, item) => sum + item.distanceKm, 0);
+  const totalDistance = visitPlan.reduce(
+    (sum, item) => sum + item.distanceKm,
+    0,
+  );
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs animate-fadeIn">
       <div className="bg-white w-full max-w-md h-full shadow-2xl flex flex-col justify-between animate-slideLeft">
-        
         {/* Drawer Header */}
         <div className="p-6 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -35,9 +40,14 @@ export default function VisitPlanDrawer({
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-extrabold text-slate-900 text-lg">My 1-Day Visit Plan</h3>
+              <h3 className="font-extrabold text-slate-900 text-lg">
+                {t("planDrawerTitle")}
+              </h3>
               <span className="text-xs text-slate-500 font-medium">
-                {visitPlan.length} {visitPlan.length === 1 ? "place" : "places"} selected
+                {visitPlan.length}{" "}
+                {visitPlan.length === 1
+                  ? t("placeSelected")
+                  : t("placesSelected")}
               </span>
             </div>
           </div>
@@ -54,9 +64,11 @@ export default function VisitPlanDrawer({
           {visitPlan.length === 0 ? (
             <div className="text-center py-16 flex flex-col items-center">
               <Compass className="w-12 h-12 text-slate-300 mb-3" />
-              <h4 className="font-bold text-slate-800 text-base">Your itinerary is empty</h4>
+              <h4 className="font-bold text-slate-800 text-base">
+                {t("emptyItineraryTitle")}
+              </h4>
               <p className="text-xs text-slate-500 max-w-xs mt-1 leading-relaxed">
-                Browse through Ampara attractions and click Add to assemble your customized sequence.
+                {t("emptyItineraryDesc")}
               </p>
             </div>
           ) : (
@@ -93,7 +105,7 @@ export default function VisitPlanDrawer({
                   <button
                     onClick={() => onRemove(item.id)}
                     className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                    title="Remove"
+                    title={t("removeStop")}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -107,8 +119,10 @@ export default function VisitPlanDrawer({
         {visitPlan.length > 0 && (
           <div className="p-6 bg-slate-50 border-t border-slate-200 space-y-4">
             <div className="flex justify-between items-center text-xs font-semibold text-slate-600">
-              <span>Estimated Circuit Distance:</span>
-              <strong className="text-slate-900 font-bold text-sm">~{totalDistance} km radial travel</strong>
+              <span>{t("totalRadialDistance")}:</span>
+              <strong className="text-slate-900 font-bold text-sm">
+                ~{totalDistance} km
+              </strong>
             </div>
 
             <div className="flex gap-3">
@@ -116,16 +130,16 @@ export default function VisitPlanDrawer({
                 onClick={onClear}
                 className="w-1/3 py-2.5 rounded-full border border-slate-300 text-slate-700 font-bold text-xs hover:bg-white transition-colors cursor-pointer"
               >
-                Clear All
+                {t("clearItinerary")}
               </button>
               <button
                 onClick={() => {
-                  alert("Your customized Ampara travel route itinerary has been generated!");
+                  alert(t("optimizedSuccess"));
                   onClose();
                 }}
                 className="w-2/3 py-2.5 rounded-full bg-[#006699] hover:bg-[#0284c7] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all cursor-pointer"
               >
-                <span>Generate Smart Route</span>
+                <span>{t("finalizeSequence")}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -135,4 +149,3 @@ export default function VisitPlanDrawer({
     </div>
   );
 }
-

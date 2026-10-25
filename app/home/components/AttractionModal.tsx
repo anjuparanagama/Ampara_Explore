@@ -14,15 +14,14 @@ export default function AttractionModal({
   if (!attraction) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fadeIn"
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-white rounded-2xl sm:rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-200 relative animate-scaleUp max-h-[92vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -41,7 +40,7 @@ export default function AttractionModal({
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          
+
           <div className="absolute bottom-3 left-4 right-4 sm:bottom-4 sm:left-6 sm:right-6 text-white">
             <div className="flex flex-wrap items-center gap-2 mb-2">
               <span className="bg-[#0284c7] text-white text-xs font-bold px-2.5 py-1 rounded-full">
@@ -85,7 +84,10 @@ export default function AttractionModal({
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {attraction.highlights.map((h, i) => (
-                <div key={i} className="bg-sky-50/70 border border-sky-100 rounded-xl p-2.5 text-xs font-semibold text-sky-900 flex items-center gap-2">
+                <div
+                  key={i}
+                  className="bg-sky-50/70 border border-sky-100 rounded-xl p-2.5 text-xs font-semibold text-sky-900 flex items-center gap-2"
+                >
                   <span className="w-2 h-2 rounded-full bg-[#0284c7] shrink-0" />
                   <span>{h}</span>
                 </div>

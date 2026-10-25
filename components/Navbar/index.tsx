@@ -245,7 +245,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                   <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-fadeIn">
                     <div className="px-3 py-2 border-b border-slate-100">
                       <p className="text-xs font-bold text-slate-800 truncate">
-                        {currentUser?.name || "Explorer"}
+                        {currentUser?.name || t("explorer")}
                       </p>
                       <p className="text-[11px] text-slate-500 truncate">
                         {currentUser?.email || ""}
@@ -260,7 +260,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                           className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-[#0284c7] rounded-xl transition-colors"
                         >
                           <ShieldCheck className="w-4 h-4 text-sky-600" />
-                          <span>Admin Dashboard</span>
+                          <span>{t("navAdmin")}</span>
                         </a>
                       )}
                       <a
@@ -269,7 +269,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                         className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-[#0284c7] rounded-xl transition-colors"
                       >
                         <MapPin className="w-4 h-4 text-sky-600" />
-                        <span>{t("navPlan")}</span>
+                        <span>{t("navMyPlans")}</span>
                       </a>
                     </div>
 
@@ -280,7 +280,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                         className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer text-left"
                       >
                         <LogOut className="w-4 h-4 text-rose-500" />
-                        <span>Sign Out</span>
+                        <span>{t("navLogout")}</span>
                       </button>
                     </div>
                   </div>
@@ -340,7 +340,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                     </div>
                     <div className="flex flex-col overflow-hidden">
                       <span className="text-sm font-bold text-slate-800 truncate">
-                        {currentUser?.name || "Explorer"}
+                        {currentUser?.name || t("explorer")}
                       </span>
                       <span className="text-xs text-slate-500 truncate">
                         {currentUser?.email || ""}
@@ -354,7 +354,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                       className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-sky-50 rounded-xl"
                     >
                       <ShieldCheck className="w-4 h-4 text-sky-600" />
-                      <span>Admin Dashboard</span>
+                      <span>{t("navAdmin")}</span>
                     </a>
                   )}
 
@@ -363,7 +363,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
                     className="flex items-center justify-center gap-2 w-full py-2 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition-colors cursor-pointer"
                   >
                     <LogOut className="w-3.5 h-3.5" />
-                    <span>Sign Out</span>
+                    <span>{t("navLogout")}</span>
                   </button>
                 </div>
               ) : (

@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface PlanHeaderProps {
   userName?: string | null;
@@ -13,25 +14,27 @@ export default function PlanHeader({
   userName,
   onCreatePlan,
 }: PlanHeaderProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-4">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
         <Link href="/" className="hover:text-sky-600 transition-colors">
-          Home
+          {t("navHome")}
         </Link>
         <span>/</span>
-        <span className="text-slate-800 font-semibold">My Plans</span>
+        <span className="text-slate-800 font-semibold">{t("myPlansTitle")}</span>
       </div>
 
       {/* Main Title Row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            {userName ? `Welcome back, ${userName}` : "My Itineraries"}
+            {userName ? `${t("welcomeExplorer")}, ${userName}` : t("myPlansTitle")}
           </h1>
           <p className="text-slate-500 text-sm mt-1">
-            Organize, track live progress, and explore your customized travel plans in Ampara.
+            {t("myPlansSubtitle")}
           </p>
         </div>
 
@@ -42,7 +45,7 @@ export default function PlanHeader({
             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold text-sm shadow-sm shadow-sky-600/20 hover:shadow-md transition-all self-start sm:self-auto cursor-pointer"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>Create New Plan</span>
+            <span>{t("createNewPlan")}</span>
           </button>
         ) : (
           <Link
@@ -50,7 +53,7 @@ export default function PlanHeader({
             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold text-sm shadow-sm shadow-sky-600/20 hover:shadow-md transition-all self-start sm:self-auto cursor-pointer"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>Create New Plan</span>
+            <span>{t("createNewPlan")}</span>
           </Link>
         )}
       </div>

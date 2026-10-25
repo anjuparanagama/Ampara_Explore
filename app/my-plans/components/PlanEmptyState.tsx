@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Compass, Plus } from "lucide-react";
 import { FilterTabType } from "@/interface/myPlans.types";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface PlanEmptyStateProps {
   searchQuery: string;
@@ -18,6 +19,8 @@ export default function PlanEmptyState({
   onClearSearch,
   onCreatePlan,
 }: PlanEmptyStateProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="bg-white rounded-2xl border border-slate-200/90 p-12 text-center max-w-lg mx-auto my-8 space-y-4 shadow-xs">
       <div className="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto">
@@ -29,12 +32,12 @@ export default function PlanEmptyState({
             ? "No matching plans found"
             : activeFilter === "bookmarked"
               ? "No bookmarked itineraries"
-              : "No itineraries in this category"}
+              : t("noPlansYet")}
         </h3>
         <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
           {searchQuery
             ? "Try searching for a different destination or clear your search query."
-            : "Start planning your Ampara excursion with curated stops, routes, and timings."}
+            : t("noPlansDesc")}
         </p>
       </div>
       {searchQuery ? (
@@ -51,7 +54,7 @@ export default function PlanEmptyState({
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold transition-colors cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Create an Itinerary</span>
+          <span>{t("createNewPlan")}</span>
         </button>
       ) : (
         <Link
@@ -59,7 +62,7 @@ export default function PlanEmptyState({
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold transition-colors cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Create an Itinerary</span>
+          <span>{t("createNewPlan")}</span>
         </Link>
       )}
     </div>

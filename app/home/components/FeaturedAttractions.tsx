@@ -3,12 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  MapPin,
-  Clock,
-  ExternalLink,
-  Compass,
-} from "lucide-react";
+import { MapPin, Clock, ExternalLink, Compass } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import type { FeaturedAttractionsProps } from "@/interface/home.types";
 
@@ -22,7 +17,7 @@ export default function FeaturedAttractions({
   onSelectAttraction,
   onClearCategory,
 }: FeaturedAttractionsProps) {
-  const { t } = useLanguage();
+  const { t, getCategoryName } = useLanguage();
 
   // Filter attractions based on search, category, and radius
   const filteredAttractions = attractions.filter((item) => {
@@ -71,7 +66,7 @@ export default function FeaturedAttractions({
           <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">
             <span>{t("destinationsTitle")}</span>
             <span className="ml-2 inline-flex items-center align-middle bg-sky-100 text-[#0284c7] text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap shrink-0">
-              {filteredAttractions.length} Found
+              {filteredAttractions.length} {t("foundCount")}
             </span>
           </h3>
           <p className="text-xs text-slate-500 mt-1">
@@ -82,13 +77,16 @@ export default function FeaturedAttractions({
         {/* Legend */}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-slate-600 font-medium">
           <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" /> 0-5 km Inner
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />{" "}
+            {t("innerRing")}
           </span>
           <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <span className="w-2.5 h-2.5 rounded-full bg-sky-500 shrink-0" /> 5-15 km Mid
+            <span className="w-2.5 h-2.5 rounded-full bg-sky-500 shrink-0" />{" "}
+            {t("midRing")}
           </span>
           <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 shrink-0" /> 15-25 km Horizon
+            <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 shrink-0" />{" "}
+            {t("horizonRing")}
           </span>
         </div>
       </div>
@@ -99,13 +97,13 @@ export default function FeaturedAttractions({
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#0284c7] animate-pulse" />
             <span className="text-slate-700">
-              Filtered by Category:{" "}
+              {t("catAll")}:{" "}
               <strong className="text-[#0284c7] font-bold text-sm">
-                {selectedCategory}
+                {getCategoryName(selectedCategory)}
               </strong>
             </span>
             <span className="bg-[#0284c7] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full ml-1 shadow-2xs">
-              {filteredAttractions.length} destinations
+              {filteredAttractions.length} {t("sitesCount")}
             </span>
           </div>
           {onClearCategory && (
@@ -113,7 +111,7 @@ export default function FeaturedAttractions({
               onClick={onClearCategory}
               className="text-[#0284c7] hover:text-[#0369a1] font-bold hover:underline cursor-pointer flex items-center gap-1"
             >
-              <span>Show All Attractions</span>
+              <span>{t("showAllAttractions")}</span>
               <span>✕</span>
             </button>
           )}
@@ -125,18 +123,17 @@ export default function FeaturedAttractions({
         <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8 shadow-xs">
           <Compass className="w-12 h-12 text-slate-300 mx-auto mb-3" />
           <h4 className="text-lg font-bold text-slate-800">
-            No destinations match your criteria
+            {t("noDestinationsFound")}
           </h4>
           <p className="text-sm text-slate-500 mt-1 max-w-md mx-auto">
-            Try expanding your search radius or clearing category filters to
-            discover more hidden gems.
+            {t("noDestinationsSubtitle")}
           </p>
           {selectedCategory && onClearCategory && (
             <button
               onClick={onClearCategory}
               className="mt-4 px-4 py-2 bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-xs"
             >
-              Show All Attractions
+              {t("showAllAttractions")}
             </button>
           )}
         </div>
@@ -152,7 +149,7 @@ export default function FeaturedAttractions({
                 <div
                   onClick={() => onSelectAttraction(attraction)}
                   className="absolute inset-0 cursor-pointer bg-slate-100"
-                  title={`Quick preview ${attraction.name}`}
+                  title={`${t("quickPreview")}: ${attraction.name}`}
                 >
                   <Image
                     src={attraction.image}
@@ -165,7 +162,7 @@ export default function FeaturedAttractions({
                   {/* Radial Zone & Category Badge */}
                   <div className="absolute top-3 left-3 flex items-center gap-1.5">
                     <span className="rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-extrabold text-slate-800 shadow-xs backdrop-blur-md">
-                      {attraction.category}
+                      {getCategoryName(attraction.category)}
                     </span>
                     <span className="rounded-full bg-[#0284c7]/90 px-2 py-1 text-[11px] font-bold text-white shadow-xs backdrop-blur-md">
                       {attraction.distanceKm} km

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X, User, Mail, Lock, ArrowRight, ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
+  const { t } = useLanguage();
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,17 +71,19 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <ShieldCheck className="w-6 h-6" />
           </div>
           <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-            {isRegister ? "Join Ampara Explore" : "Welcome Explorer"}
+            {isRegister ? t("joinAmpara") : t("welcomeExplorer")}
           </h3>
           <p className="text-xs text-slate-500 mt-1">
-            {isRegister ? "Create an account to save radial trip routes and reviews." : "Sign in to access your saved itineraries."}
+            {isRegister ? t("registerSubtitle") : t("loginSubtitle")}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {isRegister && (
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Full Name</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                {t("fullName")}
+              </label>
               <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 focus-within:ring-2 focus-within:ring-sky-200 focus-within:border-sky-400">
                 <User className="w-4 h-4 text-slate-400" />
                 <input
@@ -95,7 +99,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           )}
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Email Address</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              {t("emailAddress")}
+            </label>
             <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 focus-within:ring-2 focus-within:ring-sky-200 focus-within:border-sky-400">
               <Mail className="w-4 h-4 text-slate-400" />
               <input
@@ -110,7 +116,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Password</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              {t("password")}
+            </label>
             <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 focus-within:ring-2 focus-within:ring-sky-200 focus-within:border-sky-400">
               <Lock className="w-4 h-4 text-slate-400" />
               <input
@@ -129,7 +137,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   onClick={onClose}
                   className="text-xs font-semibold text-[#0284c7] hover:underline"
                 >
-                  Forgot password?
+                  {t("forgotPasswordLink", "Forgot password?")}
                 </a>
               </div>
             )}
@@ -142,10 +150,12 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           >
             <span>
               {isSubmitting
-                ? "Please wait..."
+                ? isRegister
+                  ? t("creatingAccount")
+                  : t("signingIn")
                 : isRegister
-                  ? "Create Account"
-                  : "Sign In"}
+                  ? t("registerBtn")
+                  : t("signInBtn")}
             </span>
             {!isSubmitting && <ArrowRight className="w-4 h-4" />}
           </button>
@@ -157,13 +167,12 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         </form>
 
         <div className="mt-6 text-center text-xs text-slate-600">
-          {isRegister ? "Already have an account?" : "Do not have an account yet?"}{" "}
           <button
             type="button"
             onClick={() => setIsRegister(!isRegister)}
             className="text-[#0284c7] font-bold hover:underline cursor-pointer"
           >
-            {isRegister ? "Sign In here" : "Register now"}
+            {isRegister ? t("alreadyHaveAccount") : t("dontHaveAccount")}
           </button>
         </div>
       </div>

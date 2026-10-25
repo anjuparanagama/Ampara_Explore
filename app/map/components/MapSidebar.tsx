@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { Search, SlidersHorizontal, X, ChevronRight } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { MapSidebarProps } from "@/interface";
+import { useLanguage } from "@/context/LanguageContext";
 import MapPlaceCard from "./MapPlaceCard";
 
 export default function MapSidebar({
@@ -20,10 +20,13 @@ export default function MapSidebar({
   visitPlan,
   onTogglePlan,
 }: MapSidebarProps) {
+  const { t } = useLanguage();
   const sourceList = allPlaces.length > 0 ? allPlaces : filteredPlaces;
   const totalCount = sourceList.length;
   const natureCount = sourceList.filter((p) => p.category === "Nature").length;
-  const wildlifeCount = sourceList.filter((p) => p.category === "Wildlife").length;
+  const wildlifeCount = sourceList.filter(
+    (p) => p.category === "Wildlife",
+  ).length;
   const sacredCount = sourceList.filter(
     (p) => p.category === "Sacred" || p.category === "Historical",
   ).length;
@@ -36,21 +39,21 @@ export default function MapSidebar({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-lg font-black text-slate-900 tracking-tight">
-                Explore Places
+                {t("explorePlaces")}
               </h1>
               <span className="bg-sky-100 text-[#0084d1] text-[11px] font-extrabold px-2 py-0.5 rounded-full">
-                {totalCount} SITES
+                {totalCount} {t("sitesCount")}
               </span>
             </div>
             <p className="text-[11px] text-slate-500 font-medium mt-0.5">
-              25 km radial radius in one view
+              {t("mapSubtitle")}
             </p>
           </div>
 
           <button
             type="button"
             className="p-2 hover:bg-slate-100 rounded-xl text-slate-500 transition-colors cursor-pointer"
-            title="Filter Options"
+            title={t("filterOptions")}
           >
             <SlidersHorizontal className="w-4 h-4" />
           </button>
@@ -63,7 +66,7 @@ export default function MapSidebar({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search lake, stupa, ruins..."
+            placeholder={t("mapSearchPlaceholder")}
             className="w-full bg-[#f8fafc] text-xs font-medium text-slate-800 placeholder-slate-400 pl-9 pr-8 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-[#0084d1] focus:bg-white transition-all"
           />
           {searchQuery && (
@@ -80,10 +83,10 @@ export default function MapSidebar({
         {/* Category Filter Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
           {[
-            { id: "All", label: `All (${totalCount})` },
-            { id: "Nature", label: `Nature (${natureCount})` },
-            { id: "Wildlife", label: `Wildlife (${wildlifeCount})` },
-            { id: "Sacred", label: `Sacred (${sacredCount})` },
+            { id: "All", label: `${t("catAll")} (${totalCount})` },
+            { id: "Nature", label: `${t("catNature")} (${natureCount})` },
+            { id: "Wildlife", label: `${t("catWildlife")} (${wildlifeCount})` },
+            { id: "Sacred", label: `${t("catSacred")} (${sacredCount})` },
           ].map((cat) => (
             <button
               key={cat.id}
@@ -104,16 +107,18 @@ export default function MapSidebar({
         <div className="pt-2 border-t border-slate-150 space-y-2">
           <div className="flex items-center justify-between text-[11px]">
             <span className="font-extrabold uppercase tracking-wider text-slate-400">
-              RADIAL ZONE DISTANCE
+              {t("radialZoneDistance")}
             </span>
-            <span className="text-[#0084d1] font-bold">Show 25 km Radar</span>
+            <span className="text-[#0084d1] font-bold">
+              {t("show25kmRadar")}
+            </span>
           </div>
 
           <div className="grid grid-cols-3 gap-1.5">
             {[
-              { km: 5, label: "Within 5 km" },
-              { km: 15, label: "Within 15 km" },
-              { km: 25, label: "Full 25 km" },
+              { km: 5, label: t("within5km") },
+              { km: 15, label: t("within15km") },
+              { km: 25, label: t("full25km") },
             ].map((z) => (
               <button
                 key={z.km}
@@ -136,42 +141,16 @@ export default function MapSidebar({
       <div className="flex-1 overflow-y-auto max-h-[460px] p-3 sm:p-4 space-y-2.5 divide-y divide-slate-100">
         {filteredPlaces.map((place) => {
           const isSelected = selectedPlace?.id === place.id;
-          const isAdded = visitPlan.some((p) => p.id === place.id);
 
           return (
             <MapPlaceCard
               key={place.id}
               place={place}
               isSelected={isSelected}
-              isAdded={isAdded}
               onSelect={() => onSelectPlace(place)}
-              onTogglePlan={(e) => {
-                e.stopPropagation();
-                onTogglePlan(place);
-              }}
             />
           );
         })}
-      </div>
-
-      {/* Bottom Sticky Queue & Planner Link */}
-      <div className="p-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2">
-        <div>
-          <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-            PLANNER PRESET
-          </div>
-          <div className="text-xs font-black text-slate-900">
-            {visitPlan.length} Destinations Queued
-          </div>
-        </div>
-
-        <Link
-          href="/plan"
-          className="bg-[#006699] hover:bg-[#0084d1] text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-sm transition-all"
-        >
-          <span>Open Planner</span>
-          <ChevronRight className="w-3.5 h-3.5" />
-        </Link>
       </div>
     </div>
   );
